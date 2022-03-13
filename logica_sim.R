@@ -30,15 +30,16 @@ deal <- function() {
     df_k$visualizaciones[which(I%in%k)] <- df_k$visualizaciones[which(I%in%k)] + 1 #se suma 1 a la dimension "visualizacion" del df a las ideas I presentes 
     # en k
     
-    dist <- ( par - k ) + 1 #Se calcula la distancia de K con respecto al valor del participante
+    dist <- ( par - k )  #Se calcula la distancia de K con respecto al valor del participante
                           #se suma 1 cada valor del vector para evitar la aparicion de valores negativos y usar
                           #min como evaluador logico 
                           #agente ve k. evaluacion logica para ver cual k tiene menor distancia con On
     
-    v_pos <-  which( I%in%k[which.min(dist)] ) #se toma el valor minimo 
+    v_pos <-  which( I%in%k[which.closest(dist, 0)] ) #se toma el valor más cercano a 0 
     #en relacion a la distancia con el valor participante
-    v_neg <- which ( I%in%k[which.max(dist)] ) #se toma el valor maximo 
+    v_neg <- which ( I%in%k[which.max(abs(dist))] ) #se toma el valor maximo 
     #en relacion a la distancia con el valor participante
+    #se usa abs para evitar confusion con numeros negativos
     
     df_k$V_pos[v_pos] <- df_k$V_pos[v_pos] + 1 #se suma 1 punto a la idea que se corresponde con el valor minimo
     df_k$V_neg[v_neg] <- df_k$V_neg[v_neg] + 1 #se suma 1 punto a la idea que se corresponde con el valor maximo
@@ -59,4 +60,3 @@ reset <- function() {
 
 reset () #se resetea el vector participantes 
 deal() #retorna dataframe con visualizaciones y votos del total de participantes
-
