@@ -4,7 +4,7 @@
 #Crea lista con dos dataframes (df_I y df_n) 
 
 #USO
-#df_I_n_list(set_dist, n_i, range)
+#df_I_n_list(X)
 
 #Argumentos
 #X    funcion de distribucion
@@ -180,14 +180,15 @@ voting_loop_A(df_I_n_list(rnorm(100,0,1)),5,10)[1]
 #voting_loop_Oi
 #####
 #Descripcion
-#
+#funcion que utliza X para generar un df (df_n), luego utiliza los valores de df_n para generar otro 
+#df (df_I), al cual se le agregan filas a medida que pasan repeticiones dentro del repeat loop.
 
 #USO
 #voting_loop_Oi(X,sam_k)
 
 #ARGUMENTOS
 #X       funcion de distribucion 
-#sam_k   numero de observaciones que seran sampleadas del pool de ideas detro de la funcion
+#sam_k   numero de observaciones que seran sampleadas del df de ideas (df_I) detro de la funcion
 #####
 voting_loop_Oi<- function(X,sam_k){
   
@@ -256,6 +257,98 @@ voting_loop_Oi<- function(X,sam_k){
 }
 
 #Ejemplo
-voting_loop_Oi(rnorm(100,0,1),5)
+voting_loop_Oi(rnorm(100,0,1),5)[1]
+
+#voting_loop_Oi_A(X, sam_k, tail_n)
+#####
+#Descripcion
+#Idem voting_loop_Oi pero utilizando el criterio A
+
+#USO
+#voting_loop_Oi_A(X, sam_k, tail_n)
+
+#Argumentos
+#X       funcion de distribucion
+#sam_k   numero de observaciones que seran sampleadas del dataframe de ideas(df_I) detro de la funcion
+#tail_n  numero de observaciones que seran extraidas de los ultimos valores de df_I reordenado 
+#       en orden decreciente para visualizaciones. 
+#####
+voting_loop_Oi_A<- function(X, sam_k, tail_n){
+  
+  I_n <- X #se guarda la dist. en una variable
+  
+  #Dataframe para cargar datos sobre los participantes
+  df_n <- data.frame(
+    "ID" = c(1:length(I_n)), #ID del participante
+    "valor" = I_n, #valor de la idea del participante
+    "vote_status" = F, #booleano que indica si voto u opino
+    "opinion_status" = F
+  )
+
+  repeat {
+    
+    par <- sample(which(df_n$vote_status == F), 1) #orden de entrada secuencial de participantes (1 en 1)
+    
+    if (df_n$opinion_status[df_n$ID%in%par] == F){
+      Oi <- data.frame("ID" = df_n$ID[df_n$ID%in%par], 
+                       "valor"=df_n$valor[df_n$ID%in%par],
+                       "visualizaciones"=0, 
+                       "V_pos"=0,
+                       "V_neg" = 0) #opinion propia del participante = valor participante
+      
+      
+      df_I <- rbind(df_I,Oi) #se arma el df a partir de las Oi
+      
+      rearranged_df_vis<- order(df_I$visualizaciones, na.last = F, decreasing = T)
+      
+      df_I <- df_I[rearranged_df_vis,]
+      
+      
+      df_n$opinion_status[df_n$ID%in%par] <- T #se cambia a TRUE la var opinion_status en df_n
+    }
+
+      
+    
+    if(length(df_I$ID) >= tail_n && df_n$opinion_status[df_n$ID%in%par] == T){
+      
+      
+      k <- sample(tail(df_I$ID,tail_n), sam_k)
+      
+      df_n$vote_status[df_n$ID%in%par] <-  T #se cambia a TRUE la var vote_status en df_n
+      
+      df_I$visualizaciones[which(df_I$ID%in%k)] <- df_I$visualizaciones[which(df_I$ID%in%k)] + 1 #se suma 1 a la dimension "visualizacion" del df a las ideas I presentes 
+      # en k
+      
+      dist <- ( df_n$valor[par] - df_I$valor[k])  #Se calcula la distancia de K con respecto al valor del participante
+      #se suma 1 cada valor del vector para evitar la aparicion de valores negativos y usar
+      #min como evaluador logico 
+      #agente ve k. evaluacion logica para ver cual k tiene menor distancia con On
+      
+      v_pos <-  which( df_I$ID%in%k[which.min ( abs ( dist ) )] ) #se toma el valor mas cercano a 0 
+      #en relacion a la distancia con el valor participante
+      v_neg <- which ( df_I$ID%in%k[which.max ( abs ( dist ) )] ) #se toma el valor maximo 
+      #en relacion a la distancia con el valor participante
+      #se usa abs para evitar confusion con numeros negativos
+      
+      df_I$V_pos[v_pos] <- df_I$V_pos[v_pos] + 1 #se suma 1 punto a la idea que se corresponde con el valor minimo
+      df_I$V_neg[v_neg] <- df_I$V_neg[v_neg] + 1 #se suma 1 punto a la idea que se corresponde con el valor maximo
+      
+      
+    }
+    #el loop va a frenar si todos los booleanos de df_n$vote_status son TRUE
+    if(all(df_n$vote_status) == T)
+      
+      break
+    
+  }
+  mod_list_In <- list(df_I, df_n) #ambos dfs modificados se vuelven a colocar dentro de una lista
+  
+  return(mod_list_In)#devuelve una lista compuesta dos dfs modificados
+}
+#Ejemplo
+voting_loop_Oi_A(rnorm(100,0,1),5,10)[1]
+
+
+
 
 
