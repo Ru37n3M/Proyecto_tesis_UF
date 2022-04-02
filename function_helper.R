@@ -461,6 +461,8 @@ voting_loop_Oi_BA<- function(X, sam_k, head_n){
     "opinion_status" = F
   )
   
+  df_I <- data.frame(NULL)
+  
   repeat {
     
     par <- sample(which(df_n$vote_status == F), 1) #orden de entrada secuencial de participantes (1 en 1)
@@ -560,6 +562,8 @@ voting_loop_Oi_BB<- function(X, sam_k, head_n){
     "opinion_status" = F
   )
   
+  df_I <- data.frame(NULL)
+  
   repeat {
     
     par <- sample(which(df_n$vote_status == F), 1) #orden de entrada secuencial de participantes (1 en 1)
@@ -574,6 +578,7 @@ voting_loop_Oi_BB<- function(X, sam_k, head_n){
                        "grado_consenso"= 0) #opinion propia del participante = valor participante
       
       #se une Oi al data frame df_I
+      
       df_I <- rbind(df_I,Oi) #se arma el df a partir de las Oi
       
       #se ordenan las filas de df_I por grado de consenso en orden decreciente
@@ -632,4 +637,14 @@ voting_loop_Oi_BB<- function(X, sam_k, head_n){
 }
 #ejemplo
 voting_loop_Oi_BB(rnorm(100,0,1),5,10)[1]
+
+
+
+
+
+
+
+
+
+
 
