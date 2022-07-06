@@ -638,13 +638,3 @@ voting_loop_Oi_BB<- function(X, sam_k, head_n){
 #ejemplo
 voting_loop_Oi_BB(rnorm(100,0,1),5,10)[1]
 
-
-
-
-
-
-
-
-
-
-
