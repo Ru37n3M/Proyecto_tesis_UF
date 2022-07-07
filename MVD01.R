@@ -6,7 +6,6 @@
 mvfun <- function(sam_size, stop_at){
   
   #librerias necesarias para correr el codigo
-  library(MASS)
   library(dplyr)
   
   #dataframe local vacio para incorporar el sampleo de las dist
@@ -54,6 +53,7 @@ mvfun <- function(sam_size, stop_at){
 #definir argumentos iniciales (sam_size y stop_at)
 mvfun2 <- mvfun(30,100) 
 #definir argumentos para la funcion anonima (distribuciones x e y)
+library(MASS)
 mvdist <- mvfun2(mvrnorm(n = 100, c(-3, -1, 1.3),diag(1,3,3)), 
      mvrnorm(n = 100, c(1, -1.2, -1.9),diag(1,3,3)) )
 
