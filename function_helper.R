@@ -37,6 +37,8 @@ shuffle_dist <- function(distr){
   
   library(tidyverse)
   
+  #Se agrega la columna id al tibble distr
+  #Se samplea aleatoriamente por el numero de filas de distr para reordenarlo
   tbl_df_O <- distr %>%
     mutate( 
       ID = rep( 
@@ -44,6 +46,7 @@ shuffle_dist <- function(distr){
       )) %>%
     sample_n(nrow(distr)) 
   
+  #Devuelve tibble reordenado y con columna ID
   tbl_df_O
 }
 
