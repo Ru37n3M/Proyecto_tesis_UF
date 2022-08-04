@@ -113,11 +113,13 @@ Opinion_pool <-function(shuffled_distr, k, nv, pv, k_method = "random", con_meth
 #argumentos definidos dentro de Opinion_pool: O_pool, par (seteados a partir de shuffled_distr)
 Voting <- function(O_pool, par, k, vneg, vpos, k_method = "random", cons_method = "A" ){
   
+  
   #Si el metodo de seleccion de ideas es "A", se samplean las ultimas filas de O_pool para que todas las ideas
   #sean visualizadas el mismo numero de veces
   #Si "B" se samplean las primeras filas de O_pool, es decir, las que mayor consenso generaron,
   #es decir, que fueron las que fueron más vistas y votadas
   #Si "random" o cualquier otra cosa que no sea ni "A" ni "B" se samplean filas de O_pool de manera aleatoria
+  
   if(k_method == "A"){
     k_opinion <- sample_n(tail(O_pool, k), ifelse(nrow(O_pool) >= k, yes = k, no = nrow(O_pool)), replace = F)
   } else if(k_method == "B"){
@@ -150,25 +152,33 @@ Voting <- function(O_pool, par, k, vneg, vpos, k_method = "random", cons_method 
   #se reordenan las filas 
   rearranged <- order(kpar_distdf$means)
   
-  kpar_distdf_top <- kpar_distdf[rearranged,]
-  
   #se reordenan en orden inverso
   rearranged_inv <- order(kpar_distdf$means, decreasing = T)
-  
-  kpar_distdf_bottom <- kpar_distdf[rearranged_inv,]
   
   O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] <- O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] + 1 #se suma 1 a la dimension "visualizacion" del df a las ideas I presentes 
   # en k
   
-  #se utiliza el df reordenado para filtrar las filas a las que se les va asignar voto positivo
-  kpar_distdf_top<- kpar_distdf_top[c(1:vpos),]
+  if (vpos > 0){
+    #se reemplaza el df original por el df reordenado
+    kpar_distdf_top <- kpar_distdf[rearranged,]
+    
+    #se utiliza el df reordenado para filtrar las filas a las que se les va asignar voto positivo
+    kpar_distdf_top<- kpar_distdf_top[c(1:vpos),]
+    
+    O_pool$V_pos[which(O_pool$ID%in%kpar_distdf_top$ID)] <- O_pool$V_pos[which(O_pool$ID%in%kpar_distdf_top$ID)] + 1 #se suma 1 punto a la idea que se corresponde con el valor minimo
+    
+  }
   
-  #se utiliza el df inverso para filtrar las filas a las que se les va asignar voto negativo
-  kpar_distdf_bottom<- kpar_distdf_bottom[c(1:vneg),]
-  
-  O_pool$V_pos[which(O_pool$ID%in%kpar_distdf_top$ID)] <- O_pool$V_pos[which(O_pool$ID%in%kpar_distdf_top$ID)] + 1 #se suma 1 punto a la idea que se corresponde con el valor minimo
-  
-  O_pool$V_neg[which(O_pool$ID%in%kpar_distdf_bottom$ID)] <- O_pool$V_neg[which(O_pool$ID%in%kpar_distdf_bottom$ID)] + 1 #se suma 1 punto a la idea que se corresponde con el valor minimo
+  if (vneg > 0){
+    
+    kpar_distdf_bottom <- kpar_distdf[rearranged_inv,]
+    
+    #se utiliza el df inverso para filtrar las filas a las que se les va asignar voto negativo
+    kpar_distdf_bottom<- kpar_distdf_bottom[c(1:vneg),]
+    
+    O_pool$V_neg[which(O_pool$ID%in%kpar_distdf_bottom$ID)] <- O_pool$V_neg[which(O_pool$ID%in%kpar_distdf_bottom$ID)] + 1 #se suma 1 punto a la idea que se corresponde con el valor minimo
+    
+  }
   
   #eleccion de criterio de consenso "B" o "A"
   if(cons_method == "B"){
