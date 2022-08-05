@@ -57,7 +57,12 @@ shuffle_dist <- function(distr){
 #k_method criterio de seleccion de k, puesto en random por default: criterios posibles "A" o "B"
 #con_method "B" como criterio alternativo posible
 #el resultado es ordenado en funcion de grado_consenso descendiente
-Opinion_pool <-function(shuffled_distr, k, nv, pv, k_method = "random", con_method = "A"){
+#argumentos t1 y t2 son umbrales de tolerancia sacados de Moussaid et al. 2013
+#según el paper, si la opinion es menor a t1, el participante está de acuerdo, entonces, vota positivo
+#si la opinion se encuentra entre t1 y t2,hace un compromiso, tiene la posibilidad de votarla en caso de no haber opiniones menores a t1
+#si la opinion es mayor a t2, la considera alejada de su posicion, en nuestro caso, vota negativamente
+#por default, conservan los valores designados en el paper
+Opinion_pool <-function(shuffled_distr, k, nv, pv, t1 = 0.3, t2 = 1.1, k_method = "random", con_method = "A"){
   
   library(tidyverse)
   
@@ -85,7 +90,7 @@ Opinion_pool <-function(shuffled_distr, k, nv, pv, k_method = "random", con_meth
     O_pool <- rbind(O_pool,looping_tbl)
     
     #se guardan los resultados de la funcion Voting
-    Voting_loop <- Voting(O_pool, par_n, k, nv, pv, k_method, con_method )
+    Voting_loop <- Voting(O_pool, par_n, k, nv, pv, t1, t2, k_method, con_method )
     
     #se sobrescribe O_pool con los resultados de la votacion
     #se actualizan visualizaciones, votos positivos y negativos y el grado de conseso
@@ -111,7 +116,8 @@ Opinion_pool <-function(shuffled_distr, k, nv, pv, k_method = "random", con_meth
 #Genera votacion, incorpora resultados al repeat loop de Opinion_pool
 #argumentos de voting que se setean en Opinion_pool: k, vneg, vpos, k_method, cons_method
 #argumentos definidos dentro de Opinion_pool: O_pool, par (seteados a partir de shuffled_distr)
-Voting <- function(O_pool, par, k, vneg, vpos, k_method = "random", cons_method = "A" ){
+#argumentos t1 y t2 idem opinion_pool()
+Voting <- function(O_pool, par, k, vneg, vpos,  t1 = 0.3, t2 = 1.1, k_method = "random", cons_method = "A" ){
   
   
   #Si el metodo de seleccion de ideas es "A", se samplean las ultimas filas de O_pool para que todas las ideas
@@ -149,18 +155,36 @@ Voting <- function(O_pool, par, k, vneg, vpos, k_method = "random", cons_method 
   #se agrega el id
   kpar_distdf$ID <- k_opinion$ID
   
-  #se reordenan las filas 
-  rearranged <- order(kpar_distdf$means)
+  #se filtran los valores que pasan t1 en un dataframe aparte
+  agree <- which(kpar_distdf$means < t1)
+
+  agree_df <- kpar_distdf[agree,]
   
-  #se reordenan en orden inverso
-  rearranged_inv <- order(kpar_distdf$means, decreasing = T)
+  #se ordena el nuevo dataframe en orden ascendiente
+  agree_df<- agree_df[order(agree_df$means),]
+  
+  #se filtran los valores entre t1 y t2 en un dataframe aparte
+  compromise <- which(between(kpar_distdf$means,t1,t2))
+  
+  compromise_df <- kpar_distdf[compromise,]
+  
+  #se ordena el nuevo dataframe en orden ascendiente
+  compromise_df<- compromise_df[order(compromise_df$means),]
+  
+  #se filtran valores superiores a t2 en un dataframe aparte
+  disagree <- which(kpar_distdf$means > t2)
+  
+  disagree_df <- kpar_distdf[disagree,]
   
   O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] <- O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] + 1 #se suma 1 a la dimension "visualizacion" del df a las ideas I presentes 
   # en k
   
-  if (vpos > 0){
+  if (length(agree) > 0 && vpos > 0){
+    
     #se reemplaza el df original por el df reordenado
-    kpar_distdf_top <- kpar_distdf[rearranged,]
+    #se combinan valores menores a t1 con valores entre t1 y t2 
+    #los valores de t1 son los primeros valores
+    kpar_distdf_top <- rbind(agree_df, compromise_df)
     
     #se utiliza el df reordenado para filtrar las filas a las que se les va asignar voto positivo
     kpar_distdf_top<- kpar_distdf_top[c(1:vpos),]
@@ -169,9 +193,10 @@ Voting <- function(O_pool, par, k, vneg, vpos, k_method = "random", cons_method 
     
   }
   
-  if (vneg > 0){
+  if (length(disagree) > 0 && vneg > 0){
     
-    kpar_distdf_bottom <- kpar_distdf[rearranged_inv,]
+    #se ordenan los valores en orden decreciente
+    kpar_distdf_bottom <- disagree_df[order(disagree_df$means, decreasing = T),]
     
     #se utiliza el df inverso para filtrar las filas a las que se les va asignar voto negativo
     kpar_distdf_bottom<- kpar_distdf_bottom[c(1:vneg),]
