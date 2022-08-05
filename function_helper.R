@@ -220,11 +220,11 @@ Voting <- function(O_pool, par, k, vneg, vpos,  t1 = 0.3, t2 = 1.1, k_method = "
 #poner el resultado de mixingfun en mixeddistr
 #setear argumentos de Voting(): k, vneg, vpos
 #el resultado es ordenado en funcion de grado_consenso descendiente
-OV_loop <- function(mixeddistr, k, vneg, vpos, k_method = "random", con_method = "A"){
+OV_loop <- function(mixeddistr, k, vneg, vpos, t1 = 0.3, t2 = 1.1, k_method = "random", con_method = "A"){
   
   shuffled_dist <- shuffle_dist(mixeddistr)
   
-  OV_res <- Opinion_pool(shuffled_dist, k, vneg, vpos, k_method, con_method )
+  OV_res <- Opinion_pool(shuffled_dist, k, vneg, vpos, t1, t2, k_method, con_method )
   
   return(OV_res)
   
