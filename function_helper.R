@@ -62,7 +62,9 @@ shuffle_dist <- function(distr){
 #si la opinion se encuentra entre t1 y t2,hace un compromiso, tiene la posibilidad de votarla en caso de no haber opiniones menores a t1
 #si la opinion es mayor a t2, la considera alejada de su posicion, en nuestro caso, vota negativamente
 #por default, conservan los valores designados en el paper
-Opinion_pool <-function(shuffled_distr, k, nv, pv, t1 = 0.3, t2 = 1.1, k_method = "random", con_method = "A"){
+#par_num_iteration cantidad de participantes por iteracion
+Opinion_pool <-function(shuffled_distr, k, par_num_iteration,
+                        nv, pv, t1 = 0.3, t2 = 1.1, k_method = "random", con_method = "A"){
   
   library(tidyverse)
   
@@ -75,7 +77,7 @@ Opinion_pool <-function(shuffled_distr, k, nv, pv, t1 = 0.3, t2 = 1.1, k_method 
   repeat{
     
     #se selecciona primera fila 
-    par_n <- par_pool[c(1:1),]
+    par_n <- par_pool[c(1:par_num_iteration),]
     
     #se arma un tibble con las dimensiones de par_n
     looping_tbl <- tibble(
@@ -102,7 +104,7 @@ Opinion_pool <-function(shuffled_distr, k, nv, pv, t1 = 0.3, t2 = 1.1, k_method 
     O_pool <- O_pool[rearranged_df_cons,]
     
     #se elimina la primera fila del pool de participantes
-    par_pool <- par_pool[-c(1:1),]
+    par_pool <- par_pool[-c(1:par_num_iteration),]
     
     #el loop se rompe cuando no quedan mas filas en el pool de participantes
     if(nrow(par_pool) == 0)
@@ -220,11 +222,12 @@ Voting <- function(O_pool, par, k, vneg, vpos,  t1 = 0.3, t2 = 1.1, k_method = "
 #poner el resultado de mixingfun en mixeddistr
 #setear argumentos de Voting(): k, vneg, vpos
 #el resultado es ordenado en funcion de grado_consenso descendiente
-OV_loop <- function(mixeddistr, k, vneg, vpos, t1 = 0.3, t2 = 1.1, k_method = "random", con_method = "A"){
+OV_loop <- function(mixeddistr, k, par_num_iteration, vneg, vpos,
+                    t1 = 0.3, t2 = 1.1, k_method = "random", con_method = "A"){
   
   shuffled_dist <- shuffle_dist(mixeddistr)
   
-  OV_res <- Opinion_pool(shuffled_dist, k, vneg, vpos, t1, t2, k_method, con_method )
+  OV_res <- Opinion_pool(shuffled_dist, k, par_num_iteration, vneg, vpos, t1, t2, k_method, con_method )
   
   return(OV_res)
   
