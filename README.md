@@ -2,13 +2,12 @@
 <html lang="esp">
     <head>
         <meta charset="UTF-8" />
-        <link href="styles.css" rel="stylesheet" />
     </head>
     <main>
         <body>
             <header>
                 <h1 class="title">Efectos contextuales sobre la dinámica de opinión en una plataforma de Crowdsoursing</h1>
-                <h2>Tesista: Yabur Carranza, Enio A.  </h2>
+                <h2>Tesista: Yabur Carranza, Enio Alejandro  </h2>
                 <h2>Directores: Ramos Usaj, Alejandro; Dottori, Martín</h2>
             </header>
             <section class="intro">
