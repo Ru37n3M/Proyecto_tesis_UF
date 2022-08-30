@@ -34,15 +34,14 @@
                 <p>El estudio de las dinámicas de opinión (DO) apunta a
                     comprender y caracterizar cómo los individuos forman sus opiniones 
                     y cómo estas evolucionan a través del tiempo y a partir de la interacción 
-                    con otros agentes (Chen et al., 2018; Anderson & Ye, 2019; 
-                    Barrera Lemarchand et al., 2019; Adams et al., 2021).</p>
+                    con otros agentes.</p>
             </section>
             <section class="WoC">
                 <h2 class="WoC-header">¿Qué es Sabiduría de las masas?</h2>
                 <p> El efecto Sabiduría de las Masas (SM) aplica a problemas donde se asume una respuesta correcta, 
                     dado que enuncia que el promedio de todas las respuestas es un valor cercano al valor real en 
                     tanto las estimaciones de cada individuo se realicen de forma simétrica e independiente alrededor 
-                    del valor (Kittur & Kraut, 2008; Mavrodiev & Schweizer, 2021a; Mavrodiev & Schweizer, 2021b ). </p>
+                    del valor. </p>
                 <p>Dicho efecto es utilizado para exporar las dinámicas de opinión en problemas con respuestas correctas a priori</p>
             </section>
             <section class="Crowdsourcing">
@@ -50,15 +49,14 @@
                 <p>Crowdsourcing  es un método en el cual no necesariamente se asume una respuesta correcta, 
                     sino que implica que poseer a un gran número de personas trabajando en una misma tarea, 
                     y luego compartiendo las soluciones, impulsa la innovación y selección de ideas más votadas 
-                    o “mejores” (Créquit et al., 2018; Tucker et al., 2019).</p>
+                    o “mejores”.</p>
             </section>
             <section class="ABM">
                 <h2 class="ABM-header">¿Qué es el Modelado Basado en Agentes?</h2>
                 <p>Agent-Based Modelling (ABM) es un tipo de simulación basada en objetos, en el cual cada individuo 
                     es representado por un agente y sus opiniones son representadas por un valor que evoluciona 
-                    en el tiempo (Anderson & Ye, 2019).</p>
+                    en el tiempo.</p>
             </section>
-            
             <section class="relevance">
                 <h2 class="relevance-header">Relevancia</h2>
                 <p>Se ha ubicado una falta de estudios que analicen la dinámica de opiniones en
@@ -120,17 +118,30 @@
                 el conjunto de todas las opiniones presentes en la plataforma hasta el momento <i>t</i>.
                </p>
                <p>
-                Dada una cantidad <i>k</i> de opiniones disponibles en cada ronda de valoración, <i>G</i><sub>i</sub> &sub; &Theta;<sub>t</sub> \ {<i>O</i><sub>i</sub>} 
-                es el subconjunto de <i>k</i> opiniones vistas por el i-ésimo agente. Si un caso particular se le muestran al agente <i>a</i><sub>i</sub> el conjunto de opiniones
+                Dada una cantidad <i>k</i> de opiniones disponibles en cada ronda de valoración, <i>G</i><sub>i</sub> &sub; &Theta;<sub>t</sub> \ {<i>O</i
+                   <sub>i</sub>} 
+                es el subconjunto de <i>k</i> opiniones vistas por el i-ésimo agente. Si un caso particular se le muestran al agente <i>a</i><sub>i</sub> el conjunto
+                   de opiniones
                 <i>G</i><sub>i</sub> , <i>O</i><sub>i,j</sub>  refiere a la j-esima idea que se le muestran al i-esimo agente donde
                 <i>O</i><sub>i,j</sub> &isin; <i>G</i><sub>i</sub> , <i>j</i> &isin; <i>N</i> - {<i>i</i>}.
                 Definimos la conducta de votación positiva como la probabilidad de que el agente <i>a</i><sub>i</sub> vote positivamente a la idea
-                <i>O</i><sub>i,j</sub> lo cual está dado por 
+                   <i>O</i><sub>i,j</sub> lo cual está dado por </p>
+                   <p>P(O<sub>i,j</sub>) = <i>D</i><sub>i,j</sub><sup>-1</sup> / &sum;<sub>j</sub><sup>k</sup> <i>D</i><sub>i,j</sub><sup>-1</sup></p>
+        <p>estando <i>D</i><sub>i,j</sub> definido como la distancia absoluta entre dos opiniones según <i>D</i><sub>i,j</sub> = |<i>O</i><sub>i</sub> - <i>O</i><sub>j</sub>| donde <i>O</i><sub>j</sub> &isin; <i>G</i><sub>i</sub>.
                </p>
-            </section>
-            <section class="references">
-                <h2 class="ref-header">Referencias</h2>
-            </section>         
+                <p>
+                     Se define entonces la probabilidad de que el agente <i>a</i><sub>i</sub> vote positivamente a la idea <i>O</i><sub>j</sub> como proporcional a la inversa de la distancia entre la opinión del agente (<i>O</i><sub>i</sub>) y la idea <i>O</i><sub>j</sub>.
+                </p>
+                <p>La conducta de votación negativa funciona de manera análoga con la única diferencia que no se toma la inversa de la distancia </p>
+                    <p>P(O<sub>i,j</sub>) = <i>D</i><sub>i,j</sub> / &sum;<sub>j</sub><sup>k</sup> <i>D</i><sub>i,j</sub></p>  
+                <p>
+                    Por tanto la probabilidad de votar negativamente la idea es proporcional a la distancia.
+                </p>
+                <h3>Definiciones de la plataforma</h3>
+                <p>La selección de opiniones que se le van a mostrar al agente i-ésimo en una determinada ronda estarán dadas por dos algoritmos de selección de opiniones que serán manipulados.</p>
+                <p>Sean <i>v</i>(<i>O</i><sub>j</sub>) la cantidad de visualizaciones de la j-ésima opinión y <i>V</i> &sube; &theta;<sub>t</sub> el subconjunto de opiniones con el mínimo valor de visualizaciones donde |<i>V</i>| &isin; [k, N], el primer algoritmo &fnof;<sub>1</sub>(<i>x</i>) elige <i>k</i> ideas seleccionando <i>O</i><sub>j</sub> cuando <i>v</i>(<i>O</i><sub>i</sub>) < <i>v</i>(<i>O</i><sub>j</sub>) o seleccionando <i>O</i><sub>i</sub> con probabilidad 1/|<i>V</i>| cuando <i>v</i>(<i>O</i><sub>i</sub>) = <i>v</i>(<i>O</i><sub>j</sub>) </p>
+                <p>Sea <i>M</i> &sube; &theta; el subconjunto de <i>n</i> opiniones con el máximo ratio de votos sobre visualizaciones <i>m</i>(<i>O</i><sub>i</sub>) /  <i>v</i>(<i>O</i><sub>i</sub>), siendo <i>m</i>(<i>O</i><sub>i</sub>) la cantidad de votos positivos de la i-ésima opinión o la diferencia entre los votos positivos y los votos negativos dependiendo de si en una determinada iteración la plataforma posee votos negativos, el segundo algoritmo &fnof;<sub>2</sub>(<i>x</i>) selecciona <i>k</i> / 2 opiniones de <i>G</i><sub>i,r</sub> según el algoritmo anteriormente descrito y el resto de las opiniones son seleccionadas tomando las <i>k</i> / 2 opiniones con el mayor ratio de votos sobre visualizaciones del conjunto <i>M</i>,  eligiendo <i>O</i><sub>i</sub> cuando <i>m</i>(<i>O</i><sub>i</sub>) < <i>m</i>(<i>O</i><sub>j</sub>) y eligiendo <i>O</i><sub>i</sub> con probabilidad 1/<i>n</i> cuando <i>m</i>(<i>O</i><sub>i</sub>) = <i>m</i>(<i>O</i><sub>j</sub>). </p>
+            </section>    
         </body>
     </main>    
 </html>
