@@ -64,8 +64,7 @@
                 <p>Se ha ubicado una falta de estudios que analicen la dinámica de opiniones en
                     plataformas de crowdsourcing online, asumiendo influencia unidireccional 
                     bajo distintas condiciones contextuales, como alternativa para explorar SM en problemas 
-                    sin respuesta a priori. 
-                </p>
+                    sin respuesta a priori.</p>
             </section>
             <section class="objectives">
                 <h2 class="objectives-header">Objetivos</h2>
