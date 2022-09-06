@@ -64,23 +64,6 @@ Opinion_pool <-function(shuffled_distr, k, par_num_iteration,
   #k_method: criterio de seleccion de k, puede ser "random" (default), "A" o "B"
   
   
-#[FALTA LA EXPLICACION DE LA FUNCION]
-  
- #según el paper, si la opinion es menor a t1, el participante está de acuerdo, entonces, vota positivo
-#si la opinion se encuentra entre t1 y t2,hace un compromiso, tiene la posibilidad de votarla en caso de no haber opiniones menores a t1
-#si la opinion es mayor a t2, la considera alejada de su posicion, en nuestro caso, vota negativamente
- #por default, conservan los valores designados en el paper
-  
-  #shuffle_dist: espera los resultados de shuffle_dist
-  #k: numero de ideas que cada participante va a ver (numero entero)
-  #par_num_iteration: cantidad de participantes por iteracion [FALTA ACLARAR QUE PASA CON ESTE ARGUMENTO]
-  #nv: la cantidad de votos negativos (numero entero)
-  #pv: la cantidad de votos positivos (numero entero)
-  #k_method: criterio de seleccion de k, puede ser "random" (default), "A" o "B"
-  #con_method: criterio alternativo posible, puede ser "A" (default) o "B" [#el resultado es ordenado en funcion de grado_consenso descendiente ESTO ES DE ACA?]
-  #t1: umbral de tolerancia (sacado de Moussaid et al. 2013)
-  #t2: umbral de tolerancia (sacado de Moussaid et al. 2013)
-  
   library(tidyverse)
   
   #nuevo dataframe con las dimensiones de shuffled_dist
