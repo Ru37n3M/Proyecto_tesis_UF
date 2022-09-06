@@ -26,45 +26,43 @@ mixingfun <- function(dislist){
 }
 
 
-mixingfun(list("n" = c(200,300,100), # n de cada distribucion
+dist <- mixingfun(list("n" = c(200,300,100), # n de cada distribucion
                "means" = list(c(2,2,2),c(1,1,1),c(0,0,0)), # lista con vectores de medias para cada dist
                "cov_mat" = list(diag(1,3,3),diag(1,3,3),diag(1,3,3)))) # lista con matrices de covarianza
 
 ######
 
-#Poner el resultado de mixingfun en distr
+
 shuffle_dist <- function(distr){
+  
+  #distr: Espera el resultado de mixingfun
   
   library(tidyverse)
   
-  #Se agrega la columna id al tibble distr
-  #Se samplea aleatoriamente por el numero de filas de distr para reordenarlo
   tbl_df_O <- distr %>%
-    mutate( 
+    mutate(
+      #Se agrega la columna id al tibble distr
       ID = rep( 
         1:nrow(distr)
       )) %>%
-    sample_n(nrow(distr)) 
+    sample_n(nrow(distr)) #Se samplea aleatoriamente por el numero de filas de distr para reordenarlo
   
   #Devuelve tibble reordenado y con columna ID
   tbl_df_O
 }
 
-#Poner el resultado de shuffle_dist en shuffled_dist
-#poner el numero de ideas que cada participante va a ver (k)
-#poner la cantidad de votos negativos (nv)
-#poner la cantidad de votos positivos (pv)
-#k_method criterio de seleccion de k, puesto en random por default: criterios posibles "A" o "B"
-#con_method "B" como criterio alternativo posible
-#el resultado es ordenado en funcion de grado_consenso descendiente
-#argumentos t1 y t2 son umbrales de tolerancia sacados de Moussaid et al. 2013
-#según el paper, si la opinion es menor a t1, el participante está de acuerdo, entonces, vota positivo
-#si la opinion se encuentra entre t1 y t2,hace un compromiso, tiene la posibilidad de votarla en caso de no haber opiniones menores a t1
-#si la opinion es mayor a t2, la considera alejada de su posicion, en nuestro caso, vota negativamente
-#por default, conservan los valores designados en el paper
-#par_num_iteration cantidad de participantes por iteracion
+
 Opinion_pool <-function(shuffled_distr, k, par_num_iteration,
-                        nv, pv, t1 = 0.3, t2 = 1.1, k_method = "random", con_method = "A"){
+                        nv, pv, ego = 0.01, k_method = "random"){
+  
+  #shuffle_dist: espera los resultados de shuffle_dist
+  #k: numero de ideas que cada participante va a ver (numero entero)
+  #par_num_iteration: cantidad de participantes por iteracion [FALTA ACLARAR QUE PASA CON ESTE ARGUMENTO]
+  #nv: la cantidad de votos negativos (numero entero)
+  #pv: la cantidad de votos positivos (numero entero)
+  #ego: valor > 0 o <= 1, definido como la probabilidad que tiene el participante de votar su propia idea (Dij == 0), valores mas cercanos a 0 implican mayor prob. de votar idea propia
+  #k_method: criterio de seleccion de k, puede ser "random" (default), "A" o "B"
+  
   
   library(tidyverse)
   
@@ -92,16 +90,12 @@ Opinion_pool <-function(shuffled_distr, k, par_num_iteration,
     O_pool <- rbind(O_pool,looping_tbl)
     
     #se guardan los resultados de la funcion Voting
-    Voting_loop <- Voting(O_pool, par_n, k, nv, pv, t1, t2, k_method, con_method )
+    Voting_loop <- Voting(O_pool, par_n, k, nv, pv, ego, k_method)
     
     #se sobrescribe O_pool con los resultados de la votacion
     #se actualizan visualizaciones, votos positivos y negativos y el grado de conseso
     O_pool <- Voting_loop
     
-    #se ordena O_pool en orden decreciente por grado de consenso
-    rearranged_df_cons<-order(O_pool$grado_consenso, na.last = F, decreasing = T) 
-    
-    O_pool <- O_pool[rearranged_df_cons,]
     
     #se elimina la primera fila del pool de participantes
     par_pool <- par_pool[-c(1:par_num_iteration),]
@@ -118,8 +112,8 @@ Opinion_pool <-function(shuffled_distr, k, par_num_iteration,
 #Genera votacion, incorpora resultados al repeat loop de Opinion_pool
 #argumentos de voting que se setean en Opinion_pool: k, vneg, vpos, k_method, cons_method
 #argumentos definidos dentro de Opinion_pool: O_pool, par (seteados a partir de shuffled_distr)
-#argumentos t1 y t2 idem opinion_pool()
-Voting <- function(O_pool, par, k, vneg, vpos,  t1 = 0.3, t2 = 1.1, k_method = "random", cons_method = "A" ){
+
+Voting <- function(O_pool, par, k, vneg, vpos, ego = 0.01, k_method = "random"){
   
   
   #Si el metodo de seleccion de ideas es "A", se samplean las ultimas filas de O_pool para que todas las ideas
@@ -129,91 +123,103 @@ Voting <- function(O_pool, par, k, vneg, vpos,  t1 = 0.3, t2 = 1.1, k_method = "
   #Si "random" o cualquier otra cosa que no sea ni "A" ni "B" se samplean filas de O_pool de manera aleatoria
   
   if(k_method == "A"){
-    k_opinion <- sample_n(tail(O_pool, k), ifelse(nrow(O_pool) >= k, yes = k, no = nrow(O_pool)), replace = F)
+    
+    #Se reordena el tibble de mayor a menor visualizaciones
+    rearranged_df_vis<-order(O_pool$visualizaciones, na.last = F, decreasing = T) 
+    
+    O_pool_vis <- O_pool[rearranged_df_vis,]
+    
+    #Se samplea k entre las últimas filas del dataframe
+    k_opinion <- sample_n(tail(O_pool_vis, k), ifelse(nrow(O_pool_vis) >= k, yes = k, no = nrow(O_pool_vis)), replace = F)
   } else if(k_method == "B"){
-    k_opinion <- sample_n(head(O_pool, k), ifelse(nrow(O_pool) >= k, yes = k, no = nrow(O_pool)), replace = F)}
+    
+    #Se reordena el tibble de mayor a menor visualizaciones
+    rearranged_df_vis<-order(O_pool$visualizaciones, na.last = F, decreasing = T) 
+    
+    O_pool_vis <- O_pool[rearranged_df_vis,]
+    
+    #Se samplea k/2 entre las últimas filas del dataframe
+    sample_bottomvis <- sample_n(tail(O_pool_vis, k/2), ifelse(nrow(O_pool_vis) >= k, yes = k, no = nrow(O_pool_vis))/2, replace = F)
+    
+    #Se reordena el tibble de mayor a menor ratio votos/visualizaciones
+    rearranged_df_ratiovm<-order(O_pool$grado_consenso, na.last = F, decreasing = T) 
+    
+    O_pool_cons <- O_pool[rearranged_df_ratiovm,]
+    
+    #Se samplea k/2 entre las últimas filas del dataframe
+    sample_topcons <- sample_n(head(O_pool_cons, k), ifelse(nrow(O_pool) >= k/2, yes = k/2, no = nrow(O_pool))/2, replace = F)
+    
+    #Se unen los resultados de ambos samplings
+    k_opinion <- rbind(sample_bottomvis, sample_topcons)
+    
+  }
+  
   else{
+    #Sampleo aleatorio
     k_opinion <- sample_n(O_pool, ifelse(nrow(O_pool) >= k, yes = k, no = nrow(O_pool)), replace = F)
   }
+  
+  O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] <- O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] + 1 #se suma 1 a la dimension "visualizacion" del df a las ideas I presentes 
+  # en 
   
   #k vectores con las dimensiones de k_opinion
   k2_noid <- k_opinion[, c(2:sum(grepl("Dim", colnames(O_pool)),1))]
   
-  distance <- function(x){
+  #Distancia entre participante y k
+  distance_i_j <- function(x){
     abs(par) - abs(x)
   }
   
-  kpar_distdf <- apply(k2_noid,1,distance)
+  #Matriz de k filas con el resultado de la diferencia
+  Dij <- apply(k2_noid,1, distance_i_j)
   
-  #deshacemos la lista y coercemos como matriz
-  kpar_distdf <- matrix(unlist(kpar_distdf), nrow = nrow(k_opinion), byrow = T)
+  Dij <- bind_rows(Dij)
   
-  #coercemos la matriz en dataframe
-  kpar_distdf <- as.data.frame(kpar_distdf)
+  #Se pasan a valores absolutos todos los numeros
+  Dij <- abs(Dij)
   
-  #se agregan las medias por cada fila
-  kpar_distdf$means <- abs(rowMeans(kpar_distdf))
+  #Comprobamos que no haya 0 como valor de algún vector, en caso de ser 0, se reemplaza por un valor distinto a 0 para
+  #evitar division por 0. Vectores de valor 0 ocurren en las primeras iteraciones del loop, donde 
+  #es mas probable que el participante vea su opinion en las k ideas seleccionadas
+  Dij[Dij == 0] <- ego
   
-  #se agrega el id
-  kpar_distdf$ID <- k_opinion$ID
+  #Inversa de la distancia, se elevan todos los valores a la -1
+  sumDij_inverse <- sum(Dij**-1)
   
-  #se filtran los valores que pasan t1 en un dataframe aparte
-  agree <- which(kpar_distdf$means < t1)
-
-  agree_df <- kpar_distdf[agree,]
-  
-  #se ordena el nuevo dataframe en orden ascendiente
-  agree_df<- agree_df[order(agree_df$means),]
-  
-  #se filtran los valores entre t1 y t2 en un dataframe aparte
-  compromise <- which(between(kpar_distdf$means,t1,t2))
-  
-  compromise_df <- kpar_distdf[compromise,]
-  
-  #se ordena el nuevo dataframe en orden ascendiente
-  compromise_df<- compromise_df[order(compromise_df$means),]
-  
-  #se filtran valores superiores a t2 en un dataframe aparte
-  disagree <- which(kpar_distdf$means > t2)
-  
-  disagree_df <- kpar_distdf[disagree,]
-  
-  O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] <- O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] + 1 #se suma 1 a la dimension "visualizacion" del df a las ideas I presentes 
-  # en k
-  
-  if (length(agree) > 0 && vpos > 0){
-    
-    #se reemplaza el df original por el df reordenado
-    #se combinan valores menores a t1 con valores entre t1 y t2 
-    #los valores de t1 son los primeros valores
-    kpar_distdf_top <- rbind(agree_df, compromise_df)
-    
-    #se utiliza el df reordenado para filtrar las filas a las que se les va asignar voto positivo
-    kpar_distdf_top<- kpar_distdf_top[c(1:vpos),]
-    
-    O_pool$V_pos[which(O_pool$ID%in%kpar_distdf_top$ID)] <- O_pool$V_pos[which(O_pool$ID%in%kpar_distdf_top$ID)] + 1 #se suma 1 punto a la idea que se corresponde con el valor minimo
-    
+  #Probabilidad de cada vector de valores de ser elegido en base a la sumatoria de todas las distancias
+  Probs_vpos <- function(x){
+    (x**-1) / sumDij_inverse
   }
   
-  if (length(disagree) > 0 && vneg > 0){
-    
-    #se ordenan los valores en orden decreciente
-    kpar_distdf_bottom <- disagree_df[order(disagree_df$means, decreasing = T),]
-    
-    #se utiliza el df inverso para filtrar las filas a las que se les va asignar voto negativo
-    kpar_distdf_bottom<- kpar_distdf_bottom[c(1:vneg),]
-    
-    O_pool$V_neg[which(O_pool$ID%in%kpar_distdf_bottom$ID)] <- O_pool$V_neg[which(O_pool$ID%in%kpar_distdf_bottom$ID)] + 1 #se suma 1 punto a la idea que se corresponde con el valor minimo
-    
+  Poij_pos<- sapply(Dij, Probs_vpos)
+  
+  #Poij_pos<- rowSums(Poij_pos)
+  
+  #se samlea vpos con las probabilidades de cada fila/vector
+  Voted_pos <- sample_n(k_opinion, vpos, prob = c(Poij_pos), replace = T)
+  
+  #se suma 1 punto a la idea que se corresponde con el valor minimo
+  O_pool$V_pos[which(O_pool$ID%in%Voted_pos$ID)] <- O_pool$V_pos[which(O_pool$ID%in%Voted_pos$ID)] + 1 
+  
+  #Sumatoria de todas las distancias
+  sumDij <- sum(Dij)
+  
+  #Probabilidad de voto negativo
+  Probs_vneg <- function(x){
+    x / sumDij
   }
   
-  #eleccion de criterio de consenso "B" o "A"
-  if(cons_method == "B"){
-    O_pool$grado_consenso[which(O_pool$ID%in%k_opinion$ID)] <- (O_pool$V_pos[which(O_pool$ID%in%k_opinion$ID)]-
-                                                                  O_pool$V_neg[which(O_pool$ID%in%k_opinion$ID)])/O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)]
-  }else{
-    O_pool$grado_consenso[which(O_pool$ID%in%k_opinion$ID)] <- O_pool$V_pos[which(O_pool$ID%in%k_opinion$ID)]/O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)]
-  }
+  Poij_neg<- sapply(Dij, Probs_vneg)
+  
+  #Se samplea vneg de k_opinion con probabilidades de voto negativo para cada vector
+  Voted_neg <- sample_n(k_opinion,vneg, prob = c(Poij_neg), replace = T)
+  
+  #se suma 1 punto a la idea que se corresponde con el valor minimo
+  O_pool$V_neg[which(O_pool$ID%in%Voted_neg$ID)] <- O_pool$V_neg[which(O_pool$ID%in%Voted_neg$ID)] + 1 
+  
+  #Ratio Votos/visualizaciones
+  O_pool$grado_consenso[which(O_pool$ID%in%k_opinion$ID)] <- (O_pool$V_pos[which(O_pool$ID%in%k_opinion$ID)]-
+                                                                O_pool$V_neg[which(O_pool$ID%in%k_opinion$ID)])/O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)]
   
   return(O_pool)
 }
@@ -223,11 +229,11 @@ Voting <- function(O_pool, par, k, vneg, vpos,  t1 = 0.3, t2 = 1.1, k_method = "
 #setear argumentos de Voting(): k, vneg, vpos
 #el resultado es ordenado en funcion de grado_consenso descendiente
 OV_loop <- function(mixeddistr, k, par_num_iteration, vneg, vpos,
-                    t1 = 0.3, t2 = 1.1, k_method = "random", con_method = "A"){
+                    ego=0.01, k_method = "random"){
   
   shuffled_dist <- shuffle_dist(mixeddistr)
   
-  OV_res <- Opinion_pool(shuffled_dist, k, par_num_iteration, vneg, vpos, t1, t2, k_method, con_method )
+  OV_res <- Opinion_pool(shuffled_dist, k, par_num_iteration, vneg, vpos, ego, k_method)
   
   return(OV_res)
   
