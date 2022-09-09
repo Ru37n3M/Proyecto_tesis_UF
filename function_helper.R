@@ -68,7 +68,7 @@ Opinion_pool <-function(shuffled_distr, k, par_num_iteration,
   #nv: la cantidad de votos negativos (numero entero)
   #pv: la cantidad de votos positivos (numero entero)
   #k_method: criterio de seleccion de k, puede ser "random" (default), "A" o "B"
-  #con_method: criterio alternativo posible, puede ser "A" (default) o "B" [#el resultado es ordenado en funcion de grado_consenso descendiente ESTO ES DE ACA?]
+  #con_method: criterio alternativo posible, puede ser "A" (default) o "B" [#el resultado es ordenado en funcion de ratio_votos_vis descendiente ESTO ES DE ACA?]
   #t1: umbral de tolerancia (sacado de Moussaid et al. 2013)
   #t2: umbral de tolerancia (sacado de Moussaid et al. 2013)
   
@@ -150,7 +150,7 @@ Voting <- function(O_pool, par, k, vneg, vpos, ego = 0.01, k_method = "random"){
     sample_bottomvis <- sample_n(tail(O_pool_vis, k), ifelse(nrow(O_pool_vis) >= k, yes = k, no = nrow(O_pool_vis)), replace = F)
     
     #Se reordena el tibble de mayor a menor ratio votos/visualizaciones
-    rearranged_df_ratiovm<-order(O_pool$grado_consenso, na.last = F, decreasing = T) 
+    rearranged_df_ratiovm<-order(O_pool$ratio_votos_vis, na.last = F, decreasing = T) 
     
     O_pool_cons <- O_pool[rearranged_df_ratiovm,]
     
@@ -230,7 +230,7 @@ Voting <- function(O_pool, par, k, vneg, vpos, ego = 0.01, k_method = "random"){
   O_pool$V_neg[which(O_pool$ID%in%Voted_neg$ID)] <- O_pool$V_neg[which(O_pool$ID%in%Voted_neg$ID)] + 1 
   
   #Ratio Votos/visualizaciones
-  O_pool$grado_consenso[which(O_pool$ID%in%k_opinion$ID)] <- (O_pool$V_pos[which(O_pool$ID%in%k_opinion$ID)]-
+  O_pool$ratio_votos_vis[which(O_pool$ID%in%k_opinion$ID)] <- (O_pool$V_pos[which(O_pool$ID%in%k_opinion$ID)]-
                                                                 O_pool$V_neg[which(O_pool$ID%in%k_opinion$ID)])/O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)]
   
   return(O_pool)
@@ -240,7 +240,7 @@ Voting <- function(O_pool, par, k, vneg, vpos, ego = 0.01, k_method = "random"){
 #Incorpora shuffle_dist() Y Opinion_pool() en una sola funcion
 #poner el resultado de mixingfun en mixeddistr
 #setear argumentos de Voting(): k, vneg, vpos
-#el resultado es ordenado en funcion de grado_consenso descendiente
+#el resultado es ordenado en funcion de ratio_votos_vis descendiente
 OV_loop <- function(mixeddistr, k, par_num_iteration, vneg, vpos,
                     ego=0.01, k_method = "random"){
   
