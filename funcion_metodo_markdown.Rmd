@@ -1,7 +1,7 @@
 ---
 title: "Match metodo-codigo"
 output:
-  github_document:
+  github_document
 ---
 
 ```{r setup, include=FALSE}
