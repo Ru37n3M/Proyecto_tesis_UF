@@ -3,7 +3,7 @@ Match metodo-codigo
 
 ## Mezcla de Multivariadas y generacion de agentes
 
-En esta simulacion, los agentes son generados a partir de una mezcla de
+En esta simulación, los agentes son generados a partir de una mezcla de
 3 distribuciones multivariadas. En uno de los casos la distribución va a
 estar definida como *N*(0, Σ) En otro de los casos la distribución va a
 estar dada por una mezcla de gaussianas multivariadas con 2 componentes
@@ -512,12 +512,14 @@ iteración la plataforma posee votos negativos.
                                                                    O_pool$V_neg[which(O_pool$ID%in%k_opinion$ID)])/O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)]
 ```
 
-\###Algoritmo de generacion de opiniones Opinion_pool es una funcion
-diseñada para generar el pool de ideas que posteriormente será utilizado
-en la función Voting, previamente descrita. Según el diseño de la
-plataforma, el participante ingresa su opinion y luego vota sobre k
-ideas presentadas. Opinion_pool representa el proceso en el cual el
-participante ingresa a la plataforma y sube su opinión al pool de ideas.
+### Algoritmo de generacion de opiniones
+
+Opinion_pool es una funcion diseñada para generar el pool de ideas que
+posteriormente será utilizado en la función Voting, previamente
+descrita. Según el diseño de la plataforma, el participante ingresa su
+opinion y luego vota sobre k ideas presentadas. Opinion_pool representa
+el proceso en el cual el participante ingresa a la plataforma y sube su
+opinión al pool de ideas.
 
 Respecto a los argumentos de la funcion, Opinion_pool requiere un
 dataframe dist y un número entero k. Además tiene otros dos argumentos
@@ -526,7 +528,7 @@ participantes por iteracion y k_method el método de selección de ideas
 elegido. El argumento par_num_iteration determina la cantidad de filas
 que pueden ser seleccionadas del dataframe dist por iteración para
 generar el dataset O_pool. Por el momento, se utilizó solo con el valor
-por default
+por default.
 
 ``` r
 Opinion_pool <-function(dist, k, par_num_iteration = 1, 
