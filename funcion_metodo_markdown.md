@@ -70,11 +70,11 @@ una lista, y se unen las filas de los tres dataset.
 Cabe destacar que cada agente tiene asociada una opinión en un espacio
 ideológico definido según *O*(*a*<sub>i</sub>) = \[*O*<sub>1</sub>,
 *O*<sub>2</sub>, *O*<sub>3</sub>\], *i* = 1, 2,…, *N*; *O*<sub>i</sub> ∈
-&#x211D<sup>3</sup> donde *O*<sub>i</sub> es la opinión del agente
-i-ésimo en el espacio tridimensional. Por este motivo, `means` es un
-vector de 3 valores y `cov_mat` es una matriz de 3 columnas y 3 filas.
-Es decir, los valores de cada agente son extraídos de una distribución
-multivariada tridimensional.
+ℝ<sup>3</sup> donde *O*<sub>i</sub> es la opinión del agente i-ésimo en
+el espacio tridimensional. Por este motivo, `means` es un vector de 3
+valores y `cov_mat` es una matriz de 3 columnas y 3 filas. Es decir, los
+valores de cada agente son extraídos de una distribución multivariada
+tridimensional.
 
 ``` r
 pmap(
