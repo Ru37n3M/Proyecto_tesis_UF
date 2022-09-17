@@ -1,7 +1,7 @@
-Match metodo-codigo
+Match Método-Código
 ================
 
-## Mezcla de Multivariadas y generacion de agentes
+## Mezcla de multivariadas y generación de agentes
 
 En esta simulación, los agentes son generados a partir de una mezcla de
 3 distribuciones multivariadas. En uno de los casos la distribución va a
@@ -11,13 +11,13 @@ representando 2 grupos de opiniones definidas según *N* (μ<sub>1</sub>,
 Σ) y *N*(μ<sub>2</sub>, Σ) donde μ<sub>1</sub> = 0 y μ<sub>1</sub> -
 μ<sub>2</sub> indica el grado de polarización de las opiniones.
 
-La funcion mixingfun fue diseñada para generar una mezcla de
-distribuciones multivariadas, siendo dislist una lista que cuente con n,
-medias y matrices de covarianza de cada distribucion. Los argumentos
-beta y total_votos son utilizados en la generacion de la cantidad de
+La función `mixingfun` fue diseñada para generar una mezcla de
+distribuciones multivariadas, siendo `dislist` una lista que cuente con
+n, medias y matrices de covarianza de cada distribución. Los argumentos
+`beta` y `total_votos` son utilizados en la generación de la cantidad de
 votos positivos y negativos de cada participante. En particular, se
-utilzan la distribucion beta como probabilidad de en la generacion de
-una distribucion binomial, la cual determina la cantidad de votos
+utilzan la distribución beta como probabilidad de en la generación de
+una distribución binomial, la cual determina la cantidad de votos
 positivos.
 
 ``` r
@@ -55,16 +55,16 @@ dist <- mixingfun(list("n" = c(200,300,100), # n de cada distribucion
                   2) # lista con matrices de covarianza
 ```
 
-Vamos a explicar con mayor detalle cada parte de la funcion…
+Vamos a explicar con mayor detalle cada parte de la función…
 
 ### Definición de agentes
 
-Los agentes son generados a partir de las funciones pmap y mvrnorm. En
-particular, pmap aplica la funcion mvrnorm a los tres elementos que
-componen la lista dislist: n, means y cov_mat, generando distribuciones
-multivariadas de n cantidad de agentes cada una. El resultado de la
-funcion se coerce en dataframe, dado que pmap devuelve una lista, y se
-unen las filas de los tres dataset.
+Los agentes son generados a partir de las funciones `pmap` y `mvrnorm`.
+En particular, `pmap` aplica la función `mvrnorm` a los tres elementos
+que componen la lista dislist: “n”, “means” y “cov_mat”, generando
+distribuciones multivariadas de n cantidad de agentes cada una. El
+resultado de la funcion se coerce en dataframe, dado que `pmap` devuelve
+una lista, y se unen las filas de los tres dataset.
 
 ``` r
 pmap(
@@ -75,21 +75,21 @@ pmap(
     bind_rows()
 ```
 
-En el siguiente segmento se observa la creacion de 3 nuevas variables
-que seran agregadas al dataset. Siendo Dist una secuencia de 1 a 3
+En el siguiente segmento se observa la creación de 3 nuevas variables
+que serán agregadas al dataset. Siendo Dist una secuencia de 1 a 3
 utilizada para identificar la distribucion proveniente de cada vector de
-valores (en este caso la longitud de dislist$n, el cual es un vector
+valores (en este caso la longitud de `dislist$n`, el cual es un vector
 compuesto de 3 elementos), siendo cada numero repetido n cantidad de
 veces.
 
-Beta son valores extraidos a partir de una distribucion beta.
+`Beta` son valores extraídos a partir de `rbeta`, una distribución beta.
 
 Finalmente, Votos_positivos esta compuesto por valores extraidos de una
-distribucion binomial, definida por n cantidad de participantes, la
-cantidad de votos totales disponibles y Beta.
+distribución binomial `rbinom`, definida por n cantidad de
+participantes, la cantidad de votos totales disponibles y `Beta`.
 
-Al final, la funcion devuelve un tibble con n participantes con x
-dimensiones cada uno, un valor beta asignado y un numero entero
+Al final, la función devuelve un `tibble` con n participantes con x
+dimensiones cada uno, un valor beta asignado y un número entero
 designando la cantidad de votos positivos disponibles para el
 participante.
 
@@ -104,11 +104,12 @@ mutate( #Creo una nueva variable para indicar de que distribucion proviene origi
     tibble() 
 ```
 
-Entonces, mixingfun requiere una lista compuesta por n cantidad de
-valores de cada distribucion, means siendo una lista con vectores de
-medias para cada distribucion y cov_mat siendo una lista compuesta por
-matrices de covarianza. Además, requiere una distribucion beta y un
-valor entero definiendo la cantidad de votos totales.
+Entonces, `mixingfun` requiere una lista compuesta por una cantidad de
+valores de cada distribución denominado en la lista como ´“n”´,
+´“means”´ siendo una lista con vectores de medias para cada distribución
+y ´“cov_mat”´ siendo una lista compuesta por matrices de covarianza.
+Además, requiere una distribución beta y un valor entero definiendo la
+cantidad de votos totales.
 
 ``` r
 dist <- mixingfun(list("n" = c(200,300,100), # n de cada distribucion
@@ -128,20 +129,20 @@ opiniones que serán manipulados.
 
 #### Primer algoritmo de selección
 
-el primer algoritmo ƒ<sub>1</sub>(*x*) elige *k* ideas seleccionando
+El primer algoritmo ƒ<sub>1</sub>(*x*) elige *k* ideas seleccionando
 *O*<sub>j</sub> cuando *v*(*O*<sub>i</sub>) \< *v*(*O*<sub>j</sub>) o
 seleccionando *O*<sub>i</sub> con probabilidad 1/\|*V*\| cuando
 *v*(*O*<sub>i</sub>) = *v*(<i>O</i><sub>j</sub>).
 
-Se samplea el pool de ideas por el numero de filas para cambiar de
+Se samplea el pool de ideas por el número de filas para cambiar de
 posición las filas de todo el dataset, de manera que todas las ideas que
 poseen la misma cantidad de visualizaciones tengan la misma probabilidad
 de ser seleccionadas, es decir, de ser reordenadas dentro de las últimas
 k filas ordenadas decrecientemente por visualizaciones.
 
 Como argumentos, se requiere un dataframe, en este caso, el pool de
-ideas, y un número entero representando la cantidad de ideas a
-seleccionar del dataset.
+ideas `O_pool`, y un número entero representando la cantidad de ideas a
+seleccionar del dataset `k`.
 
 ``` r
 algoritmo_seleccion_f1x <- function(O_pool, k){
@@ -178,7 +179,7 @@ primeras según ratio de votos/visualizaciones. Finalmente se unen las
 filas de ambos subdataset.
 
 Respecto a los argumentos, al igual que en el primer algoritmo, requiere
-un dataframe (O_pool) y un número entero (k).
+un dataframe `O_pool` y un número entero `k`.
 
 ``` r
 algoritmo_seleccion_f2x<- function(O_pool, k){
@@ -205,15 +206,16 @@ algoritmo_seleccion_f2x<- function(O_pool, k){
 }
 ```
 
-## Generacion de votacion
+## Generación de votación
 
-La funcion Voting fue diseñada para llevar a cabo el proceso de votacion
-por cada agente. Dispone de 6 argumentos: pool_ideas siendo un dataframe
-de n cantidad de filas, par siendo un dataframe de una fila (en caso de
-ser un solo agente), k siendo un número entero representando la cantidad
-de ideas a seleccionar, vpos siendo la cantidad de votos positivos, vneg
-siendo la cantidad de votos negativos y k_method siendo el algoritmo de
-selección de ideas, pudiendo tomar los valores “A”, “B” o “random”.
+La función `Voting` fue diseñada para llevar a cabo el proceso de
+votación por cada agente. Dispone de 6 argumentos: `pool_ideas` siendo
+un dataframe de n cantidad de filas, `par` siendo un dataframe de una
+fila (en caso de ser un solo agente), `k` siendo un número entero
+representando la cantidad de ideas a seleccionar, `vpos` siendo la
+cantidad de votos positivos, `vneg` siendo la cantidad de votos
+negativos y `k_method` siendo el algoritmo de selección de ideas,
+pudiendo tomar los valores “A”, “B” o “random”.
 
 ``` r
 Voting <- function(pool_ideas, par, k, vpos, vneg, k_method = "random"){
@@ -324,14 +326,14 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, k_method = "random"){
 }
 ```
 
-Vamos a explicar la funcion parte por parte…
+Vamos a explicar la función parte por parte…
 
-La funcion check itera sobre cada fila del dataset buscando una fila
+La función `check` itera sobre cada fila del dataset buscando una fila
 cuyos valores sean iguales a los del participante.
 
 Si estos valores estan presentes en el dataset, se obtiene el indice de
 la fila en la cual estan ubicados y se elimina del dataset utilizando
-idexacion negativa.
+idexación negativa.
 
 ``` r
   #Chequea fila por fila si se encuentra la opinion del participante
@@ -347,8 +349,8 @@ idexacion negativa.
 Este primer condicional permite asegurarnos de que el dataset tiene la
 cantidad necesaria de filas para iniciar un sampleo por k filas.
 
-De tener mayor o igual numero de filas que k, se procede a samplear k
-filas segun alguno de los dos algoritmos de seleccion disponibles.
+De tener mayor o igual numero de filas que `k`, se procede a samplear k
+filas segun alguno de los dos algoritmos de selección disponibles.
 
 Caso contrario, devuelve el dataset sin modificaciones.
 
@@ -363,14 +365,14 @@ Caso contrario, devuelve el dataset sin modificaciones.
 ```
 
 Dentro del primer condicional, encontramos el siguiente segmento de
-codigo, el cual corresponde a la seleccion de algoritmos de votacion.
+codigo, el cual corresponde a la selección de algoritmos de votación.
 
-El condicional para k_method es seleccionado en los argumentos de la
-funcion. El argumento elegido determina el algoritmo de seleccion de
+El condicional `if` para `k_method` es seleccionado en los argumentos de
+la función. El argumento elegido determina el algoritmo de seleccion de
 ideas para la votacion subsiguiente.
 
-En caso de no setear un argumento, o de poner una opcion diferente a “A”
-o “B”, se realiza un sampleo aleatorio.
+En caso de no setear un argumento, o de poner una opción diferente a “A”
+o “B”, se realiza un sampleo aleatorio `sample_n`.
 
 ``` r
 #Condicionales para elegir algoritmos de seleccion
@@ -388,8 +390,9 @@ o “B”, se realiza un sampleo aleatorio.
     }
 ```
 
-Se suma 1 a la columna de visualizaciones en el dataset general de ideas
-(O_pool) a las k ideas que fueron seleccionadas.
+Se suma 1 a la columna de visualizaciones `O_pool$visualizaciones` en el
+dataset general de ideas `O_pool` a las k ideas que fueron
+seleccionadas.
 
 ``` r
 O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] <- O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] + 1 #se suma 1 a la dimension "visualizacion" del df a las ideas I presentes 
@@ -402,7 +405,7 @@ De las k ideas sorteadas, se extrae solo su valor (Dim1, Dim2 y Dim3).
     k2_noid <- k_opinion[,which(grepl("Dim", colnames(O_pool)))]
 ```
 
-Luego se genera un cálculo de distancias entre la opinion del
+Luego se genera un cálculo de distancias entre la opinión del
 participante y los valores de k ideas, correspondiendose a
 *D*<sub>i,j</sub>, definido como la distancia absoluta entre dos
 opiniones según *D*<sub>i,j</sub> = \|*O*<sub>i</sub> -
@@ -431,12 +434,12 @@ idea *O*<sub>i,j</sub> lo cual está dado por P(*O*<sub>i,*j*</sub>) =
 *D*<sub>i,j</sub><sup>-1</sup>.
 
 Luego de realizar el cálculo de probabilidad, se ejecuta un condicional,
-si la cantidad de votos positivos es mayor a 0, se samplean vpos ideas
+si la cantidad de votos positivos es mayor a 0, se samplean `vpos` ideas
 de las k ideas presentadas con las probabilidades calculadas.
 
-Una vez sampleadas, se obtiene el indice de las ideas sampleadas de k en
-el dataset de ideas y se suma 1 al valor de la columna votos_positivos
-de la/s fila/s correspondientes.
+Una vez sampleadas, se obtiene el indice de las ideas sampleadas de `k`
+en el dataset de ideas y se suma 1 al valor de la columna “V_pos”
+`O_pool$V_pos` de la/s fila/s correspondientes.
 
 ``` r
     #Inversa de la distancia, se elevan todos los valores a la -1
@@ -470,8 +473,8 @@ Por lo tanto la probabilidad de votar negativamente la idea es
 proporcional a la distancia.
 
 De igual manera que con los votos positivos, que se produzca una
-votación negativa depende de la cantidad vneg de votos negativos
-disponibles. De ser vneg \> 0, se samplean vneg ideas de acuerdo al
+votación negativa depende de la cantidad `vneg` de votos negativos
+disponibles. De ser `vneg` \> 0, se samplean `vneg` ideas de acuerdo al
 cálculo de probabilidad ejecutado para conducta de votación negativa.
 
 Luego, se obtiene el índice de las vneg ideas sampleadas para sumar 1 a
@@ -512,23 +515,25 @@ iteración la plataforma posee votos negativos.
                                                                    O_pool$V_neg[which(O_pool$ID%in%k_opinion$ID)])/O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)]
 ```
 
-### Algoritmo de generacion de opiniones
+### Algoritmo de generación de opiniones
 
-Opinion_pool es una funcion diseñada para generar el pool de ideas que
-posteriormente será utilizado en la función Voting, previamente
+`Opinion_pool` es una función diseñada para generar el pool de ideas que
+posteriormente será utilizado en la función `Voting`, previamente
 descrita. Según el diseño de la plataforma, el participante ingresa su
-opinion y luego vota sobre k ideas presentadas. Opinion_pool representa
-el proceso en el cual el participante ingresa a la plataforma y sube su
-opinión al pool de ideas.
+opinion y luego vota sobre k ideas presentadas. `Opinion_pool`
+representa el proceso en el cual el participante ingresa a la plataforma
+y sube su opinión al pool de ideas.
 
-Respecto a los argumentos de la funcion, Opinion_pool requiere un
-dataframe dist y un número entero k. Además tiene otros dos argumentos
-que poseen valores por default, siendo par_num_iteration la cantidad de
-participantes por iteracion y k_method el método de selección de ideas
-elegido. El argumento par_num_iteration determina la cantidad de filas
-que pueden ser seleccionadas del dataframe dist por iteración para
-generar el dataset O_pool. Por el momento, se utilizó solo con el valor
-por default.
+Respecto a los argumentos de la funcion, `Opinion_pool` requiere un
+dataframe `dist` y un número entero `k`. Además tiene otros dos
+argumentos que poseen valores por default, siendo `par_num_iteration` la
+cantidad de participantes por iteración y `k_method` el método de
+selección de ideas elegido.
+
+El argumento `par_num_iteration` determina la cantidad de filas que
+pueden ser seleccionadas del dataframe `dist` por iteración para generar
+el dataset `O_pool`. Por el momento, se utilizó solo con el valor por
+default.
 
 ``` r
 Opinion_pool <-function(dist, k, par_num_iteration = 1, 
@@ -599,16 +604,16 @@ Opinion_pool <-function(dist, k, par_num_iteration = 1,
 Vamos a ver el código de la función en detalle…
 
 En este primer segmento, se crea un nuevo dataframe con las dimensiones
-de dist y la cantidad de votos disponibles, es decir, se seleccionan
-unicamente las columnas Dim1, Dim2, Dim3 y Votos_positivos. Una vez
-asignados a la variable par_pool, representan el pool total de
+de `dist` y la cantidad de votos disponibles, es decir, se seleccionan
+unicamente las columnas Dim1, Dim2, Dim3 y “Votos_positivos”. Una vez
+asignados a la variable `par_pool`, representan el pool total de
 participantes.
 
-La variable total_votos es obtenida a partir del máximo valor de la
-columna Votos_positivos en el dataframe dist, representando el total de
-votos disponibles por participante.
+La variable `total_votos` es obtenida a partir del máximo valor de la
+columna `Votos_positivos` en el dataframe `dist`, representando el total
+de votos disponibles por participante.
 
-Además, se genera un tibble con valor NULL, siendo el pool de ideas en
+Además, se genera un tibble con valor `NULL`, siendo el pool de ideas en
 el tiempo t = 0, dónde no se encuentran ideas disponibles.
 
 ``` r
@@ -622,13 +627,15 @@ el tiempo t = 0, dónde no se encuentran ideas disponibles.
   O_pool <- tibble(NULL)
 ```
 
-Luego se observa un repeat loop, el cual va a frenar una vez que el
-número de filas de par_pool sea igual a 0. Cómo veremos posteriormente,
-una vez que una fila del dataset par_pool, representando un
-participante, ingresó su opinión al pool de opiniones y realizó el
-proceso de votación, es decir, ejecutó la función Voting, es eliminada
-del dataset par_pool. De modo que se selecciona la siguiente, y así
-sucesivamente hasta agotar la cantidad de filas en el dataset.
+Luego se observa un `repeat` loop, el cual va a frenar una vez que el
+número de filas de `par_pool` sea igual a 0.
+
+Cómo veremos posteriormente, una vez que una fila del dataset par_pool,
+representando un participante, ingresó su opinión al pool de opiniones y
+realizó el proceso de votación, es decir, ejecutó la función `Voting`,
+es eliminada del dataset `par_pool`. De modo que se selecciona la
+siguiente, y así sucesivamente hasta agotar la cantidad de filas en el
+dataset.
 
 ``` r
 repeat{
@@ -639,22 +646,24 @@ repeat{
 ```
 
 En este fragmento se observa la selección de participantes y armado del
-dataset de opiniones. par_n es una variable que contiene una o más filas
-(dependiendo el valor de par_num_iteration), seleccionadas del dataset
-par_pool, definido anteriormente.
+dataset de opiniones. `par_n` es una variable que contiene una o más
+filas (dependiendo el valor de `par_num_iteration`), seleccionadas del
+dataset `par_pool`, definido anteriormente.
 
-La variable par_dim_only contiene solamente los valores de Dim1, Dim2 y
-Dim3 de par_n. Estos valores son luego utilizados en looping_tbl para
-generar los valores del dataframe de ideas.
+La variable `par_dim_only` contiene solamente los valores de Dim1, Dim2
+y Dim3 de `par_n`. Estos valores son luego utilizados en `looping_tbl`
+para generar los valores del dataframe de ideas.
 
-Looping_tbl es un dataframe que cuya función es agregar las columnas ID,
-visualizaciones, V_pos, V_neg y ratio_votos_vis junto a la opinion del
-participante (par_dim_only). Luego, este tibble une la fila generada a
-las filas del dataset de ideas O_pool.
+`looping_tbl` es un dataframe que cuya función es agregar las columnas
+“ID”, “visualizaciones”, “V_pos”, “V_neg” y “ratio_votos_vis” junto a la
+opinión del participante `par_dim_only`. Luego, este tibble une la fila
+generada a las filas del dataset de ideas `O_pool` utilizando
+`bind_rows`.
 
-En este sentido, O_pool permite acumular las ideas de cada participante
-por iteracion, junto con sus visualizaciones, votos y ratio, dado que
-looping_tbl se resetea por cada iteración del repeat loop.
+En este sentido, `O_pool` permite acumular las ideas de cada
+participante por iteracion, junto con sus visualizaciones, votos y
+ratio, dado que `looping_tbl` se resetea por cada iteración del `repeat`
+loop.
 
 ``` r
 #se selecciona primera fila 
@@ -676,10 +685,10 @@ looping_tbl se resetea por cada iteración del repeat loop.
     O_pool <- bind_rows(O_pool,looping_tbl)
 ```
 
-La variable Votos_negativos es generada a partir de la resta del valor
-de la columna Votos_positivos de par_n con el número asignado a la
+La variable `Votos_negativos` es generada a partir de la resta del valor
+de la columna “Votos_positivos” de `par_n` con el número asignado a la
 variable total_votos, definida anteriormente como el máximo valor de la
-columna Votos_positivos del dataframe dist.
+columna “Votos_positivos” del dataframe `dist`.
 
 ``` r
 #Se restan los votos positivos del total de votos para obtener la cantidad de votos negativos
@@ -687,10 +696,10 @@ columna Votos_positivos del dataframe dist.
 ```
 
 Una vez definidos la cantidad de votos negativos, se pasan las variables
-definidas como argumentos a la función Voting, la cual llevará a cabo el
-proceso de votación. El resultado de la función es guardado dentro de la
-variable O_pool, sobrescribiendo los valores de visualizaciones, V_pos,
-V_neg y ratio_votos_vis anteriores.
+definidas como argumentos a la función `Voting`, la cual llevará a cabo
+el proceso de votación. El resultado de la función es guardado dentro de
+la variable `O_pool`, sobrescribiendo los valores de las columnas
+“visualizaciones”, “V_pos”, “V_neg” y “ratio_votos_vis” anteriores.
 
 ``` r
  #se guardan los resultados de la funcion Voting
