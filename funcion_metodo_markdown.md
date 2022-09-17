@@ -4,12 +4,13 @@ Match Método-Código
 ## Mezcla de multivariadas y generación de agentes
 
 En esta simulación, los agentes son generados a partir de una mezcla de
-3 distribuciones multivariadas. En uno de los casos la distribución va a
-estar definida como *N*(0, Σ) En otro de los casos la distribución va a
-estar dada por una mezcla de gaussianas multivariadas con 2 componentes
-representando 2 grupos de opiniones definidas según *N* (μ<sub>1</sub>,
-Σ) y *N*(μ<sub>2</sub>, Σ) donde μ<sub>1</sub> = 0 y μ<sub>1</sub> -
-μ<sub>2</sub> indica el grado de polarización de las opiniones.
+3 distribuciones multivariadas tridimensionales. En uno de los casos la
+distribución va a estar definida como *N*(0, Σ) En otro de los casos la
+distribución va a estar dada por una mezcla de gaussianas multivariadas
+con 2 componentes representando 2 grupos de opiniones definidas según
+*N* (μ<sub>1</sub>, Σ) y *N*(μ<sub>2</sub>, Σ) donde μ<sub>1</sub> = 0 y
+μ<sub>1</sub> - μ<sub>2</sub> indica el grado de polarización de las
+opiniones.
 
 La función `mixingfun` fue diseñada para generar una mezcla de
 distribuciones multivariadas, siendo `dislist` una lista que cuente con
@@ -66,6 +67,15 @@ distribuciones multivariadas de n cantidad de agentes cada una. El
 resultado de la funcion se coerce en dataframe, dado que `pmap` devuelve
 una lista, y se unen las filas de los tres dataset.
 
+Cabe destacar que cada agente tiene asociada una opinión en un espacio
+ideológico definido según *O*(*a*<sub>i</sub>) = \[*O*<sub>1</sub>,
+*O*<sub>2</sub>, *O*<sub>3</sub>\], *i* = 1, 2,…, *N*; *O*<sub>i</sub> ∈
+&#x211D<sup>3</sup> donde *O*<sub>i</sub> es la opinión del agente
+i-ésimo en el espacio tridimensional. Por este motivo, `means` es un
+vector de 3 valores y `cov_mat` es una matriz de 3 columnas y 3 filas.
+Es decir, los valores de cada agente son extraídos de una distribución
+multivariada tridimensional.
+
 ``` r
 pmap(
     dislist,
@@ -105,11 +115,11 @@ mutate( #Creo una nueva variable para indicar de que distribucion proviene origi
 ```
 
 Entonces, `mixingfun` requiere una lista compuesta por una cantidad de
-valores de cada distribución denominado en la lista como ´“n”´,
-´“means”´ siendo una lista con vectores de medias para cada distribución
-y ´“cov_mat”´ siendo una lista compuesta por matrices de covarianza.
-Además, requiere una distribución beta y un valor entero definiendo la
-cantidad de votos totales.
+valores de cada distribución denominado en la lista como “n”, “means”
+siendo una lista con vectores de medias para cada distribución y
+“cov_mat” siendo una lista compuesta por matrices de covarianza. Además,
+requiere una distribución beta y un valor entero definiendo la cantidad
+de votos totales.
 
 ``` r
 dist <- mixingfun(list("n" = c(200,300,100), # n de cada distribucion
