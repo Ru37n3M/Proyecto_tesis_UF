@@ -783,22 +783,6 @@ O_B <- Opinion_pool(dist, 6, k_method = "B")
 Como se puede observar en el gráfico, los algoritmos funcionan según lo
 esperado, especificado anteriormente.
 
-``` r
-super_df <- bind_rows(O_A, O_B, O_random)
-
-super_df<-super_df %>%
-  mutate(
-    algoritmo = rep(c("f1x", "f2x", "random"), c(600,600,600))
-  )
-
-#distribucion de visualizaciones
-library(ggplot2)
-ggplot(super_df, aes(algoritmo, visualizaciones, col = algoritmo)) +
-  geom_jitter() +
-   labs(x = "Algoritmo", y = "Visualizaciones", title = "Distribución de visualizaciones por algoritmo") +
-  theme_minimal()
-```
-
 ![](funcion_metodo_markdown_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 Las opiniones seleccionadas por f1x representan una constante respecto a
@@ -815,25 +799,9 @@ algoritmo f2x en comparación con “random”
 En esta figura podemos observar el ratio contra la cantidad de
 visualizaciones de cada opinion
 
-``` r
-ggplot(super_df, aes(ratio_votos_vis, visualizaciones, col = algoritmo)) + 
-  geom_count() + 
-  labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución de Ratio contra Visualizaciones") + 
-  theme_minimal()
-```
-
 ![](funcion_metodo_markdown_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 f1x se mantiene constante tanto en relación a las visualizaciones como
 al ratio, mientras que random mantiene una distribución gaussiana normal
 con media en ratio = 0. Por otra parte, se observan valores outliers en
 f2x con un alto número de visualizaciones cercanos a ratio = 0.
-
-``` r
-ggplot(super_df, aes(ratio_votos_vis, visualizaciones, col = algoritmo)) + 
-  geom_count() + 
-  labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución de Ratio contra Visualizaciones") + 
-  theme_minimal()
-```
-
-![](funcion_metodo_markdown_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
