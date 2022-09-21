@@ -1,7 +1,44 @@
-Match Método-Código
+Efectos contextuales de una simulación Basada en Agentes en una
+plataforma de Crowdsourcing
 ================
 
-## Mezcla de multivariadas y generación de agentes
+## Introducción
+
+Se generará un tipo de simulación basada en objetos, la cual es una
+simulación basada en agentes, con el fin de explorar la dinámica de
+opiniones de los agentes en una plataforma diseñada para la facilitación
+e identificación de consensos en una comunidad a través de Crowdsourcing
+con el fin de generar SM.
+
+La simulación pretende representar la dinámica generada por una
+plataforma de crowdsourcing de opiniones, que funciona de la siguiente
+manera:
+
+1.  Un usuario entra a la plataforma. Se direcciona a un “desafío”. El
+    desafío plantea una consigna sobre la que se deberán presentar sus
+    opiniones.
+
+2.  Dependiendo de la implementación se le pide al usuario que primero
+    ingrese su opinión sobre ese desafío o se le muestran una cantidad
+    determinada de ideas del resto de los usuarios sobre ese desafío
+    (según el criterio de un algoritmo de selección) para que vote sobre
+    las mismas.
+
+3.  Independientemente de en qué momento el usuario dio su opinión, una
+    vez que esta fue emitida entra en el conjunto del total de ideas que
+    pueden llegar a ser visualizadas por los otros usuarios. De igual
+    manera, independientemente de en qué momento se realice la votación,
+    los usuarios visualizan una cantidad fija de ideas del resto sobre
+    las cuales pueden emitir uno o más votos individuales (sobre cada
+    idea) de valencia positiva o negativa.
+
+Dentro de los parámetros y algoritmos que definen la simulación pueden
+separarse según estén asociados a los agentes o al proceso de generación
+y valoración de opiniones.
+
+## Definiciones de agente
+
+### Mezcla de multivariadas y generación de agentes
 
 En esta simulación, los agentes son generados a partir de una mezcla de
 3 distribuciones multivariadas tridimensionales. En uno de los casos la
@@ -47,18 +84,9 @@ mixingfun <- function(dislist, beta, total_votos){
     tibble() #Convierto el resultado final en un tibble
   
 }
-
-
-dist <- mixingfun(list("n" = c(200,300,100), # n de cada distribucion
-                       "means" = list(c(2,2,2),c(1,1,1),c(0,0,0)), # lista con vectores de medias para cada dist
-                       "cov_mat" = list(diag(1,3,3),diag(1,3,3),diag(1,3,3))),
-                  rbeta(600,4,2),
-                  2) # lista con matrices de covarianza
 ```
 
 Vamos a explicar con mayor detalle cada parte de la función…
-
-### Definición de agentes
 
 Los agentes son generados a partir de las funciones `pmap` y `mvrnorm`.
 En particular, `pmap` aplica la función `mvrnorm` a los tres elementos
@@ -129,94 +157,17 @@ dist <- mixingfun(list("n" = c(200,300,100), # n de cada distribucion
                   2) #Size de distribucion binomial 
 ```
 
-## Definiciones de la plataforma
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
+    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ✖ dplyr::select() masks MASS::select()
 
-### Algoritmos de seleccion
-
-La selección de opiniones que se le van a mostrar al agente i-ésimo en
-una determinada ronda estarán dadas por dos algoritmos de selección de
-opiniones que serán manipulados.
-
-#### Primer algoritmo de selección
-
-El primer algoritmo ƒ<sub>1</sub>(*x*) elige *k* ideas seleccionando
-*O*<sub>j</sub> cuando *v*(*O*<sub>i</sub>) \< *v*(*O*<sub>j</sub>) o
-seleccionando *O*<sub>i</sub> con probabilidad 1/\|*V*\| cuando
-*v*(*O*<sub>i</sub>) = *v*(<i>O</i><sub>j</sub>).
-
-Se samplea el pool de ideas por el número de filas para cambiar de
-posición las filas de todo el dataset, de manera que todas las ideas que
-poseen la misma cantidad de visualizaciones tengan la misma probabilidad
-de ser seleccionadas, es decir, de ser reordenadas dentro de las últimas
-k filas ordenadas decrecientemente por visualizaciones.
-
-Como argumentos, se requiere un dataframe, en este caso, el pool de
-ideas `O_pool`, y un número entero representando la cantidad de ideas a
-seleccionar del dataset `k`.
-
-``` r
-algoritmo_seleccion_f1x <- function(O_pool, k){
-  
-  #Se reordena aleatoriamente el dataframe
-  #Se hace para evitar que, en caso de empate de visualizaciones,
-  #todos los valores minimos tengan iguales probabilidades de ser seleccionados
-  #al subsetear las últimas k filas del dataset
-  O_pool <- sample_n(O_pool, nrow(O_pool))
-  
-  #Se obtienen k valores de los ultimos puestos del dataframe
-  k_opinion<- O_pool[order(O_pool$visualizaciones, decreasing = T),] %>%
-    slice_tail(n = k)
-  
-  return(k_opinion)
-  
-}
-```
-
-#### Segundo algoritmo de selección
-
-El segundo algoritmo ƒ<sub>2</sub>(<i>x</i>) selecciona *k* / 2
-opiniones de *G*<sub>i,r</sub> según el algoritmo anteriormente descrito
-y el resto de las opiniones son seleccionadas tomando las *k* / 2
-opiniones con el mayor ratio de votos sobre visualizaciones del conjunto
-*M*, eligiendo *O*<sub>i</sub> cuando *m*(*O*<sub>i</sub>) \<
-*m*(*O*<sub>j</sub>) y eligiendo *O*<sub>i</sub> con probabilidad
-1/<i>n</i> cuando *m*(<i>O</i><sub>i</sub>) = *m*(*O*<sub>j</sub>).
-
-Al igual que en el primer algoritmo, el dataframe es “barajado” para
-aleatorizar la posicion de las filas. Luego se seleccionan k/2 filas
-ubicadas últimas según orden de visualizaciones y k/2 filas ubicadas
-primeras según ratio de votos/visualizaciones. Finalmente se unen las
-filas de ambos subdataset.
-
-Respecto a los argumentos, al igual que en el primer algoritmo, requiere
-un dataframe `O_pool` y un número entero `k`.
-
-``` r
-algoritmo_seleccion_f2x<- function(O_pool, k){
-  
-  #Se reordena aleatoriamente el dataframe
-  #Se hace para evitar que, en caso de empate de visualizaciones,
-  #todos los valores minimos tengan iguales probabilidades de ser seleccionados
-  #al subsetear las últimas k filas del dataset
-  O_pool <- sample_n(O_pool, nrow(O_pool))
-  
-  #Se subsetean las últimas k/2 filas del dataset ordenado de forma decreciente segun visualizaciones
-  k_opinion_low<- O_pool[order(O_pool$visualizaciones, decreasing = T),] %>%
-    slice_tail(n = k/2)
-  
-  #Se subsetean las primeras k/2 filas del dataset ordenado de forma decreciente segun ratio votos-visualizaciones
-  k_opinion_high <- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
-    slice_head(n = k/2)
-  
-  #Se combinan las filas de ambos subsets para formar k opinones que seran presentadas al participante
-  k_opinion <- bind_rows(k_opinion_low, k_opinion_high)
-  
-  return(k_opinion)
-  
-}
-```
-
-## Generación de votación
+### Generación de votación
 
 La función `Voting` fue diseñada para llevar a cabo el proceso de
 votación por cada agente. Dispone de 6 argumentos: `pool_ideas` siendo
@@ -384,6 +335,9 @@ ideas para la votacion subsiguiente.
 En caso de no setear un argumento, o de poner una opción diferente a “A”
 o “B”, se realiza un sampleo aleatorio `sample_n`.
 
+Se ampliará sobre ambas funciones en la seccion “Definiciones de la
+plataforma”.
+
 ``` r
 #Condicionales para elegir algoritmos de seleccion
     if(k_method == "A"){
@@ -546,13 +500,13 @@ el dataset `O_pool`. Por el momento, se utilizó solo con el valor por
 default.
 
 ``` r
-Opinion_pool <-function(dist, k, par_num_iteration = 1, 
+Opinion_pool <-function(dist, k,
                         k_method = "random"){
   
   #shuffle_dist: espera los resultados de shuffle_dist
   #k: numero de ideas que cada participante va a ver (numero entero)
   #total_votos: numero entero, cantidad de votos disponibles para el participante
-  #par_num_iteration: cantidad de participantes por iteracion
+  #par_num_iteration: cantidad de participantes por iteracion [FALTA ACLARAR QUE PASA CON ESTE ARGUMENTO]
   #k_method: criterio de seleccion de k, puede ser "random" (default), "A" o "B"
   
   library(tidyverse)
@@ -571,7 +525,7 @@ Opinion_pool <-function(dist, k, par_num_iteration = 1,
   repeat{
     
     #se selecciona primera fila 
-    par_n <- par_pool[c(1:par_num_iteration),]
+    par_n <- par_pool[c(1:1),]
     
     #se selecciona solo los valores de la opinion del participante (Dim)
     par_dim_only <- par_n[, which(grepl("Dim", colnames(dist)))]
@@ -600,7 +554,7 @@ Opinion_pool <-function(dist, k, par_num_iteration = 1,
     
     
     #se elimina la primera fila del pool de participantes
-    par_pool <- par_pool[-c(1:par_num_iteration),]
+    par_pool <- par_pool[-c(1:1),]
     
     #el loop se rompe cuando no quedan mas filas en el pool de participantes
     if(nrow(par_pool) == 0)
@@ -656,9 +610,8 @@ repeat{
 ```
 
 En este fragmento se observa la selección de participantes y armado del
-dataset de opiniones. `par_n` es una variable que contiene una o más
-filas (dependiendo el valor de `par_num_iteration`), seleccionadas del
-dataset `par_pool`, definido anteriormente.
+dataset de opiniones. `par_n` es una variable que contiene una fila,
+seleccionadas del dataset `par_pool`, definido anteriormente.
 
 La variable `par_dim_only` contiene solamente los valores de Dim1, Dim2
 y Dim3 de `par_n`. Estos valores son luego utilizados en `looping_tbl`
@@ -677,7 +630,7 @@ loop.
 
 ``` r
 #se selecciona primera fila 
-    par_n <- par_pool[c(1:par_num_iteration),]
+    par_n <- par_pool[c(1:1),]
     
     #se selecciona solo los valores de la opinion del participante (Dim)
     par_dim_only <- par_n[, which(grepl("Dim", colnames(dist)))]
@@ -726,3 +679,161 @@ se adelantó anteriormente.
 ``` r
 par_pool <- par_pool[-c(1:par_num_iteration),]
 ```
+
+## Definiciones de la plataforma
+
+### Algoritmos de seleccion
+
+La selección de opiniones que se le van a mostrar al agente i-ésimo en
+una determinada ronda estarán dadas por dos algoritmos de selección de
+opiniones que serán manipulados.
+
+#### Primer algoritmo de selección
+
+El primer algoritmo ƒ<sub>1</sub>(*x*) elige *k* ideas seleccionando
+*O*<sub>j</sub> cuando *v*(*O*<sub>i</sub>) \< *v*(*O*<sub>j</sub>) o
+seleccionando *O*<sub>i</sub> con probabilidad 1/\|*V*\| cuando
+*v*(*O*<sub>i</sub>) = *v*(<i>O</i><sub>j</sub>).
+
+Se samplea el pool de ideas por el número de filas para cambiar de
+posición las filas de todo el dataset, de manera que todas las ideas que
+poseen la misma cantidad de visualizaciones tengan la misma probabilidad
+de ser seleccionadas, es decir, de ser reordenadas dentro de las últimas
+k filas ordenadas decrecientemente por visualizaciones.
+
+Como argumentos, se requiere un dataframe, en este caso, el pool de
+ideas `O_pool`, y un número entero representando la cantidad de ideas a
+seleccionar del dataset `k`.
+
+``` r
+algoritmo_seleccion_f1x <- function(O_pool, k){
+  
+  #Se reordena aleatoriamente el dataframe
+  #Se hace para evitar que, en caso de empate de visualizaciones,
+  #todos los valores minimos tengan iguales probabilidades de ser seleccionados
+  #al subsetear las últimas k filas del dataset
+  O_pool <- sample_n(O_pool, nrow(O_pool))
+  
+  #Se obtienen k valores de los ultimos puestos del dataframe
+  k_opinion<- O_pool[order(O_pool$visualizaciones, decreasing = T),] %>%
+    slice_tail(n = k)
+  
+  return(k_opinion)
+  
+}
+```
+
+#### Segundo algoritmo de selección
+
+El segundo algoritmo ƒ<sub>2</sub>(<i>x</i>) selecciona *k* / 2
+opiniones de *G*<sub>i,r</sub> según el algoritmo anteriormente descrito
+y el resto de las opiniones son seleccionadas tomando las *k* / 2
+opiniones con el mayor ratio de votos sobre visualizaciones del conjunto
+*M*, eligiendo *O*<sub>i</sub> cuando *m*(*O*<sub>i</sub>) \<
+*m*(*O*<sub>j</sub>) y eligiendo *O*<sub>i</sub> con probabilidad
+1/<i>n</i> cuando *m*(<i>O</i><sub>i</sub>) = *m*(*O*<sub>j</sub>).
+
+Al igual que en el primer algoritmo, el dataframe es “barajado” para
+aleatorizar la posicion de las filas. Luego se seleccionan k/2 filas
+ubicadas últimas según orden de visualizaciones y k/2 filas ubicadas
+primeras según ratio de votos/visualizaciones. Finalmente se unen las
+filas de ambos subdataset.
+
+Respecto a los argumentos, al igual que en el primer algoritmo, requiere
+un dataframe `O_pool` y un número entero `k`.
+
+``` r
+algoritmo_seleccion_f2x<- function(O_pool, k){
+  
+  #Se reordena aleatoriamente el dataframe
+  #Se hace para evitar que, en caso de empate de visualizaciones,
+  #todos los valores minimos tengan iguales probabilidades de ser seleccionados
+  #al subsetear las últimas k filas del dataset
+  O_pool <- sample_n(O_pool, nrow(O_pool))
+  
+  #Se subsetean las últimas k/2 filas del dataset ordenado de forma decreciente segun visualizaciones
+  k_opinion_low<- O_pool[order(O_pool$visualizaciones, decreasing = T),] %>%
+    slice_tail(n = k/2)
+  
+  #Se subsetean las primeras k/2 filas del dataset ordenado de forma decreciente segun ratio votos-visualizaciones
+  k_opinion_high <- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
+    slice_head(n = k/2)
+  
+  #Se combinan las filas de ambos subsets para formar k opinones que seran presentadas al participante
+  k_opinion <- bind_rows(k_opinion_low, k_opinion_high)
+  
+  return(k_opinion)
+  
+}
+```
+
+## Resultados preliminares
+
+Los siguientes 3 ejemplos seran el resultado de una sola simulacion por
+cada algoritmo y siendo k = 6 para todas las simulaciones.
+
+``` r
+O_random <- Opinion_pool(dist, 6)
+O_A <- Opinion_pool(dist, 6, k_method = "A")
+O_B <- Opinion_pool(dist, 6, k_method = "B")
+```
+
+### Distribucion de visualizaciones por algoritmos
+
+Como se puede observar en el gráfico, los algoritmos funcionan según lo
+esperado, especificado anteriormente.
+
+``` r
+super_df <- bind_rows(O_A, O_B, O_random)
+
+super_df<-super_df %>%
+  mutate(
+    algoritmo = rep(c("f1x", "f2x", "random"), c(600,600,600))
+  )
+
+#distribucion de visualizaciones
+library(ggplot2)
+ggplot(super_df, aes(algoritmo, visualizaciones, col = algoritmo)) +
+  geom_jitter() +
+   labs(x = "Algoritmo", y = "Visualizaciones", title = "Distribución de visualizaciones por algoritmo") +
+  theme_minimal()
+```
+
+![](funcion_metodo_markdown_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+Las opiniones seleccionadas por f1x representan una constante respecto a
+sus visualizaciones, mientras que en f2x se puede observar la presencia
+de opiniones con un número elevado de visualizaciones y opiniones con un
+bajo número de visualizaciones, comparable a f1x.
+
+También podemos notar que las “mejores” opiniones en términos de
+visualizaciones alcanzaron un mayor número de visualizaciones con el
+algoritmo f2x en comparación con “random”
+
+### Distribución según ratio
+
+En esta figura podemos observar el ratio contra la cantidad de
+visualizaciones de cada opinion
+
+``` r
+ggplot(super_df, aes(ratio_votos_vis, visualizaciones, col = algoritmo)) + 
+  geom_count() + 
+  labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución de Ratio contra Visualizaciones") + 
+  theme_minimal()
+```
+
+![](funcion_metodo_markdown_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+f1x se mantiene constante tanto en relación a las visualizaciones como
+al ratio, mientras que random mantiene una distribución gaussiana normal
+con media en ratio = 0. Por otra parte, se observan valores outliers en
+f2x con un alto número de visualizaciones cercanos a ratio = 0.
+
+``` r
+ggplot(super_df, aes(ratio_votos_vis, visualizaciones, col = algoritmo)) + 
+  geom_count() + 
+  labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución de Ratio contra Visualizaciones") + 
+  theme_minimal()
+```
+
+![](funcion_metodo_markdown_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->

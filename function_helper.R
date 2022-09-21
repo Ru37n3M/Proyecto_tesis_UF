@@ -56,7 +56,7 @@ shuffle_dist <- function(distr){
 
 #####
 
-Opinion_pool <-function(dist, k, par_num_iteration = 1, 
+Opinion_pool <-function(dist, k,
                         k_method = "random"){
   
   #shuffle_dist: espera los resultados de shuffle_dist
@@ -81,7 +81,7 @@ Opinion_pool <-function(dist, k, par_num_iteration = 1,
   repeat{
     
     #se selecciona primera fila 
-    par_n <- par_pool[c(1:par_num_iteration),]
+    par_n <- par_pool[c(1:1),]
     
     #se selecciona solo los valores de la opinion del participante (Dim)
     par_dim_only <- par_n[, which(grepl("Dim", colnames(dist)))]
@@ -110,7 +110,7 @@ Opinion_pool <-function(dist, k, par_num_iteration = 1,
     
     
     #se elimina la primera fila del pool de participantes
-    par_pool <- par_pool[-c(1:par_num_iteration),]
+    par_pool <- par_pool[-c(1:1),]
     
     #el loop se rompe cuando no quedan mas filas en el pool de participantes
     if(nrow(par_pool) == 0)
@@ -280,3 +280,23 @@ algoritmo_seleccion_f2x<- function(O_pool, k){
   return(k_opinion)
   
 }
+
+
+#funcion general de la simulacion, incorpora mixingfun y Opinion_pool en una funcion
+#Argumentos
+#list: lista con vector de n de c/distribucion, lista de vectores de medias de c/distribucion y lista de matrices de covarianza
+#beta: distribucion beta para probabilidad de distribucion binomial dentro de mixingfun
+#votos_totales: cantidad de votos total para cada participante
+simulacion_plataforma <- function(list, beta, votos_totales, k, k_method = "random"){
+  dist <- mixingfun(list, beta, votos_totales) #mixingfun
+  resultado_simulacion <- Opinion_pool(dist, k, k_method = "random") #Opinion_pool
+  return(resultado_simulacion) #devuelve resultado Opinion_pool
+}
+
+simulacion_plataforma(list("n" = c(200,300,100), # n de cada distribucion
+                           "means" = list(c(2,2,2),c(1,1,1),c(0,0,0)), # lista con vectores de medias para cada dist
+                           "cov_mat" = list(diag(1,3,3),diag(1,3,3),diag(1,3,3))), # lista con matrices de covarianza
+                      rbeta(600,4,2), #Distribucion beta, n == sum(list$n)
+                      2,#Size de distribucion binomial 
+                      6,#numero de k
+                      k_method = "O_B") #algoritmo de seleccion
