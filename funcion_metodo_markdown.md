@@ -86,8 +86,6 @@ mixingfun <- function(dislist, beta, total_votos){
 }
 ```
 
-Vamos a explicar con mayor detalle cada parte de la función…
-
 Los agentes son generados a partir de las funciones `pmap` y `mvrnorm`.
 En particular, `pmap` aplica la función `mvrnorm` a los tres elementos
 que componen la lista dislist: “n”, “means” y “cov_mat”, generando
@@ -126,10 +124,9 @@ Finalmente, Votos_positivos esta compuesto por valores extraidos de una
 distribución binomial `rbinom`, definida por n cantidad de
 participantes, la cantidad de votos totales disponibles y `Beta`.
 
-Al final, la función devuelve un `tibble` con n participantes con x
-dimensiones cada uno, un valor beta asignado y un número entero
-designando la cantidad de votos positivos disponibles para el
-participante.
+La función devuelve un `tibble` con n participantes con x dimensiones
+cada uno, un valor beta asignado y un número entero designando la
+cantidad de votos positivos disponibles para el participante.
 
 ``` r
 mutate( #Creo una nueva variable para indicar de que distribucion proviene originalmente cada valor
@@ -142,12 +139,12 @@ mutate( #Creo una nueva variable para indicar de que distribucion proviene origi
     tibble() 
 ```
 
-Entonces, `mixingfun` requiere una lista compuesta por una cantidad de
-valores de cada distribución denominado en la lista como “n”, “means”
-siendo una lista con vectores de medias para cada distribución y
-“cov_mat” siendo una lista compuesta por matrices de covarianza. Además,
-requiere una distribución beta y un valor entero definiendo la cantidad
-de votos totales.
+`mixingfun` requiere una lista compuesta por una cantidad de valores de
+cada distribución denominado en la lista como “n”, “means” siendo una
+lista con vectores de medias para cada distribución y “cov_mat” siendo
+una lista compuesta por matrices de covarianza. Además, requiere una
+distribución beta y un valor entero definiendo la cantidad de votos
+totales.
 
 ``` r
 dist <- mixingfun(list("n" = c(200,300,100), # n de cada distribucion
@@ -169,14 +166,14 @@ dist <- mixingfun(list("n" = c(200,300,100), # n de cada distribucion
 
 ### Generación de votación
 
-La función `Voting` fue diseñada para llevar a cabo el proceso de
-votación por cada agente. Dispone de 6 argumentos: `pool_ideas` siendo
-un dataframe de n cantidad de filas, `par` siendo un dataframe de una
-fila (en caso de ser un solo agente), `k` siendo un número entero
-representando la cantidad de ideas a seleccionar, `vpos` siendo la
-cantidad de votos positivos, `vneg` siendo la cantidad de votos
-negativos y `k_method` siendo el algoritmo de selección de ideas,
-pudiendo tomar los valores “A”, “B” o “random”.
+`Voting` fue diseñada para llevar a cabo el proceso de votación por cada
+agente. Dispone de 6 argumentos: `pool_ideas` siendo un dataframe de n
+cantidad de filas, `par` siendo un dataframe de una fila (en caso de ser
+un solo agente), `k` siendo un número entero representando la cantidad
+de ideas a seleccionar, `vpos` siendo la cantidad de votos positivos,
+`vneg` siendo la cantidad de votos negativos y `k_method` siendo el
+algoritmo de selección de ideas, pudiendo tomar los valores “A”, “B” o
+“random”.
 
 ``` r
 Voting <- function(pool_ideas, par, k, vpos, vneg, k_method = "random"){
@@ -287,8 +284,6 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, k_method = "random"){
 }
 ```
 
-Vamos a explicar la función parte por parte…
-
 La función `check` itera sobre cada fila del dataset buscando una fila
 cuyos valores sean iguales a los del participante.
 
@@ -307,8 +302,8 @@ idexación negativa.
     as_tibble
 ```
 
-Este primer condicional permite asegurarnos de que el dataset tiene la
-cantidad necesaria de filas para iniciar un sampleo por k filas.
+El condicional permite asegurarnos de que el dataset tiene la cantidad
+necesaria de filas para iniciar un sampleo por k filas.
 
 De tener mayor o igual numero de filas que `k`, se procede a samplear k
 filas segun alguno de los dos algoritmos de selección disponibles.
@@ -328,9 +323,9 @@ Caso contrario, devuelve el dataset sin modificaciones.
 Dentro del primer condicional, encontramos el siguiente segmento de
 codigo, el cual corresponde a la selección de algoritmos de votación.
 
-El condicional `if` para `k_method` es seleccionado en los argumentos de
-la función. El argumento elegido determina el algoritmo de seleccion de
-ideas para la votacion subsiguiente.
+`if` para `k_method` es seleccionado en los argumentos de la función. El
+argumento elegido determina el algoritmo de seleccion de ideas para la
+votacion subsiguiente.
 
 En caso de no setear un argumento, o de poner una opción diferente a “A”
 o “B”, se realiza un sampleo aleatorio `sample_n`.
@@ -390,16 +385,15 @@ opiniones según *D*<sub>i,j</sub> = \|*O*<sub>i</sub> -
     Dij <- abs(Dij)
 ```
 
-A partir del calculo de la distancia de cada idea en relacion al
-participante, definimos la conducta de votación positiva como la
-probabilidad de que el agente *a*<sub>i</sub> vote positivamente a la
-idea *O*<sub>i,j</sub> lo cual está dado por P(*O*<sub>i,*j*</sub>) =
+Definimos la conducta de votación positiva como la probabilidad de que
+el agente *a*<sub>i</sub> vote positivamente a la idea *O*<sub>i,j</sub>
+lo cual está dado por P(*O*<sub>i,*j*</sub>) =
 *D*<sub>i,j</sub><sup>-1</sup> / ∑<sub>j</sub><sup>k</sup>
 *D*<sub>i,j</sub><sup>-1</sup>.
 
-Luego de realizar el cálculo de probabilidad, se ejecuta un condicional,
-si la cantidad de votos positivos es mayor a 0, se samplean `vpos` ideas
-de las k ideas presentadas con las probabilidades calculadas.
+Luego de realizar el cálculo de probabilidad, si la cantidad de votos
+positivos es mayor a 0, se samplean `vpos` ideas de las k ideas
+presentadas con las probabilidades calculadas.
 
 Una vez sampleadas, se obtiene el indice de las ideas sampleadas de `k`
 en el dataset de ideas y se suma 1 al valor de la columna “V_pos”
@@ -481,23 +475,17 @@ iteración la plataforma posee votos negativos.
 
 ### Algoritmo de generación de opiniones
 
-`Opinion_pool` es una función diseñada para generar el pool de ideas que
-posteriormente será utilizado en la función `Voting`, previamente
-descrita. Según el diseño de la plataforma, el participante ingresa su
-opinion y luego vota sobre k ideas presentadas. `Opinion_pool`
-representa el proceso en el cual el participante ingresa a la plataforma
-y sube su opinión al pool de ideas.
+`Opinion_pool` genera el pool de ideas que posteriormente será utilizado
+en la función `Voting`, previamente descrita. Según el diseño de la
+plataforma, el participante ingresa su opinion y luego vota sobre k
+ideas presentadas. `Opinion_pool` representa el proceso en el cual el
+participante ingresa a la plataforma y sube su opinión al pool de ideas.
 
 Respecto a los argumentos de la funcion, `Opinion_pool` requiere un
 dataframe `dist` y un número entero `k`. Además tiene otros dos
 argumentos que poseen valores por default, siendo `par_num_iteration` la
 cantidad de participantes por iteración y `k_method` el método de
 selección de ideas elegido.
-
-El argumento `par_num_iteration` determina la cantidad de filas que
-pueden ser seleccionadas del dataframe `dist` por iteración para generar
-el dataset `O_pool`. Por el momento, se utilizó solo con el valor por
-default.
 
 ``` r
 Opinion_pool <-function(dist, k,
@@ -565,8 +553,6 @@ Opinion_pool <-function(dist, k,
 }
 ```
 
-Vamos a ver el código de la función en detalle…
-
 En este primer segmento, se crea un nuevo dataframe con las dimensiones
 de `dist` y la cantidad de votos disponibles, es decir, se seleccionan
 unicamente las columnas Dim1, Dim2, Dim3 y “Votos_positivos”. Una vez
@@ -591,8 +577,8 @@ el tiempo t = 0, dónde no se encuentran ideas disponibles.
   O_pool <- tibble(NULL)
 ```
 
-Luego se observa un `repeat` loop, el cual va a frenar una vez que el
-número de filas de `par_pool` sea igual a 0.
+`repeat` se cortará una vez que el número de filas de `par_pool` sea
+igual a 0.
 
 Cómo veremos posteriormente, una vez que una fila del dataset par_pool,
 representando un participante, ingresó su opinión al pool de opiniones y
@@ -648,8 +634,8 @@ loop.
     O_pool <- bind_rows(O_pool,looping_tbl)
 ```
 
-La variable `Votos_negativos` es generada a partir de la resta del valor
-de la columna “Votos_positivos” de `par_n` con el número asignado a la
+`Votos_negativos` es generada a partir de la resta del valor de la
+columna “Votos_positivos” de `par_n` con el número asignado a la
 variable total_votos, definida anteriormente como el máximo valor de la
 columna “Votos_positivos” del dataframe `dist`.
 
@@ -659,10 +645,8 @@ columna “Votos_positivos” del dataframe `dist`.
 ```
 
 Una vez definidos la cantidad de votos negativos, se pasan las variables
-definidas como argumentos a la función `Voting`, la cual llevará a cabo
-el proceso de votación. El resultado de la función es guardado dentro de
-la variable `O_pool`, sobrescribiendo los valores de las columnas
-“visualizaciones”, “V_pos”, “V_neg” y “ratio_votos_vis” anteriores.
+definidas como argumentos a `Voting`, la cual llevará a cabo el proceso
+de votación. El resultado de la función es guardado dentro de `O_pool`.
 
 ``` r
  #se guardan los resultados de la funcion Voting
