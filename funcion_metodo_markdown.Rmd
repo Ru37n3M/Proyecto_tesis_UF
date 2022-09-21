@@ -648,7 +648,7 @@ O_B <- Opinion_pool(dist, 6, k_method = "B")
 
 Como se puede observar en el gráfico, los algoritmos funcionan según lo esperado, especificado anteriormente. 
 
-```{r,echo=FALSE}
+```{r grafico_visualizaciones,echo=FALSE}
 super_df <- bind_rows(O_A, O_B, O_random)
 
 super_df<-super_df %>%
@@ -669,7 +669,7 @@ También podemos notar que las "mejores" opiniones en términos de visualizacion
 
 En esta figura podemos observar el ratio contra la cantidad de visualizaciones de cada opinion
 
-```{r,echo=FALSE}
+```{r grafico_ratio,echo=FALSE}
 ggplot(super_df,aes(ratio_votos_vis,visualizaciones,col=algoritmo))+geom_count()+labs(x="Ratio_votos/visualizaciones",y="Visualizaciones", title="Distribución_Ratio_contra_Visualizaciones")+theme_minimal()
 ```
 

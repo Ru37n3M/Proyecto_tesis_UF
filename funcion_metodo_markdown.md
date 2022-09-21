@@ -783,7 +783,7 @@ O_B <- Opinion_pool(dist, 6, k_method = "B")
 Como se puede observar en el gráfico, los algoritmos funcionan según lo
 esperado, especificado anteriormente.
 
-![](funcion_metodo_markdown_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](funcion_metodo_markdown_files/figure-gfm/grafico_visualizaciones-1.png)<!-- -->
 
 Las opiniones seleccionadas por f1x representan una constante respecto a
 sus visualizaciones, mientras que en f2x se puede observar la presencia
@@ -799,7 +799,7 @@ algoritmo f2x en comparación con “random”
 En esta figura podemos observar el ratio contra la cantidad de
 visualizaciones de cada opinion
 
-![](funcion_metodo_markdown_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](funcion_metodo_markdown_files/figure-gfm/grafico_ratio-1.png)<!-- -->
 
 f1x se mantiene constante tanto en relación a las visualizaciones como
 al ratio, mientras que random mantiene una distribución gaussiana normal
