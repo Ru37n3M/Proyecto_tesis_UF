@@ -166,28 +166,17 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, k_method = "random"){
     #k vectores con las dimensiones de k_opinion
     k2_noid <- k_opinion[,which(grepl("Dim", colnames(O_pool)))]
     
-    #Distancia entre participante y k
-    distance_i_j <- function(x){
-      abs(par) - abs(x)
-    }
-    
     #Matriz de k filas con el resultado de la diferencia
-    Dij <- apply(k2_noid,1, distance_i_j)
-    
-    Dij <- bind_rows(Dij)
-    
-    #Se pasan a valores absolutos todos los numeros
-    Dij <- abs(Dij)
+    Dij <- apply(k2_noid,1, function(x) abs(par) - abs(x)) %>%
+      bind_rows %>%
+      abs
     
     #Inversa de la distancia, se elevan todos los valores a la -1
     sumDij_inverse <- sum(Dij**-1)
     
     #Probabilidad de cada vector de valores de ser elegido en base a la sumatoria de todas las distancias
-    Probs_vpos <- function(x){
-      (x**-1) / sumDij_inverse
-    }
     
-    Poij_pos<- sapply(Dij, Probs_vpos)
+    Poij_pos<- sapply(Dij, function(x) (x**-1) / sumDij_inverse)
     
     #Condicional para votos positivos, chequea si el participante tiene votos positivos
     if(vpos > 0){
@@ -205,11 +194,7 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, k_method = "random"){
     sumDij <- sum(Dij)
     
     #Probabilidad de voto negativo
-    Probs_vneg <- function(x){
-      x / sumDij
-    }
-    
-    Poij_neg<- sapply(Dij, Probs_vneg)
+    Poij_neg<- sapply(Dij, function(x) x / sumDij )
     
     #Condicional para votos negativos, chequea si el participante tiene votos negativos
     if(vneg > 0){
