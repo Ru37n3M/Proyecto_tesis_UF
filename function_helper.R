@@ -56,7 +56,7 @@ shuffle_dist <- function(distr){
 
 #####
 
-Opinion_pool <-function(dist, k,
+Opinion_pool <-function(dist, k, prop = 0.5, 
                         k_method = "random"){
   
   #shuffle_dist: espera los resultados de shuffle_dist
@@ -102,7 +102,7 @@ Opinion_pool <-function(dist, k,
     Votos_negativos <- abs(par_n$Votos_positivos - total_votos)
     
     #se guardan los resultados de la funcion Voting
-    Voting_loop <- Voting(O_pool, par_dim_only, k, par_n$Votos_positivos, Votos_negativos, k_method)
+    Voting_loop <- Voting(O_pool, par_dim_only, k, par_n$Votos_positivos, Votos_negativos, prop, k_method)
     
     #se sobrescribe O_pool con los resultados de la votacion
     #se actualizan visualizaciones, votos positivos y negativos y el grado de conseso
@@ -129,7 +129,7 @@ Opinion_pool <-function(dist, k,
 
 #####
 
-Voting <- function(pool_ideas, par, k, vpos, vneg, k_method = "random"){
+Voting <- function(pool_ideas, par, k, vpos, vneg, prop = 0.5, k_method = "random"){
   
   #Chequea fila por fila si se encuentra la opinion del participante
   check <- function(x){
@@ -149,11 +149,19 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, k_method = "random"){
       
       k_opinion <- algoritmo_seleccion_f1x(O_pool, k)
       
+    } else if(k_method == "Ab"){
+      
+      k_opinion <- algoritmo_seleccion_f1xb(O_pool, k)
+      
     } else if(k_method == "B"){
       
-      k_opinion <- algoritmo_seleccion_f2x(O_pool, k)
+      k_opinion <- algoritmo_seleccion_f2x(O_pool, k, prop)
       
-    }
+    } else if(k_method == "Bd"){
+      
+      k_opinion <- algoritmo_seleccion_f2xd(O_pool, k, prop)
+      
+    } 
     
     else{
       #Sampleo aleatorio
@@ -240,10 +248,30 @@ algoritmo_seleccion_f1x <- function(O_pool, k){
   
 }
 
+#se samplean k ideas por > ratio
+algoritmo_seleccion_f1xb <- function(O_pool, k){
+  
+  #Se reordena aleatoriamente el dataframe
+  #Se hace para evitar que, en caso de empate de visualizaciones,
+  #todos los valores minimos tengan iguales probabilidades de ser seleccionados
+  #al subsetear las últimas k filas del dataset
+  O_pool <- sample_n(O_pool, nrow(O_pool))
+  
+  #Se obtienen k valores de los ultimos puestos del dataframe
+  k_opinion<- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
+    slice_tail(n = k)
+  
+  return(k_opinion)
+  
+}
+
 #####
 #Algoritmo de seleccion f2x
-#se samplean k/2 ideas segun f1x y otras k/2 ideas segun < ratio votos-visualizaciones
-algoritmo_seleccion_f2x<- function(O_pool, k){
+#se samplean la proporcion prop de k ideas segun f1x y k-(prop*k) ideas segun < ratio votos-visualizaciones
+algoritmo_seleccion_f2x <- function(O_pool, k, prop){
+  
+  g1_prop <- round(prop*k)
+  g2_prop <- round(k - (prop * k))
   
   #Se reordena aleatoriamente el dataframe
   #Se hace para evitar que, en caso de empate de visualizaciones,
@@ -252,12 +280,39 @@ algoritmo_seleccion_f2x<- function(O_pool, k){
   O_pool <- sample_n(O_pool, nrow(O_pool))
   
   #Se subsetean las últimas k/2 filas del dataset ordenado de forma decreciente segun visualizaciones
-  k_opinion_low<- O_pool[order(O_pool$visualizaciones, decreasing = T),] %>%
-    slice_tail(n = k/2)
+  k_opinion_low <- O_pool[order(O_pool$visualizaciones, decreasing = T),] %>%
+    slice_tail(n = g1_prop)
   
   #Se subsetean las primeras k/2 filas del dataset ordenado de forma decreciente segun ratio votos-visualizaciones
   k_opinion_high <- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
-    slice_head(n = k/2)
+    slice_head(n = g2_prop)
+  
+  #Se combinan las filas de ambos subsets para formar k opinones que seran presentadas al participante
+  k_opinion <- bind_rows(k_opinion_low, k_opinion_high)
+  
+  return(k_opinion)
+  
+}
+
+#se samplean la proporcion prop de k ideas segun > ratio-votos-visualizaciones y k-(prop*k) ideas segun < ratio votos-visualizaciones
+algoritmo_seleccion_f2xd <- function(O_pool, k, prop){
+  
+  g1_prop <- round(prop*k)
+  g2_prop <- round(k - (prop * k))
+  
+  #Se reordena aleatoriamente el dataframe
+  #Se hace para evitar que, en caso de empate de visualizaciones,
+  #todos los valores minimos tengan iguales probabilidades de ser seleccionados
+  #al subsetear las últimas k filas del dataset
+  O_pool <- sample_n(O_pool, nrow(O_pool))
+  
+  #Se subsetean las últimas k/2 filas del dataset ordenado de forma decreciente segun visualizaciones
+  k_opinion_low<- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
+    slice_tail(n = g1_prop)
+  
+  #Se subsetean las primeras k/2 filas del dataset ordenado de forma decreciente segun ratio votos-visualizaciones
+  k_opinion_high <- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
+    slice_head(n = g2_prop)
   
   #Se combinan las filas de ambos subsets para formar k opinones que seran presentadas al participante
   k_opinion <- bind_rows(k_opinion_low, k_opinion_high)
@@ -272,7 +327,7 @@ algoritmo_seleccion_f2x<- function(O_pool, k){
 #list: lista con vector de n de c/distribucion, lista de vectores de medias de c/distribucion y lista de matrices de covarianza
 #beta: distribucion beta para probabilidad de distribucion binomial dentro de mixingfun
 #votos_totales: cantidad de votos total para cada participante
-simulacion_plataforma <- function(list, beta, votos_totales, k, k_method = "random"){
+simulacion_plataforma <- function(list, beta, votos_totales, k, prop, k_method = "random"){
   dist <- mixingfun(list, beta, votos_totales) #mixingfun
   resultado_simulacion <- Opinion_pool(dist, k, k_method = "random") #Opinion_pool
   return(resultado_simulacion) #devuelve resultado Opinion_pool
@@ -284,4 +339,5 @@ simulacion_plataforma(list("n" = c(200,300,100), # n de cada distribucion
                       rbeta(600,4,2), #Distribucion beta, n == sum(list$n)
                       2,#Size de distribucion binomial 
                       6,#numero de k
+                      prop = 0.5, 
                       k_method = "O_B") #algoritmo de seleccion
