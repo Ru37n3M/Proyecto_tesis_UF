@@ -34,7 +34,18 @@ La función `mixingfun` fue diseñada para generar una mezcla de distribuciones 
 
 
 ```{r mixingfun}
-
+mixingfun(
+  list(
+    'n' = c(5,5),
+    'means' = list(rep(-1,3), rep(1, 3)),
+    'cov_mat' = list(
+      diag(3),
+      diag(3)
+    )
+  ),
+  rbeta(10, 6, 2),
+  3
+)
 ```
 
 
@@ -50,7 +61,6 @@ pmap(
   ) %>% 
     lapply(as.data.frame) %>%  #Convierte cada matriz de la lista en dataframe
     bind_rows()
-
 ```
 
 
@@ -87,8 +97,18 @@ dist <- mixingfun(list("n" = c(200,300,100), # n de cada distribucion
                   2) #Size de distribucion binomial 
 ```
 
+## Orden de entrada
 
-### Generación de votación
+El orden de entrada de los agentes y los numeros de identificacion de cada sujeto (ID) estan generados a partir de la funcion `shuffle_dist`. Ejemplificamos aca 
+
+```{r}
+shuffle_dist(dist) %>% head()
+```
+
+El orden de entrada es el orden de las filas del dataframe resultante a partir de esta funcion. 
+
+
+## Generación de votación
 
 `Voting` fue diseñada para llevar a cabo el proceso de votación por cada agente. Dispone de 6 argumentos: `pool_ideas` siendo un dataframe de n cantidad de filas, `par` siendo un dataframe de una fila (en caso de ser un solo agente), `k` siendo un número entero representando la cantidad de ideas a seleccionar, `vpos` siendo la cantidad de votos positivos, `vneg` siendo la cantidad de votos negativos y `k_method` siendo el algoritmo de selección de ideas, pudiendo tomar los valores "A", "B" o "random".
 
@@ -442,7 +462,6 @@ Opinion_pool <-function(dist, k,
   return(O_pool)
 }
 ```
-
 
 En este primer segmento, se crea un nuevo dataframe con las dimensiones de `dist` y la cantidad de votos disponibles, es decir, se seleccionan unicamente las columnas Dim1, Dim2, Dim3 y "Votos_positivos". Una vez asignados a la variable `par_pool`, representan el pool total de participantes. 
 

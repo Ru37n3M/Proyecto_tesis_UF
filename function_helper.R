@@ -31,20 +31,20 @@ mixingfun <- function(dislist, beta, total_votos){
 
 #####
 shuffle_dist <- function(distr){
-  
+  #La funcion devuelve el mismo dataframe que como input pero con una columna de ID para cada fila y reordenado aleatoriamente
   #distr: Espera el resultado de mixingfun
   
   library(tidyverse)
   
   tbl_df_O <- distr %>%
     mutate(
-      #Se agrega la columna id al tibble distr
+      #Se agrega la columna id al tibble distr, el identificador de cada sujeto.
       ID = rep( 
         1:nrow(distr)
       )) %>%
     sample_n(nrow(distr)) #Se samplea aleatoriamente por el numero de filas de distr para reordenarlo
   
-  #Devuelve tibble reordenado y con columna ID
+  #Devuelve tibble mezclado (shuffled) y con columna ID
   tbl_df_O
 }
 
@@ -60,7 +60,6 @@ Opinion_pool <-function(dist, k, prop = 0.5,
   #k_method: criterio de seleccion de k, puede ser "random" (default), "A" o "B"
   
   library(tidyverse)
-  
   
   
   #nuevo dataframe con las dimensiones de shuffled_dist
@@ -322,7 +321,14 @@ algoritmo_seleccion_f2xd <- function(O_pool, k, prop){
 #beta: distribucion beta para probabilidad de distribucion binomial dentro de mixingfun
 #votos_totales: cantidad de votos total para cada participante
 simulacion_plataforma <- function(list, beta, votos_totales, k, prop, k_method = "random"){
+  parametro_alfa <- integer(stringr::str_extract_all(beta, '\\d')[[1]][1])
+  parametro_beta <- integer(stringr::str_extract_all(beta, '\\d')[[1]][2])
+  beta <- rbeta(
+    sum(list$n),
+    parametro_alfa,
+    parametro_beta
+  )
   dist <- mixingfun(list, beta, votos_totales) #mixingfun
-  resultado_simulacion <- Opinion_pool(dist, k, k_method = "random") #Opinion_pool
+  resultado_simulacion <- Opinion_pool(dist, k, k_method) #Opinion_pool
   return(resultado_simulacion) #devuelve resultado Opinion_pool
 }
