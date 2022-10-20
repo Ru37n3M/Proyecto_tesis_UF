@@ -4,19 +4,20 @@
 mixingfun <- function(dislist, beta, total_votos){
   #La funcion devuelve un tibble con los valores para las 3 dimensiones y la distribucion original de donde proviene cada valor
   
-  #dislist: Tiene que ser una lista de 3 elementos nombrada como "n","means" y "cov_mat" con un vector de longitud K, una lista de longitud K con vectores de longitud 3 y una lista de longitud K con matrices 3 x 3. El primer elemento marca la cantidad de sujetos a extraer de cada distribucion, el segundo elemento la media de cada distribucion y el ultimo la matriz de covarianza de cada distribucion.  
+  #dislist: Tiene que ser una lista de elementos nombrada como "n","means" y "cov_mat" con un vector de longitud K, una lista de longitud K con vectores de longitud 3 y una lista de longitud K con matrices 3 x 3. El primer elemento marca la cantidad de sujetos a extraer de cada distribucion, el segundo elemento la media de cada distribucion y el ultimo la matriz de covarianza de cada distribucion.  
   
   library(MASS)
   library(tidyverse)
-  
-  pmap(
+  mix_df <- pmap(
     dislist,
     function(n, means, cov_mat) mvrnorm(n, means, cov_mat) #Genero los muestreos de la distribucion multivariada
   ) %>% 
     lapply(as.data.frame) %>%  #Convierte cada matriz de la lista en dataframe
-    bind_rows() %>% #Une la lista de matrices en un solo dataframe
-    rename(Dim1 = V1,Dim2 = V2,Dim3 = V3) %>% #Cambia los nombres de las 3 columnas a algo mas representativo
-    mutate( #Creo una nueva variable para indicar de que distribucion proviene originalmente cada valor
+    bind_rows() #Une la lista de matrices en un solo dataframe
+ 
+  colnames(mix_df) <- paste('Dim', 1:ncol(mix_df), sep = '') #Cambia los nombres de las columnas a algo mas representativo
+  
+  mix_df %>% mutate( #Creo una nueva variable para indicar de que distribucion proviene originalmente cada valor
       Dist = rep( 
         1:length(dislist$n), dislist$n #Pongo un numero para cada distribucion y lo repito segun cuantos datos hay provenientes de esa distribucion
       ),
