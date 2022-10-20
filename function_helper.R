@@ -326,12 +326,3 @@ simulacion_plataforma <- function(list, beta, votos_totales, k, prop, k_method =
   resultado_simulacion <- Opinion_pool(dist, k, k_method = "random") #Opinion_pool
   return(resultado_simulacion) #devuelve resultado Opinion_pool
 }
-
-simulacion_plataforma(list("n" = c(200,300,100), # n de cada distribucion
-                           "means" = list(c(2,2,2),c(1,1,1),c(0,0,0)), # lista con vectores de medias para cada dist
-                           "cov_mat" = list(diag(1,3,3),diag(1,3,3),diag(1,3,3))), # lista con matrices de covarianza
-                      rbeta(600,4,2), #Distribucion beta, n == sum(list$n)
-                      2,#Size de distribucion binomial 
-                      6,#numero de k
-                      prop = 0.5, 
-                      k_method = "O_B") #algoritmo de seleccion
