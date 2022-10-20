@@ -55,8 +55,7 @@ Opinion_pool <-function(dist, k, prop = 0.5,
   
   #shuffle_dist: espera los resultados de shuffle_dist
   #k: numero de ideas que cada participante va a ver (numero entero)
-  #total_votos: numero entero, cantidad de votos disponibles para el participante
-  #par_num_iteration: cantidad de participantes por iteracion [FALTA ACLARAR QUE PASA CON ESTE ARGUMENTO]
+  #props: proporcion de ideas seleccionadas en base al algoritmo f1x
   #k_method: criterio de seleccion de k, puede ser "random" (default), "A" o "B"
   
   library(tidyverse)
