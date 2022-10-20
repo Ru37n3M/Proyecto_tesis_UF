@@ -141,7 +141,8 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, prop = 0.5, k_method = "rando
       
       k_opinion <- algoritmo_seleccion_f1x(O_pool, k)
       
-    } 
+    } else if(k_method == "B"){
+      
       k_opinion <- algoritmo_seleccion_f2x(O_pool, k, prop)
       
     }
@@ -204,12 +205,13 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, prop = 0.5, k_method = "rando
     
     return(O_pool)
     
-    else{
-      return(pool_ideas)
-    }
-    
-  } 
-
+  }
+  
+  else{
+    return(pool_ideas)
+  }
+  
+}
 
 
 #####
@@ -283,6 +285,6 @@ simulacion_plataforma <- function(list, beta, votos_totales, k, prop, k_method =
     parametro_beta
   )
   dist <- mixingfun(list, beta, votos_totales) #mixingfun
-  resultado_simulacion <- Opinion_pool(dist, k, k_method) #Opinion_pool
+  resultado_simulacion <- Opinion_pool(dist, k, prop, k_method) #Opinion_pool
   return(resultado_simulacion) #devuelve resultado Opinion_pool
 }
