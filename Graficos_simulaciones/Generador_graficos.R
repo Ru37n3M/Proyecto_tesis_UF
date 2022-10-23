@@ -10,7 +10,8 @@ random <- simulacion_plataforma(list("n" = c(166,167,167), # n de cada distribuc
                                                      "4,2", #Distribucion beta, n == sum(list$n)
                                                      3,#Size de distribucion binomial 
                                                      4,#numero de k
-                                                     prop = 0.5, 
+                                                     prop = 0.5,
+                                votos_negativos = TRUE,
                                                      k_method = "random") #algoritmo de seleccion
 
 A <- simulacion_plataforma(list("n" = c(166,167,167), # n de cada distribucion
@@ -20,6 +21,7 @@ A <- simulacion_plataforma(list("n" = c(166,167,167), # n de cada distribucion
                                                 3,#Size de distribucion binomial 
                                                 4,#numero de k
                                                 prop = 0.5, 
+                           votos_negativos = TRUE,
                                                 k_method = "A") #algoritmo de seleccion
 
 B <- simulacion_plataforma(list("n" = c(166,167,167), # n de cada distribucion
@@ -28,7 +30,8 @@ B <- simulacion_plataforma(list("n" = c(166,167,167), # n de cada distribucion
                                                 "4,2", #Distribucion beta, n == sum(list$n)
                                                 3,#Size de distribucion binomial 
                                                 4,#numero de k
-                                                prop = 0.5, 
+                                                prop = 0.5,
+                           votos_negativos = TRUE,
                                                 k_method = "B") #algoritmo de seleccion
 
 ############

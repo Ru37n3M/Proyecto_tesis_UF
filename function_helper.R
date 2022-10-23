@@ -50,12 +50,15 @@ shuffle_dist <- function(distr){
 
 #####
 
-Opinion_pool <-function(dist, k, prop = 0.5, 
+Opinion_pool <-function(dist, k, prop, votos_negativos = TRUE,
                         k_method = "random"){
   
   #shuffle_dist: espera los resultados de shuffle_dist
   #k: numero de ideas que cada participante va a ver (numero entero)
   #props: proporcion de ideas seleccionadas en base al algoritmo f1x
+  #votos_negativos: booleano, determina si el participante dispone o no de votos negativos
+  #TRUE : los participantes tienen votos negativos
+  #FALSE : los participantes NO tienen votos negativos
   #k_method: criterio de seleccion de k, puede ser "random" (default), "A" o "B"
   
   library(tidyverse)
@@ -91,7 +94,13 @@ Opinion_pool <-function(dist, k, prop = 0.5,
     O_pool <- bind_rows(O_pool,looping_tbl)
     
     #Se restan los votos positivos del total de votos para obtener la cantidad de votos negativos
-    Votos_negativos <- abs(par_n$Votos_positivos - total_votos)
+    if(votos_negativos){
+      Votos_negativos <- abs(par_n$Votos_positivos - total_votos)
+    }
+    else{
+      Votos_negativos <- 0 #Si no se permiten votos negativos, se setea votos_negativos en 0
+    }
+    
     
     #se guardan los resultados de la funcion Voting
     Voting_loop <- Voting(O_pool, par_dim_only, k, par_n$Votos_positivos, Votos_negativos, prop, k_method)
@@ -240,7 +249,7 @@ algoritmo_seleccion_f1x <- function(O_pool, k){
 algoritmo_seleccion_f2x <- function(O_pool, k, prop){
   
   g1_prop <- round(prop*k)
-  g2_prop <- round(k - (prop * k))
+  g2_prop <- k - g1_prop
   
   #Se reordena aleatoriamente el dataframe
   #Se hace para evitar que, en caso de empate de visualizaciones,
@@ -276,7 +285,8 @@ algoritmo_seleccion_f2x <- function(O_pool, k, prop){
 #list: lista con vector de n de c/distribucion, lista de vectores de medias de c/distribucion y lista de matrices de covarianza
 #beta: distribucion beta para probabilidad de distribucion binomial dentro de mixingfun
 #votos_totales: cantidad de votos total para cada participante
-simulacion_plataforma <- function(list, beta, votos_totales, k, prop, k_method = "random"){
+simulacion_plataforma <- function(list, beta, votos_totales, k, prop, 
+                                  votos_negativos = TRUE, k_method = "random"){
   parametro_alfa <- integer(stringr::str_extract_all(beta, '\\d')[[1]][1])
   parametro_beta <- integer(stringr::str_extract_all(beta, '\\d')[[1]][2])
   beta <- rbeta(
@@ -285,7 +295,7 @@ simulacion_plataforma <- function(list, beta, votos_totales, k, prop, k_method =
     parametro_beta
   )
   dist <- mixingfun(list, beta, votos_totales) #mixingfun
-  resultado_simulacion <- Opinion_pool(dist, k, prop, k_method) #Opinion_pool
+  resultado_simulacion <- Opinion_pool(dist, k, prop, votos_negativos, k_method) #Opinion_pool
   return(resultado_simulacion) #devuelve resultado Opinion_pool
 }
 
