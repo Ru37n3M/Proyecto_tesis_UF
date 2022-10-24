@@ -318,15 +318,14 @@ generador_graficos <- function(distlist, k, top){
     lapply(as.data.frame) %>%  #Convierte cada matriz de la lista en dataframe
     bind_rows() %>%#Une la lista de matrices en un solo dataframe
     mutate(
-      algoritmo = rep(c("random", "A", "B"), c(rep(nrow(distlist[[1]]), length(distlist))))
-    )
-  
+      algoritmo = rep(c("random", "A", "B"), c(nrow(distlist[[1]]), nrow(distlist[[2]]), nrow(distlist[[3]])))
+      )
+    
   #1 Distribucion de cantidad de visualizaciones
   plot_1a <- ggplot(combined_df, aes(algoritmo, visualizaciones, col = algoritmo)) +
     geom_jitter() +
     labs(x = "Algoritmo", y = "Visualizaciones", title = "Distribución Visualizaciones") +  
-    theme_minimal() +
-    facet_wrap(~algoritmo)
+    theme_minimal()
   
   plot_1b <- ggplot(combined_df, aes(x = visualizaciones, fill = algoritmo, color = algoritmo)) + 
     geom_bar(size = 2) +
@@ -335,18 +334,26 @@ generador_graficos <- function(distlist, k, top){
   plot_list_1 <- list(plot_1a, plot_1b)
   
   #2 Distribucion de cantidad de votos positivos
-  plot_2 <- ggplot(combined_df, aes(x = visualizaciones, fill = algoritmo, color = algoritmo)) + 
+  plot_2a <- ggplot(combined_df, aes(x = visualizaciones, fill = algoritmo, color = algoritmo)) + 
     geom_bar(size = 2)  +
     facet_grid(V_pos~algoritmo)
   
-  plot_list_2 <- list(plot_2)
+  plot_2b <- ggplot(combined_df, aes(x = V_pos, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_2 <- list(plot_2a, plot_2b)
   
   #3 Distribucion de cantidad de votos negativos
-  plot_3 <- ggplot(combined_df, aes(x = visualizaciones, fill = algoritmo, color = algoritmo)) + 
+  plot_3a <- ggplot(combined_df, aes(x = V_neg, fill = algoritmo, color = algoritmo)) + 
     geom_bar(size = 2)  +
     facet_grid(V_neg~algoritmo)
   
-  plot_list_3 <- list(plot_3)
+  plot_3b <- ggplot(combined_df, aes(x = V_neg, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_3 <- list(plot_3a, plot_3b)
   
   #4 Distribucion de cantidad de visualizaciones de ideas que tengan más de k visualizaciones
   
