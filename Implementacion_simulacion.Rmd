@@ -3,6 +3,12 @@ title: "R Notebook"
 output: html_notebook
 ---
 
+```{r}
+library(tidyverse)
+source("function_helper.R")
+```
+
+
 # Parametros
 
 
@@ -143,17 +149,19 @@ Asi finalmente quedan `r nrow(parametros_simulacion_df)` situaciones unicas.
 
 
 ```{r}
-simulacion_plataforma(
-  list = list(
-    'n' = c(parametros_simulacion_df$N[1]/2, parametros_simulacion_df$N[1]/2),
-    'means' = list(rep(0.5,3), rep(1,3)),
-    'cov_mat' = list(diag(3), diag(3))
-  ),
-  beta = '6-2',
-  votos_totales = 3,
-  k = 5,
-  prop = 1,
-  k_method = 'B'
-)
+test <- pmap(parametros_simulacion_df,
+     ~ simulacion_plataforma(
+      list = list(
+            'n' = c(..1/2, ..1/2),
+            'means' = list(rep(1,3), rep(-1,3)),
+            'cov_mat' = list(diag(3), diag(3))
+          ),
+      beta = ..6,
+      votos_totales = ..3,
+      k = ..2,
+      prop = ..5,
+      k_method = 'B'
+        )
+     )
 ```
 
