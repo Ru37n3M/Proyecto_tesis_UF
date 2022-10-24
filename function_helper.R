@@ -73,6 +73,8 @@ Opinion_pool <-function(dist, k, prop, votos_negativos = TRUE,
   #dataframe vacio para incorporar resultados del repeat loop
   O_pool <- tibble(NULL)
   
+  participant_vis_tibble <- tibble(NULL)
+  
   repeat{
     
     #se selecciona primera fila 
@@ -105,10 +107,23 @@ Opinion_pool <-function(dist, k, prop, votos_negativos = TRUE,
     #se guardan los resultados de la funcion Voting
     Voting_loop <- Voting(O_pool, par_dim_only, k, par_n$Votos_positivos, Votos_negativos, prop, k_method)
     
+    Voting_res <- as.data.frame(Voting_loop[1]) %>%
+      tibble()
+    
     #se sobrescribe O_pool con los resultados de la votacion
     #se actualizan visualizaciones, votos positivos y negativos y el grado de conseso
-    O_pool <- Voting_loop
+    O_pool <- Voting_res
     
+    if(nrow(O_pool > k)){
+      Voting_participant_choice <- as.vector(Voting_loop[2])
+      
+      looping_participant_vis_tibble <- tibble(
+        "ID_participante" = rep(nrow(O_pool), length(Voting_participant_choice)), 
+        "Ideas_visualizadas" = Voting_participant_choice
+      )
+      
+      participant_vis_tibble <- bind_rows(participant_vis_tibble,looping_participant_vis_tibble)
+    }
     
     #se elimina la primera fila del pool de participantes
     par_pool <- par_pool[-c(1:1),]
@@ -118,8 +133,11 @@ Opinion_pool <-function(dist, k, prop, votos_negativos = TRUE,
       break
   }
   
-  return(O_pool)
+  return(list(O_pool, 
+              participant_vis_tibble
+  ))
 }
+
 
 #####
 #Esta funcion se encuentra dentro de Opinion_pool
@@ -212,12 +230,12 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, prop = 0.5, k_method = "rando
     O_pool$ratio_votos_vis[which(O_pool$ID%in%k_opinion$ID)] <- (O_pool$V_pos[which(O_pool$ID%in%k_opinion$ID)]-
                                                                    O_pool$V_neg[which(O_pool$ID%in%k_opinion$ID)])/O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)]
     
-    return(O_pool)
+    return(list(O_pool, k_opinion$ID))
     
   }
   
   else{
-    return(pool_ideas)
+    return(list(pool_ideas))
   }
   
 }
@@ -281,6 +299,8 @@ algoritmo_seleccion_f2x <- function(O_pool, k, prop){
 
 
 #funcion general de la simulacion, incorpora mixingfun y Opinion_pool en una funcion
+#devuelve una lista que contiene dos dataframes: uno contiene las dimensiones, visualizaciones, votos y rates de c/idea
+#y el otro contiene los ID de las ideas que visualiza cada usuario
 #Argumentos
 #list: lista con vector de n de c/distribucion, lista de vectores de medias de c/distribucion y lista de matrices de covarianza
 #beta: distribucion beta para probabilidad de distribucion binomial dentro de mixingfun
@@ -296,7 +316,16 @@ simulacion_plataforma <- function(list, beta, votos_totales, k, prop,
   )
   dist <- mixingfun(list, beta, votos_totales) #mixingfun
   resultado_simulacion <- Opinion_pool(dist, k, prop, votos_negativos, k_method) #Opinion_pool
-  return(resultado_simulacion) #devuelve resultado Opinion_pool
+  resultado_tbl_opiniones <- resultado_simulacion[1] %>%
+    unclass() %>%
+    as.data.frame() %>%
+    tibble()
+  
+  covisualizaciones <- resultado_simulacion[2] %>%
+    unclass() %>%
+    as.data.frame()
+  
+  return(list(resultado_tbl_opiniones, covisualizaciones)) #devuelve una lista con un  dataframe con las visualizaciones y votos de c/idea y otro con las ideas que visualizo cada usuario
 }
 
 #####
