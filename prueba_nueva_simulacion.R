@@ -3,6 +3,7 @@ dist <- mixingfun(list("n" = c(50,50), # n de cada distribucion
                        "cov_mat" = list(diag(1,3,3),diag(1,3,3))), # lista con matrices de covarianza
                   rbeta(100,6,2),#Distribucion beta, n == sum(list$n)
                   3)
+
 dist <- shuffle_dist(dist)
 
 #Genera pool de opiniones
@@ -34,7 +35,7 @@ for(i in 1:nrow(dist)){
   }else{
     
     #pool minimo
-    pool_aleatorio <- slice_min(pool_opiniones[1:(indice_sujeto_actual-1),], order_by = visualizaciones, n = k)
+    pool_aleatorio <- slice_min(pool_opiniones[1:(indice_sujeto_actual-1),], order_by = visualizaciones, n = k, with_ties = FALSE)
     #pool_aleatorio <- slice_sample(pool_opiniones[1:(indice_sujeto_actual-1),], n = k) %>% select(Dim1:Dim3, ID)
     current_ids <- pool_aleatorio %>% pull(ID)
     
