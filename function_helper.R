@@ -50,13 +50,15 @@ shuffle_dist <- function(distr){
 
 #####
 
-Opinion_pool <-function(dist, k, prop = 0.5, 
+Opinion_pool <-function(dist, k, prop, votos_negativos = TRUE,
                         k_method = "random"){
   
   #shuffle_dist: espera los resultados de shuffle_dist
   #k: numero de ideas que cada participante va a ver (numero entero)
-  #total_votos: numero entero, cantidad de votos disponibles para el participante
-  #par_num_iteration: cantidad de participantes por iteracion [FALTA ACLARAR QUE PASA CON ESTE ARGUMENTO]
+  #props: proporcion de ideas seleccionadas en base al algoritmo f1x
+  #votos_negativos: booleano, determina si el participante dispone o no de votos negativos
+  #TRUE : los participantes tienen votos negativos
+  #FALSE : los participantes NO tienen votos negativos
   #k_method: criterio de seleccion de k, puede ser "random" (default), "A" o "B"
   
   library(tidyverse)
@@ -92,7 +94,13 @@ Opinion_pool <-function(dist, k, prop = 0.5,
     O_pool <- bind_rows(O_pool,looping_tbl)
     
     #Se restan los votos positivos del total de votos para obtener la cantidad de votos negativos
-    Votos_negativos <- abs(par_n$Votos_positivos - total_votos)
+    if(votos_negativos){
+      Votos_negativos <- abs(par_n$Votos_positivos - total_votos)
+    }
+    else{
+      Votos_negativos <- 0 #Si no se permiten votos negativos, se setea votos_negativos en 0
+    }
+    
     
     #se guardan los resultados de la funcion Voting
     Voting_loop <- Voting(O_pool, par_dim_only, k, par_n$Votos_positivos, Votos_negativos, prop, k_method)
@@ -142,19 +150,11 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, prop = 0.5, k_method = "rando
       
       k_opinion <- algoritmo_seleccion_f1x(O_pool, k)
       
-    } else if(k_method == "Ab"){
-      
-      k_opinion <- algoritmo_seleccion_f1xb(O_pool, k)
-      
     } else if(k_method == "B"){
       
       k_opinion <- algoritmo_seleccion_f2x(O_pool, k, prop)
       
-    } else if(k_method == "Bd"){
-      
-      k_opinion <- algoritmo_seleccion_f2xd(O_pool, k, prop)
-      
-    } 
+    }
     
     else{
       #Sampleo aleatorio
@@ -222,6 +222,7 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, prop = 0.5, k_method = "rando
   
 }
 
+
 #####
 #Algoritmo de seleccion f1x
 #se samplean k ideas por > cantidad de visualizaciones
@@ -241,22 +242,6 @@ algoritmo_seleccion_f1x <- function(O_pool, k){
   
 }
 
-#se samplean k ideas por > ratio
-algoritmo_seleccion_f1xb <- function(O_pool, k){
-  
-  #Se reordena aleatoriamente el dataframe
-  #Se hace para evitar que, en caso de empate de visualizaciones,
-  #todos los valores minimos tengan iguales probabilidades de ser seleccionados
-  #al subsetear las últimas k filas del dataset
-  O_pool <- sample_n(O_pool, nrow(O_pool))
-  
-  #Se obtienen k valores de los ultimos puestos del dataframe
-  k_opinion<- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
-    slice_tail(n = k)
-  
-  return(k_opinion)
-  
-}
 
 #####
 #Algoritmo de seleccion f2x
@@ -264,7 +249,7 @@ algoritmo_seleccion_f1xb <- function(O_pool, k){
 algoritmo_seleccion_f2x <- function(O_pool, k, prop){
   
   g1_prop <- round(prop*k)
-  g2_prop <- round(k - (prop * k))
+  g2_prop <- k - g1_prop
   
   #Se reordena aleatoriamente el dataframe
   #Se hace para evitar que, en caso de empate de visualizaciones,
@@ -280,39 +265,19 @@ algoritmo_seleccion_f2x <- function(O_pool, k, prop){
   k_opinion_high <- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
     slice_head(n = g2_prop)
   
-  #Se combinan las filas de ambos subsets para formar k opinones que seran presentadas al participante
-  k_opinion <- bind_rows(k_opinion_low, k_opinion_high)
+  if(g1_prop == 0){
+    k_opinion <- k_opinion_high
+  } else if(g2_prop == 0){
+    k_opinion <- k_opinion_low
+  } else{
+    #Se combinan las filas de ambos subsets para formar k opinones que seran presentadas al participante
+    k_opinion <- bind_rows(k_opinion_low, k_opinion_high)
+  }
   
   return(k_opinion)
   
 }
 
-#se samplean la proporcion prop de k ideas segun > ratio-votos-visualizaciones y k-(prop*k) ideas segun < ratio votos-visualizaciones
-algoritmo_seleccion_f2xd <- function(O_pool, k, prop){
-  
-  g1_prop <- round(prop*k)
-  g2_prop <- round(k - (prop * k))
-  
-  #Se reordena aleatoriamente el dataframe
-  #Se hace para evitar que, en caso de empate de visualizaciones,
-  #todos los valores minimos tengan iguales probabilidades de ser seleccionados
-  #al subsetear las últimas k filas del dataset
-  O_pool <- sample_n(O_pool, nrow(O_pool))
-  
-  #Se subsetean las últimas k/2 filas del dataset ordenado de forma decreciente segun visualizaciones
-  k_opinion_low<- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
-    slice_tail(n = g1_prop)
-  
-  #Se subsetean las primeras k/2 filas del dataset ordenado de forma decreciente segun ratio votos-visualizaciones
-  k_opinion_high <- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
-    slice_head(n = g2_prop)
-  
-  #Se combinan las filas de ambos subsets para formar k opinones que seran presentadas al participante
-  k_opinion <- bind_rows(k_opinion_low, k_opinion_high)
-  
-  return(k_opinion)
-  
-}
 
 
 #funcion general de la simulacion, incorpora mixingfun y Opinion_pool en una funcion
@@ -320,7 +285,8 @@ algoritmo_seleccion_f2xd <- function(O_pool, k, prop){
 #list: lista con vector de n de c/distribucion, lista de vectores de medias de c/distribucion y lista de matrices de covarianza
 #beta: distribucion beta para probabilidad de distribucion binomial dentro de mixingfun
 #votos_totales: cantidad de votos total para cada participante
-simulacion_plataforma <- function(list, beta, votos_totales, k, prop, k_method = "random"){
+simulacion_plataforma <- function(list, beta, votos_totales, k, prop, 
+                                  votos_negativos = TRUE, k_method = "random"){
   parametro_alfa <- integer(stringr::str_extract_all(beta, '\\d')[[1]][1])
   parametro_beta <- integer(stringr::str_extract_all(beta, '\\d')[[1]][2])
   beta <- rbeta(
@@ -329,6 +295,230 @@ simulacion_plataforma <- function(list, beta, votos_totales, k, prop, k_method =
     parametro_beta
   )
   dist <- mixingfun(list, beta, votos_totales) #mixingfun
-  resultado_simulacion <- Opinion_pool(dist, k, k_method) #Opinion_pool
+  resultado_simulacion <- Opinion_pool(dist, k, prop, votos_negativos, k_method) #Opinion_pool
   return(resultado_simulacion) #devuelve resultado Opinion_pool
 }
+
+#####
+#la funcion genera graficos de distribucion de visualizaciones, votos y rates
+#devuelve una lista que contiene listas de graficos
+#argumentos
+#distlist = lista de distribuciones (ej. 1 distribucion por algoritmo)
+#k = numerico, cantidad de visualizaciones necesarias para pasar un filtro de visualizaciones (relevante solo para 
+#el grafico de distribucion de ideas con mas de k vistas)
+#top = numerico, cantidad de ideas seleccionadas por mayor rate 
+
+generador_graficos <- function(distlist, k, top){
+  
+  library(tidyverse)
+  library(ggplot2)
+  
+  #dataframe con los 3 algoritmos de selección
+  combined_df <- distlist %>%
+    lapply(as.data.frame) %>%  #Convierte cada matriz de la lista en dataframe
+    bind_rows() %>%#Une la lista de matrices en un solo dataframe
+    mutate(
+      algoritmo = rep(c("random", "A", "B"), c(nrow(distlist[[1]]), nrow(distlist[[2]]), nrow(distlist[[3]])))
+      )
+    
+  #1 Distribucion de cantidad de visualizaciones
+  plot_1a <- ggplot(combined_df, aes(algoritmo, visualizaciones, col = algoritmo)) +
+    geom_jitter() +
+    labs(x = "Algoritmo", y = "Visualizaciones", title = "Distribución Visualizaciones") +  
+    theme_minimal()
+  
+  plot_1b <- ggplot(combined_df, aes(x = visualizaciones, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_1 <- list(plot_1a, plot_1b)
+  
+  #2 Distribucion de cantidad de votos positivos
+  plot_2a <- ggplot(combined_df, aes(x = visualizaciones, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)  +
+    facet_grid(V_pos~algoritmo)
+  
+  plot_2b <- ggplot(combined_df, aes(x = V_pos, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_2 <- list(plot_2a, plot_2b)
+  
+  #3 Distribucion de cantidad de votos negativos
+  plot_3a <- ggplot(combined_df, aes(x = V_neg, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)  +
+    facet_grid(V_neg~algoritmo)
+  
+  plot_3b <- ggplot(combined_df, aes(x = V_neg, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_3 <- list(plot_3a, plot_3b)
+  
+  #4 Distribucion de cantidad de visualizaciones de ideas que tengan más de k visualizaciones
+  
+  combined_df_kvis <- combined_df[which(combined_df$visualizaciones >= k),]
+  
+  plot_4a <- ggplot(combined_df_kvis, aes(x = visualizaciones, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)
+  
+  plot_4b <- ggplot(combined_df_kvis, aes(x = visualizaciones, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_4<- list(plot_4a, plot_4b)
+  
+  #5 Distribucion de votos positivos de ideas que tengan mas de 0 votos positivos
+  
+  combined_df_Vposfilt <- combined_df[which(combined_df$V_pos > 0),]
+  
+  plot_5a <- ggplot(combined_df_Vposfilt, aes(x = V_pos, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)
+  
+  plot_5b <- ggplot(combined_df_Vposfilt, aes(x = V_pos, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_5<- list(plot_5a, plot_5b)
+  
+  #6 Distribucion de votos negativos de ideas que tengan mas de 0 votos negativos
+  
+  combined_df_Vnegfilt <- combined_df[which(combined_df$V_neg > 0),]
+  
+  plot_6a <- ggplot(combined_df_Vnegfilt, aes(x = V_neg, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)
+  
+  plot_6b <- ggplot(combined_df_Vposfilt, aes(x = V_neg, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_6 <- list(plot_6a, plot_6b)
+  
+  #7 Distribucion de rates
+  
+  plot_7a <- ggplot(combined_df, aes(x = ratio_votos_vis, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)
+  
+  plot_7b <- ggplot(combined_df, aes(x = ratio_votos_vis, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_7 <- list(plot_7a, plot_7b)
+  
+  #8 Distribucion de rates de ideas que tengan al menos 1 voto
+  
+  combined_df_Votefilt <- combined_df[which(combined_df$V_neg > 0 |
+                                              combined_df$V_pos > 0),]
+  
+  plot_8a <- ggplot(combined_df_Votefilt, aes(x = ratio_votos_vis, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)
+  
+  plot_8b <- ggplot(combined_df_Votefilt, aes(x = ratio_votos_vis, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_8<- list(plot_8a, plot_8b)
+  
+  #9 Distribucion de rates x visualizaciones
+  
+  plot_9a <- ggplot(combined_df, aes(ratio_votos_vis, visualizaciones, col = algoritmo)) + 
+    geom_jitter() + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio - Visualizaciones") + 
+    theme_minimal() + 
+    facet_wrap(~algoritmo)
+  
+  plot_9b <- ggplot(combined_df, aes(ratio_votos_vis, visualizaciones, col = algoritmo)) + 
+    geom_jitter() + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio - Visualizaciones") + 
+    theme_minimal() 
+  
+  plot_list_9 <- list(plot_9a, plot_9b)
+  #10 Distribucion de rates de ideas x visualizaciones que tengan al menos 1 voto
+  
+  plot_10a <- ggplot(combined_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = algoritmo)) + 
+    geom_jitter() + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio - Visualizaciones") + 
+    theme_minimal() + 
+    facet_wrap(~algoritmo)
+  
+  plot_10b <- ggplot(combined_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = algoritmo)) + 
+    geom_jitter() + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio - Visualizaciones") + 
+    theme_minimal() 
+  
+  plot_list_10 <- list(plot_10a, plot_10b)
+  
+  #Creacion de dataframe con top 25 de cada algoritmo
+  
+  random_top <- distlist[[1]][order(distlist[[1]]$ratio_votos_vis, decreasing = T), ] %>%
+    filter(. , visualizaciones >= k) %>%
+    slice_head(. , n = 25) 
+  
+  A_top <- distlist[[2]][order(distlist[[2]]$ratio_votos_vis, decreasing = T), ] %>%
+    slice_head(. , n = 25) 
+  
+  B_top <- distlist[[3]][order(distlist[[3]]$ratio_votos_vis, decreasing = T), ] %>%
+    filter(. , visualizaciones >= k) %>%
+    slice_head(. , n = 25) 
+  
+  combined_df_top <- bind_rows(random_top, A_top , B_top) %>%
+    mutate(
+      algoritmo = rep(c("random", "A", "B"), c(rep(top, 3)))
+    )
+  
+  #11 Distribucion de rates de las 25 ideas con mejor rate
+  
+  plot_11a <- ggplot(combined_df_top, aes(x = ratio_votos_vis, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)
+  
+  plot_11b <- ggplot(combined_df_top, aes(x = ratio_votos_vis, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_11 <- list(plot_11a, plot_11b)
+  
+  #12 Distribucion de visualizaciones de las 25 ideas con mejor rate
+  
+  plot_12a <- ggplot(combined_df_top, aes(x = visualizaciones, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)
+  
+  plot_12b <- ggplot(combined_df_top, aes(x = visualizaciones, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_wrap(~algoritmo)
+  
+  plot_list_12 <- list(plot_12a, plot_12b)
+  
+  #13 Distribucion de votos de las 25 ideas con mejor rate
+  
+  plot_13a <- ggplot(combined_df_top, aes(x = V_pos, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)
+  
+  plot_13b <- ggplot(combined_df_top, aes(x = V_neg, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2)
+  
+  plot_13c <-ggplot(combined_df_top, aes(x = V_pos, fill = algoritmo, color = algoritmo)) + 
+    geom_bar(size = 2) +
+    facet_grid(V_neg~algoritmo)
+  
+  plot_list_13 <- list(plot_13a, plot_13b, plot_13c)
+  ##################
+  
+  #devuelve una lista con listas de graficos
+  return(list(
+    "visualizaciones" = plot_list_1,
+    "votos_positivos" = plot_list_2,
+    "votos_negativos" = plot_list_3,
+    "visualizaciones_k" = plot_list_4,
+    "votos_positivos_atleast1vote" = plot_list_5, 
+    "votos_negativos_atleast1vote" = plot_list_6,
+    "rates" = plot_list_7,
+    "rates_atleast1vote" = plot_list_8,
+    "ratesxvisualizaciones" = plot_list_9,
+    "ratesxvisualizaciones_atleast1vote" = plot_list_10,
+    "rates_top" = plot_list_11, 
+    "visualizaciones_top" = plot_list_12, 
+    "votos_top" = plot_list_13
+  ))
+}
+
+######
