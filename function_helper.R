@@ -309,11 +309,24 @@ simulacion_plataforma <- function(list, beta, votos_totales, k, prop,
                                   votos_negativos = TRUE, k_method = "random"){
   parametro_alfa <- integer(stringr::str_extract_all(beta, '\\d')[[1]][1])
   parametro_beta <- integer(stringr::str_extract_all(beta, '\\d')[[1]][2])
-  beta <- rbeta(
-    sum(list$n),
-    parametro_alfa,
-    parametro_beta
-  )
+  
+  parametro_alfa_check <- length(parametro_alfa)
+  parametro_beta_check <- length(parametro_beta)
+  
+  if(parametro_alfa_check == 0 | parametro_beta_check == 0 ){
+    beta <- rbeta(
+      sum(list$n),
+      length(parametro_alfa),
+      length(parametro_beta)
+    )
+  } else{
+    beta <- rbeta(
+      sum(list$n),
+      parametro_alfa,
+      parametro_beta
+    )
+  }
+  
   dist <- mixingfun(list, beta, votos_totales) #mixingfun
   resultado_simulacion <- Opinion_pool(dist, k, prop, votos_negativos, k_method) #Opinion_pool
   resultado_tbl_opiniones <- resultado_simulacion[1] %>%
