@@ -307,25 +307,15 @@ algoritmo_seleccion_f2x <- function(O_pool, k, prop){
 #votos_totales: cantidad de votos total para cada participante
 simulacion_plataforma <- function(list, beta, votos_totales, k, prop, 
                                   votos_negativos = TRUE, k_method = "random"){
-  parametro_alfa <- integer(stringr::str_extract_all(beta, '\\d')[[1]][1])
-  parametro_beta <- integer(stringr::str_extract_all(beta, '\\d')[[1]][2])
+  parametro_alfa <- as.integer(stringr::str_extract_all(beta, '\\d')[[1]][1])
+  parametro_beta <- as.integer(stringr::str_extract_all(beta, '\\d')[[1]][2])
   
-  parametro_alfa_check <- length(parametro_alfa)
-  parametro_beta_check <- length(parametro_beta)
+  beta <- rbeta(
+    sum(list$n),
+    parametro_alfa,
+    parametro_beta
+  )
   
-  if(parametro_alfa_check == 0 | parametro_beta_check == 0 ){
-    beta <- rbeta(
-      sum(list$n),
-      length(parametro_alfa),
-      length(parametro_beta)
-    )
-  } else{
-    beta <- rbeta(
-      sum(list$n),
-      parametro_alfa,
-      parametro_beta
-    )
-  }
   
   dist <- mixingfun(list, beta, votos_totales) #mixingfun
   resultado_simulacion <- Opinion_pool(dist, k, prop, votos_negativos, k_method) #Opinion_pool
@@ -340,6 +330,7 @@ simulacion_plataforma <- function(list, beta, votos_totales, k, prop,
   
   return(list(resultado_tbl_opiniones, covisualizaciones)) #devuelve una lista con un  dataframe con las visualizaciones y votos de c/idea y otro con las ideas que visualizo cada usuario
 }
+
 
 #####
 #la funcion genera graficos de distribucion de visualizaciones, votos y rates
