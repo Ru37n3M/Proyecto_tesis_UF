@@ -1770,21 +1770,38 @@ pre code {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
-<pre class="r"><code>library(tidyverse)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<div id="parametros" class="section level1">
-<h1>Parametros</h1>
-<div id="variacion-de-n" class="section level2">
-<h2>Variacion de N</h2>
-<p>En este caso quedan todos los parametros fijos con la excepcion del
-N.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFjaW9uX24gPC0gZXhwYW5kLmdyaWQoXG4gIGMoMTAwLDIwMCw1MDAsMTAwMCwgMTAwMDApLCAjTlxuICAxMCwgI2NhbnRpZGFkIGRlIGlkZWFzXG4gIDMsICNDYW50aWRhZCBkZSB2b3Rvc1xuICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbClcbiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvblxuICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YVxuKVxuYGBgIn0= -->
-<pre class="r"><code>variacion_n &lt;- expand.grid(
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGBcbmBgYCJ9 -->
+<pre class="r"><code>```r
+library(tidyverse)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+
+# Parametros
+
+
+## Variacion de N
+
+En este caso quedan todos los parametros fijos con la excepcion del N.
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudmFyaWFjaW9uX24gPC0gZXhwYW5kLmdyaWQoXG4gIGMoMTAwLDIwMCw1MDAsMTAwMCwgMTAwMDApLCAjTlxuICAxMCwgI2NhbnRpZGFkIGRlIGlkZWFzXG4gIDMsICNDYW50aWRhZCBkZSB2b3Rvc1xuICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbClcbiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvblxuICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YVxuKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+variacion_n &lt;- expand.grid(
   c(100,200,500,1000, 10000), #N
   10, #cantidad de ideas
   3, #Cantidad de votos
@@ -1792,18 +1809,31 @@ N.</p>
   0.5, #Proporciones del algoritmo de visualizacion
   &#39;6-2&#39; #Parametros de la distribucion beta
 )</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="variacion-de-la-cantidad-de-ideas" class="section level2">
-<h2>Variacion de la cantidad de ideas</h2>
-<p>En este caso quedan todos los parametros fijos con la excepcion de la
-cantidad de ideas, k.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFjaW9uX2sgPC0gZXhwYW5kLmdyaWQoXG4gIDUwMCwgI05cbiAgYyg1LDEwLDE1KSwgI2NhbnRpZGFkIGRlIGlkZWFzXG4gIDMsICNDYW50aWRhZCBkZSB2b3Rvc1xuICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbClcbiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvblxuICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YVxuKVxuYGBgIn0= -->
-<pre class="r"><code>variacion_k &lt;- expand.grid(
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+## Variacion de la cantidad de ideas
+
+En este caso quedan todos los parametros fijos con la excepcion de la cantidad de ideas, k.
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudmFyaWFjaW9uX2sgPC0gZXhwYW5kLmdyaWQoXG4gIDUwMCwgI05cbiAgYyg1LDEwLDE1KSwgI2NhbnRpZGFkIGRlIGlkZWFzXG4gIDMsICNDYW50aWRhZCBkZSB2b3Rvc1xuICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbClcbiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvblxuICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YVxuKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+variacion_k &lt;- expand.grid(
   500, #N
   c(5,10,15), #cantidad de ideas
   3, #Cantidad de votos
@@ -1811,18 +1841,31 @@ cantidad de ideas, k.</p>
   0.5, #Proporciones del algoritmo de visualizacion
   &#39;6-2&#39; #Parametros de la distribucion beta
 )</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="variacion-de-la-cantidad-de-votos" class="section level2">
-<h2>Variacion de la cantidad de votos</h2>
-<p>Como siempre, quedan todos los parametros fijos y se varia unicamente
-la cantidad de votos</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFjaW9uX3ZvdG9zIDwtIGV4cGFuZC5ncmlkKFxuICA1MDAsICNOXG4gIDEwLCAjY2FudGlkYWQgZGUgaWRlYXNcbiAgYygxLDMsNSksICNDYW50aWRhZCBkZSB2b3Rvc1xuICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbClcbiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvblxuICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YVxuKVxuYGBgIn0= -->
-<pre class="r"><code>variacion_votos &lt;- expand.grid(
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+## Variacion de la cantidad de votos
+
+Como siempre, quedan todos los parametros fijos y se varia unicamente la cantidad de votos
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudmFyaWFjaW9uX3ZvdG9zIDwtIGV4cGFuZC5ncmlkKFxuICA1MDAsICNOXG4gIDEwLCAjY2FudGlkYWQgZGUgaWRlYXNcbiAgYygxLDMsNSksICNDYW50aWRhZCBkZSB2b3Rvc1xuICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbClcbiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvblxuICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YVxuKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+variacion_votos &lt;- expand.grid(
   500, #N
   10, #cantidad de ideas
   c(1,3,5), #Cantidad de votos
@@ -1830,16 +1873,30 @@ la cantidad de votos</p>
   0.5, #Proporciones del algoritmo de visualizacion
   &#39;6-2&#39; #Parametros de la distribucion beta
 )</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="variacion-del-tipo-de-votos" class="section level2">
-<h2>Variacion del tipo de votos</h2>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFjaW9uX3RpcG8gPC0gZXhwYW5kLmdyaWQoXG4gIDUwMCwgI05cbiAgMTAsICNjYW50aWRhZCBkZSBpZGVhc1xuICAzLCAjQ2FudGlkYWQgZGUgdm90b3NcbiAgYygxLDApLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbClcbiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvblxuICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YVxuKVxuYGBgIn0= -->
-<pre class="r"><code>variacion_tipo &lt;- expand.grid(
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+
+## Variacion del tipo de votos
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudmFyaWFjaW9uX3RpcG8gPC0gZXhwYW5kLmdyaWQoXG4gIDUwMCwgI05cbiAgMTAsICNjYW50aWRhZCBkZSBpZGVhc1xuICAzLCAjQ2FudGlkYWQgZGUgdm90b3NcbiAgYygxLDApLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbClcbiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvblxuICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YVxuKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+variacion_tipo &lt;- expand.grid(
   500, #N
   10, #cantidad de ideas
   3, #Cantidad de votos
@@ -1847,42 +1904,83 @@ la cantidad de votos</p>
   0.5, #Proporciones del algoritmo de visualizacion
   &#39;6-2&#39; #Parametros de la distribucion beta
 )</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>El tipo de votos no esta implementado dentro de la funcion
-<code>simulacion_plataforma</code> por lo que es necesario adaptarlo
-para lo que esta implementado. La mejor manera de hacerlo seria
-aprovechar los parametros de la distribucion beta. Siendo que esta
-distribucion controla la probabilidad de que ocurran votos positivos, si
-lo llevamos a 1 nos aseguramos que nunca ocurran votos negativos. Para
-eso podemos usar una distribucion <span class="math inline">\(Beta(1,0)\)</span>.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmJldGEoMTAsIDEsIDApXG5gYGAifQ== -->
-<pre class="r"><code>rbeta(10, 1, 0)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSAxIDEgMSAxIDEgMSAxIDEgMSAxXG4ifQ== -->
-<pre><code> [1] 1 1 1 1 1 1 1 1 1 1</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>De esta manera implementamos una modificacion sobre el dataframe
-alterando los parametros de la distribucion para que sean ‘1-0’</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFjaW9uX3RpcG8kVmFyNiA8LSBjKCc2LTInLCAnMS0wJylcbmBgYCJ9 -->
-<pre class="r"><code>variacion_tipo$Var6 &lt;- c(&#39;6-2&#39;, &#39;1-0&#39;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="variacion-de-algoritmo-de-visualizacion" class="section level2">
-<h2>Variacion de algoritmo de visualizacion</h2>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFjaW9uX3Zpc3VhbGl6YWNpb24gPC0gZXhwYW5kLmdyaWQoXG4gIDUwMCwgI05cbiAgMTAsICNjYW50aWRhZCBkZSBpZGVhc1xuICAzLCAjQ2FudGlkYWQgZGUgdm90b3NcbiAgMSwgI1ByZXNlbmNpYSBkZSB2b3RvcyBuZWdhdGl2b3MgKGJvb2wpXG4gIGMoMCwgMC4yNSwgMC41LCAwLjc1LCAxKSwgI1Byb3BvcmNpb25lcyBkZWwgYWxnb3JpdG1vIGRlIHZpc3VhbGl6YWNpb25cbiAgJzYtMicgI1BhcmFtZXRyb3MgZGUgbGEgZGlzdHJpYnVjaW9uIGJldGFcbilcbmBgYCJ9 -->
-<pre class="r"><code>variacion_visualizacion &lt;- expand.grid(
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+El tipo de votos no esta implementado dentro de la funcion `simulacion_plataforma` por lo que es necesario adaptarlo para lo que esta implementado. La mejor manera de hacerlo seria aprovechar los parametros de la distribucion beta. Siendo que esta distribucion controla la probabilidad de que ocurran votos positivos, si lo llevamos a 1 nos aseguramos que nunca ocurran votos negativos. Para eso podemos usar una distribucion $Beta(1,0)$. 
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucmJldGEoMTAsIDEsIDApXG5gYGBcbmBgYCJ9 --&gt;
+
+```r
+```r
+rbeta(10, 1, 0)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoiIFsxXSAxIDEgMSAxIDEgMSAxIDEgMSAxXG4ifQ== --&gt;
+</code></pre>
+<p>[1] 1 1 1 1 1 1 1 1 1 1</p>
+<pre><code>
+
+
+&lt;!-- rnb-output-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+De esta manera implementamos una modificacion sobre el dataframe alterando los parametros de la distribucion para que sean &#39;1-0&#39;
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudmFyaWFjaW9uX3RpcG8kVmFyNiA8LSBjKCc2LTInLCAnMS0wJylcbmBgYFxuYGBgIn0= --&gt;
+
+```r
+```r
+variacion_tipo$Var6 &lt;- c(&#39;6-2&#39;, &#39;1-0&#39;)</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+
+## Variacion de algoritmo de visualizacion
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudmFyaWFjaW9uX3Zpc3VhbGl6YWNpb24gPC0gZXhwYW5kLmdyaWQoXG4gIDUwMCwgI05cbiAgMTAsICNjYW50aWRhZCBkZSBpZGVhc1xuICAzLCAjQ2FudGlkYWQgZGUgdm90b3NcbiAgMSwgI1ByZXNlbmNpYSBkZSB2b3RvcyBuZWdhdGl2b3MgKGJvb2wpXG4gIGMoMCwgMC4yNSwgMC41LCAwLjc1LCAxKSwgI1Byb3BvcmNpb25lcyBkZWwgYWxnb3JpdG1vIGRlIHZpc3VhbGl6YWNpb25cbiAgJzYtMicgI1BhcmFtZXRyb3MgZGUgbGEgZGlzdHJpYnVjaW9uIGJldGFcbilcbmBgYFxuYGBgIn0= --&gt;
+
+```r
+```r
+variacion_visualizacion &lt;- expand.grid(
   500, #N
   10, #cantidad de ideas
   3, #Cantidad de votos
@@ -1890,17 +1988,31 @@ alterando los parametros de la distribucion para que sean ‘1-0’</p>
   c(0, 0.25, 0.5, 0.75, 1), #Proporciones del algoritmo de visualizacion
   &#39;6-2&#39; #Parametros de la distribucion beta
 )</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="variacion-de-distribucion-beta" class="section level2">
-<h2>Variacion de distribucion beta</h2>
-<p>Se varian los parametros que controlan la distribucion beta</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFjaW9uX2JldGEgPC0gZXhwYW5kLmdyaWQoXG4gIDUwMCwgI05cbiAgMTAsICNjYW50aWRhZCBkZSBpZGVhc1xuICAzLCAjQ2FudGlkYWQgZGUgdm90b3NcbiAgMSwgI1ByZXNlbmNpYSBkZSB2b3RvcyBuZWdhdGl2b3MgKGJvb2wpXG4gIDAuNSwgI1Byb3BvcmNpb25lcyBkZWwgYWxnb3JpdG1vIGRlIHZpc3VhbGl6YWNpb25cbiAgYygnNC00JywgJzYtMicsICcyLTYnKSAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YVxuKVxuYGBgIn0= -->
-<pre class="r"><code>variacion_beta &lt;- expand.grid(
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+## Variacion de distribucion beta
+
+Se varian los parametros que controlan la distribucion beta
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudmFyaWFjaW9uX2JldGEgPC0gZXhwYW5kLmdyaWQoXG4gIDUwMCwgI05cbiAgMTAsICNjYW50aWRhZCBkZSBpZGVhc1xuICAzLCAjQ2FudGlkYWQgZGUgdm90b3NcbiAgMSwgI1ByZXNlbmNpYSBkZSB2b3RvcyBuZWdhdGl2b3MgKGJvb2wpXG4gIDAuNSwgI1Byb3BvcmNpb25lcyBkZWwgYWxnb3JpdG1vIGRlIHZpc3VhbGl6YWNpb25cbiAgYygnNC00JywgJzYtMicsICcyLTYnKSAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YVxuKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+variacion_beta &lt;- expand.grid(
   500, #N
   10, #cantidad de ideas
   3, #Cantidad de votos
@@ -1908,18 +2020,31 @@ alterando los parametros de la distribucion para que sean ‘1-0’</p>
   0.5, #Proporciones del algoritmo de visualizacion
   c(&#39;4-4&#39;, &#39;6-2&#39;, &#39;2-6&#39;) #Parametros de la distribucion beta
 )</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="integracion" class="section level2">
-<h2>Integracion</h2>
-<p>Para integrar todos los dataframes generados anteriormente en uno
-solo vamos a usar <code>rbind</code>.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFyYW1ldHJvc19zaW11bGFjaW9uX2RmIDwtIHJiaW5kKFxuICB2YXJpYWNpb25fbiwgXG4gIHZhcmlhY2lvbl9rLFxuICB2YXJpYWNpb25fdm90b3MsXG4gIHZhcmlhY2lvbl90aXBvLFxuICB2YXJpYWNpb25fdmlzdWFsaXphY2lvbixcbiAgdmFyaWFjaW9uX2JldGFcbilcbmBgYCJ9 -->
-<pre class="r"><code>parametros_simulacion_df &lt;- rbind(
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+## Integracion
+
+Para integrar todos los dataframes generados anteriormente en uno solo vamos a usar `rbind`. 
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucGFyYW1ldHJvc19zaW11bGFjaW9uX2RmIDwtIHJiaW5kKFxuICB2YXJpYWNpb25fbiwgXG4gIHZhcmlhY2lvbl9rLFxuICB2YXJpYWNpb25fdm90b3MsXG4gIHZhcmlhY2lvbl90aXBvLFxuICB2YXJpYWNpb25fdmlzdWFsaXphY2lvbixcbiAgdmFyaWFjaW9uX2JldGFcbilcbmBgYFxuYGBgIn0= --&gt;
+
+```r
+```r
+parametros_simulacion_df &lt;- rbind(
   variacion_n, 
   variacion_k,
   variacion_votos,
@@ -1927,15 +2052,29 @@ solo vamos a usar <code>rbind</code>.</p>
   variacion_visualizacion,
   variacion_beta
 )</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>A continuacion es necesario cambiar los nombres de las columnas a
-algo mas representativo</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29sbmFtZXMocGFyYW1ldHJvc19zaW11bGFjaW9uX2RmKSA8LSBjKFxuICAnTicsXG4gICdjYW50X2lkZWFzJyxcbiAgJ2NhbnRfdm90b3MnLFxuICAnTmVnYXRpdm9zJyxcbiAgJ0FsZ29yaXRtbycsXG4gICdCZXRhJ1xuKVxuYGBgIn0= -->
-<pre class="r"><code>colnames(parametros_simulacion_df) &lt;- c(
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+A continuacion es necesario cambiar los nombres de las columnas a algo mas representativo
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuY29sbmFtZXMocGFyYW1ldHJvc19zaW11bGFjaW9uX2RmKSA8LSBjKFxuICAnTicsXG4gICdjYW50X2lkZWFzJyxcbiAgJ2NhbnRfdm90b3MnLFxuICAnTmVnYXRpdm9zJyxcbiAgJ0FsZ29yaXRtbycsXG4gICdCZXRhJ1xuKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+colnames(parametros_simulacion_df) &lt;- c(
   &#39;N&#39;,
   &#39;cant_ideas&#39;,
   &#39;cant_votos&#39;,
@@ -1943,22 +2082,52 @@ algo mas representativo</p>
   &#39;Algoritmo&#39;,
   &#39;Beta&#39;
 )</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Por ultimo tenemos que eliminar filas repetidas.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFyYW1ldHJvc19zaW11bGFjaW9uX2RmIDwtIHBhcmFtZXRyb3Nfc2ltdWxhY2lvbl9kZiAlPiUgZGlzdGluY3QoKVxuYGBgIn0= -->
-<pre class="r"><code>parametros_simulacion_df &lt;- parametros_simulacion_df %&gt;% distinct()</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Asi finalmente quedan 16 situaciones unicas.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGVzdCA8LSBwbWFwKHBhcmFtZXRyb3Nfc2ltdWxhY2lvbl9kZixcbiAgICAgfiBzaW11bGFjaW9uX3BsYXRhZm9ybWEoXG4gICAgICBsaXN0ID0gbGlzdChcbiAgICAgICAgICAgICduJyA9IGMoLi4xLzIsIC4uMS8yKSxcbiAgICAgICAgICAgICdtZWFucycgPSBsaXN0KHJlcCgxLDMpLCByZXAoLTEsMykpLFxuICAgICAgICAgICAgJ2Nvdl9tYXQnID0gbGlzdChkaWFnKDMpLCBkaWFnKDMpKVxuICAgICAgICAgICksXG4gICAgICBiZXRhID0gLi42LFxuICAgICAgdm90b3NfdG90YWxlcyA9IC4uMyxcbiAgICAgIGsgPSAuLjIsXG4gICAgICBwcm9wID0gLi41LFxuICAgICAga19tZXRob2QgPSAnQidcbiAgICAgICAgKVxuICAgICApXG5cbmBgYCJ9 -->
-<pre class="r"><code>test &lt;- pmap(parametros_simulacion_df,
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+Por ultimo tenemos que eliminar filas repetidas. 
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucGFyYW1ldHJvc19zaW11bGFjaW9uX2RmIDwtIHBhcmFtZXRyb3Nfc2ltdWxhY2lvbl9kZiAlPiUgZGlzdGluY3QoKVxuYGBgXG5gYGAifQ== --&gt;
+
+```r
+```r
+parametros_simulacion_df &lt;- parametros_simulacion_df %&gt;% distinct()</code></pre>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-chunk-end --&gt;
+
+
+&lt;!-- rnb-text-begin --&gt;
+
+
+Asi finalmente quedan 16 situaciones unicas.
+
+
+
+&lt;!-- rnb-text-end --&gt;
+
+
+&lt;!-- rnb-chunk-begin --&gt;
+
+
+&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGVzdCA8LSBwbWFwKHBhcmFtZXRyb3Nfc2ltdWxhY2lvbl9kZixcbiAgICAgfiBzaW11bGFjaW9uX3BsYXRhZm9ybWEoXG4gICAgICBsaXN0ID0gbGlzdChcbiAgICAgICAgICAgICduJyA9IGMoLi4xLzIsIC4uMS8yKSxcbiAgICAgICAgICAgICdtZWFucycgPSBsaXN0KHJlcCgxLDMpLCByZXAoLTEsMykpLFxuICAgICAgICAgICAgJ2Nvdl9tYXQnID0gbGlzdChkaWFnKDMpLCBkaWFnKDMpKVxuICAgICAgICAgICksXG4gICAgICBiZXRhID0gLi42LFxuICAgICAgdm90b3NfdG90YWxlcyA9IC4uMyxcbiAgICAgIGsgPSAuLjIsXG4gICAgICBwcm9wID0gLi41LFxuICAgICAga19tZXRob2QgPSAnQidcbiAgICAgICAgKVxuICAgICApXG5gYGAifQ== --&gt;
+
+```r
+test &lt;- pmap(parametros_simulacion_df,
      ~ simulacion_plataforma(
       list = list(
             &#39;n&#39; = c(..1/2, ..1/2),
@@ -1971,19 +2140,27 @@ algo mas representativo</p>
       prop = ..5,
       k_method = &#39;B&#39;
         )
-     )
-</code></pre>
+     )</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogTkFzIHByb2R1Y2VkV2FybmluZzogTkFzIHByb2R1Y2VkRXJyb3IgaW4gaWYgKHZwb3MgPiAwKSB7IDogbWlzc2luZyB2YWx1ZSB3aGVyZSBUUlVFL0ZBTFNFIG5lZWRlZFxuIn0= -->
-<pre><code>Warning: NAs producedWarning: NAs producedError in if (vpos &gt; 0) { : missing value where TRUE/FALSE needed</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Graficos</p>
 <!-- rnb-text-end -->
-</div>
-</div>
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG50ZXN0X29ubHlfb3BpbmlvbiA8LSBtYXAodGVzdCwgMSlcbnRlc3RfY292aXN1YWxpemFjaW9uZXMgPC0gbWFwKHRlc3QsIDIpXG5cbmdyYWZpY29zX29waW5pb25lcyA8LSBtYXAoXG4gIHRlc3Rfb25seV9vcGluaW9uLFxuICBnZW5lcmFkb3JfZ3JhZmljb3NcbilcblxuXG5gYGAifQ== -->
+<pre class="r"><code>
+test_only_opinion &lt;- map(test, 1)
+test_covisualizaciones &lt;- map(test, 2)
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpzb3VyY2UoImZ1bmN0aW9uX2hlbHBlci5SIikKYGBgCgoKIyBQYXJhbWV0cm9zCgoKIyMgVmFyaWFjaW9uIGRlIE4KCkVuIGVzdGUgY2FzbyBxdWVkYW4gdG9kb3MgbG9zIHBhcmFtZXRyb3MgZmlqb3MgY29uIGxhIGV4Y2VwY2lvbiBkZWwgTi4KCmBgYHtyfQp2YXJpYWNpb25fbiA8LSBleHBhbmQuZ3JpZCgKICBjKDEwMCwyMDAsNTAwLDEwMDAsIDEwMDAwKSwgI04KICAxMCwgI2NhbnRpZGFkIGRlIGlkZWFzCiAgMywgI0NhbnRpZGFkIGRlIHZvdG9zCiAgMSwgI1ByZXNlbmNpYSBkZSB2b3RvcyBuZWdhdGl2b3MgKGJvb2wpCiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvbgogICc2LTInICNQYXJhbWV0cm9zIGRlIGxhIGRpc3RyaWJ1Y2lvbiBiZXRhCikKYGBgCgojIyBWYXJpYWNpb24gZGUgbGEgY2FudGlkYWQgZGUgaWRlYXMKCkVuIGVzdGUgY2FzbyBxdWVkYW4gdG9kb3MgbG9zIHBhcmFtZXRyb3MgZmlqb3MgY29uIGxhIGV4Y2VwY2lvbiBkZSBsYSBjYW50aWRhZCBkZSBpZGVhcywgay4KCmBgYHtyfQp2YXJpYWNpb25fayA8LSBleHBhbmQuZ3JpZCgKICA1MDAsICNOCiAgYyg1LDEwLDE1KSwgI2NhbnRpZGFkIGRlIGlkZWFzCiAgMywgI0NhbnRpZGFkIGRlIHZvdG9zCiAgMSwgI1ByZXNlbmNpYSBkZSB2b3RvcyBuZWdhdGl2b3MgKGJvb2wpCiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvbgogICc2LTInICNQYXJhbWV0cm9zIGRlIGxhIGRpc3RyaWJ1Y2lvbiBiZXRhCikKYGBgCgojIyBWYXJpYWNpb24gZGUgbGEgY2FudGlkYWQgZGUgdm90b3MKCkNvbW8gc2llbXByZSwgcXVlZGFuIHRvZG9zIGxvcyBwYXJhbWV0cm9zIGZpam9zIHkgc2UgdmFyaWEgdW5pY2FtZW50ZSBsYSBjYW50aWRhZCBkZSB2b3RvcwoKYGBge3J9CnZhcmlhY2lvbl92b3RvcyA8LSBleHBhbmQuZ3JpZCgKICA1MDAsICNOCiAgMTAsICNjYW50aWRhZCBkZSBpZGVhcwogIGMoMSwzLDUpLCAjQ2FudGlkYWQgZGUgdm90b3MKICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbCkKICAwLjUsICNQcm9wb3JjaW9uZXMgZGVsIGFsZ29yaXRtbyBkZSB2aXN1YWxpemFjaW9uCiAgJzYtMicgI1BhcmFtZXRyb3MgZGUgbGEgZGlzdHJpYnVjaW9uIGJldGEKKQpgYGAKCgojIyBWYXJpYWNpb24gZGVsIHRpcG8gZGUgdm90b3MKCmBgYHtyfQp2YXJpYWNpb25fdGlwbyA8LSBleHBhbmQuZ3JpZCgKICA1MDAsICNOCiAgMTAsICNjYW50aWRhZCBkZSBpZGVhcwogIDMsICNDYW50aWRhZCBkZSB2b3RvcwogIGMoMSwwKSwgI1ByZXNlbmNpYSBkZSB2b3RvcyBuZWdhdGl2b3MgKGJvb2wpCiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvbgogICc2LTInICNQYXJhbWV0cm9zIGRlIGxhIGRpc3RyaWJ1Y2lvbiBiZXRhCikKYGBgCgpFbCB0aXBvIGRlIHZvdG9zIG5vIGVzdGEgaW1wbGVtZW50YWRvIGRlbnRybyBkZSBsYSBmdW5jaW9uIGBzaW11bGFjaW9uX3BsYXRhZm9ybWFgIHBvciBsbyBxdWUgZXMgbmVjZXNhcmlvIGFkYXB0YXJsbyBwYXJhIGxvIHF1ZSBlc3RhIGltcGxlbWVudGFkby4gTGEgbWVqb3IgbWFuZXJhIGRlIGhhY2VybG8gc2VyaWEgYXByb3ZlY2hhciBsb3MgcGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YS4gU2llbmRvIHF1ZSBlc3RhIGRpc3RyaWJ1Y2lvbiBjb250cm9sYSBsYSBwcm9iYWJpbGlkYWQgZGUgcXVlIG9jdXJyYW4gdm90b3MgcG9zaXRpdm9zLCBzaSBsbyBsbGV2YW1vcyBhIDEgbm9zIGFzZWd1cmFtb3MgcXVlIG51bmNhIG9jdXJyYW4gdm90b3MgbmVnYXRpdm9zLiBQYXJhIGVzbyBwb2RlbW9zIHVzYXIgdW5hIGRpc3RyaWJ1Y2lvbiAkQmV0YSgxLDApJC4gCgpgYGB7cn0KcmJldGEoMTAsIDEsIDApCmBgYApEZSBlc3RhIG1hbmVyYSBpbXBsZW1lbnRhbW9zIHVuYSBtb2RpZmljYWNpb24gc29icmUgZWwgZGF0YWZyYW1lIGFsdGVyYW5kbyBsb3MgcGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gcGFyYSBxdWUgc2VhbiAnMS0wJwoKYGBge3J9CnZhcmlhY2lvbl90aXBvJFZhcjYgPC0gYygnNi0yJywgJzEtMCcpCmBgYAoKCiMjIFZhcmlhY2lvbiBkZSBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvbgoKYGBge3J9CnZhcmlhY2lvbl92aXN1YWxpemFjaW9uIDwtIGV4cGFuZC5ncmlkKAogIDUwMCwgI04KICAxMCwgI2NhbnRpZGFkIGRlIGlkZWFzCiAgMywgI0NhbnRpZGFkIGRlIHZvdG9zCiAgMSwgI1ByZXNlbmNpYSBkZSB2b3RvcyBuZWdhdGl2b3MgKGJvb2wpCiAgYygwLCAwLjI1LCAwLjUsIDAuNzUsIDEpLCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvbgogICc2LTInICNQYXJhbWV0cm9zIGRlIGxhIGRpc3RyaWJ1Y2lvbiBiZXRhCikKYGBgCgojIyBWYXJpYWNpb24gZGUgZGlzdHJpYnVjaW9uIGJldGEKClNlIHZhcmlhbiBsb3MgcGFyYW1ldHJvcyBxdWUgY29udHJvbGFuIGxhIGRpc3RyaWJ1Y2lvbiBiZXRhCgpgYGB7cn0KdmFyaWFjaW9uX2JldGEgPC0gZXhwYW5kLmdyaWQoCiAgNTAwLCAjTgogIDEwLCAjY2FudGlkYWQgZGUgaWRlYXMKICAzLCAjQ2FudGlkYWQgZGUgdm90b3MKICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbCkKICAwLjUsICNQcm9wb3JjaW9uZXMgZGVsIGFsZ29yaXRtbyBkZSB2aXN1YWxpemFjaW9uCiAgYygnNC00JywgJzYtMicsICcyLTYnKSAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YQopCmBgYAoKIyMgSW50ZWdyYWNpb24KClBhcmEgaW50ZWdyYXIgdG9kb3MgbG9zIGRhdGFmcmFtZXMgZ2VuZXJhZG9zIGFudGVyaW9ybWVudGUgZW4gdW5vIHNvbG8gdmFtb3MgYSB1c2FyIGByYmluZGAuIAoKYGBge3J9CnBhcmFtZXRyb3Nfc2ltdWxhY2lvbl9kZiA8LSByYmluZCgKICB2YXJpYWNpb25fbiwgCiAgdmFyaWFjaW9uX2ssCiAgdmFyaWFjaW9uX3ZvdG9zLAogIHZhcmlhY2lvbl90aXBvLAogIHZhcmlhY2lvbl92aXN1YWxpemFjaW9uLAogIHZhcmlhY2lvbl9iZXRhCikKYGBgCgpBIGNvbnRpbnVhY2lvbiBlcyBuZWNlc2FyaW8gY2FtYmlhciBsb3Mgbm9tYnJlcyBkZSBsYXMgY29sdW1uYXMgYSBhbGdvIG1hcyByZXByZXNlbnRhdGl2bwoKYGBge3J9CmNvbG5hbWVzKHBhcmFtZXRyb3Nfc2ltdWxhY2lvbl9kZikgPC0gYygKICAnTicsCiAgJ2NhbnRfaWRlYXMnLAogICdjYW50X3ZvdG9zJywKICAnTmVnYXRpdm9zJywKICAnQWxnb3JpdG1vJywKICAnQmV0YScKKQpgYGAKClBvciB1bHRpbW8gdGVuZW1vcyBxdWUgZWxpbWluYXIgZmlsYXMgcmVwZXRpZGFzLiAKCmBgYHtyfQpwYXJhbWV0cm9zX3NpbXVsYWNpb25fZGYgPC0gcGFyYW1ldHJvc19zaW11bGFjaW9uX2RmICU+JSBkaXN0aW5jdCgpCmBgYAoKQXNpIGZpbmFsbWVudGUgcXVlZGFuIGByIG5yb3cocGFyYW1ldHJvc19zaW11bGFjaW9uX2RmKWAgc2l0dWFjaW9uZXMgdW5pY2FzLgoKCmBgYHtyfQp0ZXN0IDwtIHBtYXAocGFyYW1ldHJvc19zaW11bGFjaW9uX2RmLAogICAgIH4gc2ltdWxhY2lvbl9wbGF0YWZvcm1hKAogICAgICBsaXN0ID0gbGlzdCgKICAgICAgICAgICAgJ24nID0gYyguLjEvMiwgLi4xLzIpLAogICAgICAgICAgICAnbWVhbnMnID0gbGlzdChyZXAoMSwzKSwgcmVwKC0xLDMpKSwKICAgICAgICAgICAgJ2Nvdl9tYXQnID0gbGlzdChkaWFnKDMpLCBkaWFnKDMpKQogICAgICAgICAgKSwKICAgICAgYmV0YSA9IC4uNiwKICAgICAgdm90b3NfdG90YWxlcyA9IC4uMywKICAgICAgayA9IC4uMiwKICAgICAgcHJvcCA9IC4uNSwKICAgICAga19tZXRob2QgPSAnQicKICAgICAgICApCiAgICAgKQpgYGAKCg==</div>
+graficos_opiniones &lt;- map(
+  test_only_opinion,
+  generador_graficos
+)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7cn0NCmxpYnJhcnkodGlkeXZlcnNlKQ0Kc291cmNlKCJmdW5jdGlvbl9oZWxwZXIuUiIpDQpgYGANCg0KDQojIFBhcmFtZXRyb3MNCg0KDQojIyBWYXJpYWNpb24gZGUgTg0KDQpFbiBlc3RlIGNhc28gcXVlZGFuIHRvZG9zIGxvcyBwYXJhbWV0cm9zIGZpam9zIGNvbiBsYSBleGNlcGNpb24gZGVsIE4uDQoNCmBgYHtyfQ0KdmFyaWFjaW9uX24gPC0gZXhwYW5kLmdyaWQoDQogIGMoMTAwLDIwMCw1MDAsMTAwMCwgMTAwMDApLCAjTg0KICAxMCwgI2NhbnRpZGFkIGRlIGlkZWFzDQogIDMsICNDYW50aWRhZCBkZSB2b3Rvcw0KICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbCkNCiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvbg0KICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YQ0KKQ0KYGBgDQoNCiMjIFZhcmlhY2lvbiBkZSBsYSBjYW50aWRhZCBkZSBpZGVhcw0KDQpFbiBlc3RlIGNhc28gcXVlZGFuIHRvZG9zIGxvcyBwYXJhbWV0cm9zIGZpam9zIGNvbiBsYSBleGNlcGNpb24gZGUgbGEgY2FudGlkYWQgZGUgaWRlYXMsIGsuDQoNCmBgYHtyfQ0KdmFyaWFjaW9uX2sgPC0gZXhwYW5kLmdyaWQoDQogIDUwMCwgI04NCiAgYyg1LDEwLDE1KSwgI2NhbnRpZGFkIGRlIGlkZWFzDQogIDMsICNDYW50aWRhZCBkZSB2b3Rvcw0KICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbCkNCiAgMC41LCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvbg0KICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YQ0KKQ0KYGBgDQoNCiMjIFZhcmlhY2lvbiBkZSBsYSBjYW50aWRhZCBkZSB2b3Rvcw0KDQpDb21vIHNpZW1wcmUsIHF1ZWRhbiB0b2RvcyBsb3MgcGFyYW1ldHJvcyBmaWpvcyB5IHNlIHZhcmlhIHVuaWNhbWVudGUgbGEgY2FudGlkYWQgZGUgdm90b3MNCg0KYGBge3J9DQp2YXJpYWNpb25fdm90b3MgPC0gZXhwYW5kLmdyaWQoDQogIDUwMCwgI04NCiAgMTAsICNjYW50aWRhZCBkZSBpZGVhcw0KICBjKDEsMyw1KSwgI0NhbnRpZGFkIGRlIHZvdG9zDQogIDEsICNQcmVzZW5jaWEgZGUgdm90b3MgbmVnYXRpdm9zIChib29sKQ0KICAwLjUsICNQcm9wb3JjaW9uZXMgZGVsIGFsZ29yaXRtbyBkZSB2aXN1YWxpemFjaW9uDQogICc2LTInICNQYXJhbWV0cm9zIGRlIGxhIGRpc3RyaWJ1Y2lvbiBiZXRhDQopDQpgYGANCg0KDQojIyBWYXJpYWNpb24gZGVsIHRpcG8gZGUgdm90b3MNCg0KYGBge3J9DQp2YXJpYWNpb25fdGlwbyA8LSBleHBhbmQuZ3JpZCgNCiAgNTAwLCAjTg0KICAxMCwgI2NhbnRpZGFkIGRlIGlkZWFzDQogIDMsICNDYW50aWRhZCBkZSB2b3Rvcw0KICBjKDEsMCksICNQcmVzZW5jaWEgZGUgdm90b3MgbmVnYXRpdm9zIChib29sKQ0KICAwLjUsICNQcm9wb3JjaW9uZXMgZGVsIGFsZ29yaXRtbyBkZSB2aXN1YWxpemFjaW9uDQogICc2LTInICNQYXJhbWV0cm9zIGRlIGxhIGRpc3RyaWJ1Y2lvbiBiZXRhDQopDQpgYGANCg0KRWwgdGlwbyBkZSB2b3RvcyBubyBlc3RhIGltcGxlbWVudGFkbyBkZW50cm8gZGUgbGEgZnVuY2lvbiBgc2ltdWxhY2lvbl9wbGF0YWZvcm1hYCBwb3IgbG8gcXVlIGVzIG5lY2VzYXJpbyBhZGFwdGFybG8gcGFyYSBsbyBxdWUgZXN0YSBpbXBsZW1lbnRhZG8uIExhIG1lam9yIG1hbmVyYSBkZSBoYWNlcmxvIHNlcmlhIGFwcm92ZWNoYXIgbG9zIHBhcmFtZXRyb3MgZGUgbGEgZGlzdHJpYnVjaW9uIGJldGEuIFNpZW5kbyBxdWUgZXN0YSBkaXN0cmlidWNpb24gY29udHJvbGEgbGEgcHJvYmFiaWxpZGFkIGRlIHF1ZSBvY3VycmFuIHZvdG9zIHBvc2l0aXZvcywgc2kgbG8gbGxldmFtb3MgYSAxIG5vcyBhc2VndXJhbW9zIHF1ZSBudW5jYSBvY3VycmFuIHZvdG9zIG5lZ2F0aXZvcy4gUGFyYSBlc28gcG9kZW1vcyB1c2FyIHVuYSBkaXN0cmlidWNpb24gJEJldGEoMSwwKSQuIA0KDQpgYGB7cn0NCnJiZXRhKDEwLCAxLCAwKQ0KYGBgDQpEZSBlc3RhIG1hbmVyYSBpbXBsZW1lbnRhbW9zIHVuYSBtb2RpZmljYWNpb24gc29icmUgZWwgZGF0YWZyYW1lIGFsdGVyYW5kbyBsb3MgcGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gcGFyYSBxdWUgc2VhbiAnMS0wJw0KDQpgYGB7cn0NCnZhcmlhY2lvbl90aXBvJFZhcjYgPC0gYygnNi0yJywgJzEtMCcpDQpgYGANCg0KDQojIyBWYXJpYWNpb24gZGUgYWxnb3JpdG1vIGRlIHZpc3VhbGl6YWNpb24NCg0KYGBge3J9DQp2YXJpYWNpb25fdmlzdWFsaXphY2lvbiA8LSBleHBhbmQuZ3JpZCgNCiAgNTAwLCAjTg0KICAxMCwgI2NhbnRpZGFkIGRlIGlkZWFzDQogIDMsICNDYW50aWRhZCBkZSB2b3Rvcw0KICAxLCAjUHJlc2VuY2lhIGRlIHZvdG9zIG5lZ2F0aXZvcyAoYm9vbCkNCiAgYygwLCAwLjI1LCAwLjUsIDAuNzUsIDEpLCAjUHJvcG9yY2lvbmVzIGRlbCBhbGdvcml0bW8gZGUgdmlzdWFsaXphY2lvbg0KICAnNi0yJyAjUGFyYW1ldHJvcyBkZSBsYSBkaXN0cmlidWNpb24gYmV0YQ0KKQ0KYGBgDQoNCiMjIFZhcmlhY2lvbiBkZSBkaXN0cmlidWNpb24gYmV0YQ0KDQpTZSB2YXJpYW4gbG9zIHBhcmFtZXRyb3MgcXVlIGNvbnRyb2xhbiBsYSBkaXN0cmlidWNpb24gYmV0YQ0KDQpgYGB7cn0NCnZhcmlhY2lvbl9iZXRhIDwtIGV4cGFuZC5ncmlkKA0KICA1MDAsICNODQogIDEwLCAjY2FudGlkYWQgZGUgaWRlYXMNCiAgMywgI0NhbnRpZGFkIGRlIHZvdG9zDQogIDEsICNQcmVzZW5jaWEgZGUgdm90b3MgbmVnYXRpdm9zIChib29sKQ0KICAwLjUsICNQcm9wb3JjaW9uZXMgZGVsIGFsZ29yaXRtbyBkZSB2aXN1YWxpemFjaW9uDQogIGMoJzQtNCcsICc2LTInLCAnMi02JykgI1BhcmFtZXRyb3MgZGUgbGEgZGlzdHJpYnVjaW9uIGJldGENCikNCmBgYA0KDQojIyBJbnRlZ3JhY2lvbg0KDQpQYXJhIGludGVncmFyIHRvZG9zIGxvcyBkYXRhZnJhbWVzIGdlbmVyYWRvcyBhbnRlcmlvcm1lbnRlIGVuIHVubyBzb2xvIHZhbW9zIGEgdXNhciBgcmJpbmRgLiANCg0KYGBge3J9DQpwYXJhbWV0cm9zX3NpbXVsYWNpb25fZGYgPC0gcmJpbmQoDQogIHZhcmlhY2lvbl9uLCANCiAgdmFyaWFjaW9uX2ssDQogIHZhcmlhY2lvbl92b3RvcywNCiAgdmFyaWFjaW9uX3RpcG8sDQogIHZhcmlhY2lvbl92aXN1YWxpemFjaW9uLA0KICB2YXJpYWNpb25fYmV0YQ0KKQ0KYGBgDQoNCkEgY29udGludWFjaW9uIGVzIG5lY2VzYXJpbyBjYW1iaWFyIGxvcyBub21icmVzIGRlIGxhcyBjb2x1bW5hcyBhIGFsZ28gbWFzIHJlcHJlc2VudGF0aXZvDQoNCmBgYHtyfQ0KY29sbmFtZXMocGFyYW1ldHJvc19zaW11bGFjaW9uX2RmKSA8LSBjKA0KICAnTicsDQogICdjYW50X2lkZWFzJywNCiAgJ2NhbnRfdm90b3MnLA0KICAnTmVnYXRpdm9zJywNCiAgJ0FsZ29yaXRtbycsDQogICdCZXRhJw0KKQ0KYGBgDQoNClBvciB1bHRpbW8gdGVuZW1vcyBxdWUgZWxpbWluYXIgZmlsYXMgcmVwZXRpZGFzLiANCg0KYGBge3J9DQpwYXJhbWV0cm9zX3NpbXVsYWNpb25fZGYgPC0gcGFyYW1ldHJvc19zaW11bGFjaW9uX2RmICU+JSBkaXN0aW5jdCgpDQpgYGANCg0KQXNpIGZpbmFsbWVudGUgcXVlZGFuIGByIG5yb3cocGFyYW1ldHJvc19zaW11bGFjaW9uX2RmKWAgc2l0dWFjaW9uZXMgdW5pY2FzLg0KDQoNCmBgYHtyfQ0KdGVzdCA8LSBwbWFwKHBhcmFtZXRyb3Nfc2ltdWxhY2lvbl9kZiwNCiAgICAgfiBzaW11bGFjaW9uX3BsYXRhZm9ybWEoDQogICAgICBsaXN0ID0gbGlzdCgNCiAgICAgICAgICAgICduJyA9IGMoLi4xLzIsIC4uMS8yKSwNCiAgICAgICAgICAgICdtZWFucycgPSBsaXN0KHJlcCgxLDMpLCByZXAoLTEsMykpLA0KICAgICAgICAgICAgJ2Nvdl9tYXQnID0gbGlzdChkaWFnKDMpLCBkaWFnKDMpKQ0KICAgICAgICAgICksDQogICAgICBiZXRhID0gLi42LA0KICAgICAgdm90b3NfdG90YWxlcyA9IC4uMywNCiAgICAgIGsgPSAuLjIsDQogICAgICBwcm9wID0gLi41LA0KICAgICAga19tZXRob2QgPSAnQicNCiAgICAgICAgKQ0KICAgICApDQpgYGANCg0KDQpHcmFmaWNvcw0KDQpgYGB7cn0NCg0KdGVzdF9vbmx5X29waW5pb24gPC0gbWFwKHRlc3QsIDEpDQp0ZXN0X2NvdmlzdWFsaXphY2lvbmVzIDwtIG1hcCh0ZXN0LCAyKQ0KDQpncmFmaWNvc19vcGluaW9uZXMgPC0gbWFwKA0KICB0ZXN0X29ubHlfb3BpbmlvbiwNCiAgZ2VuZXJhZG9yX2dyYWZpY29zDQopDQoNCg0KYGBgDQo=</div>
 
 
 
