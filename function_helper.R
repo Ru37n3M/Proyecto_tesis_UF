@@ -351,56 +351,135 @@ generador_graficos <- function(distlist){
     as.data.frame()
   
   #1 Distribucion de cantidad de visualizaciones
-  plot_1 <- ggplot(combined_df, aes(x = visualizaciones)) + 
-    geom_bar(size = 1)
+  plot_1a <- ggplot(combined_df, aes(x = visualizaciones)) + 
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de cantidad de visualizaciones", 
+         x= "Cantidad de visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_1 <- list(plot_1)
+  plot_1b <-  ggplot(combined_df, aes(x = visualizaciones, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de cantidad de visualizaciones", 
+         x= "Cantidad de visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  
+  plot_list_1 <- list(plot_1a, plot_1b)
   
   #2 Distribucion de cantidad de votos positivos
   plot_2a <- ggplot(combined_df, aes(x = V_pos)) + 
-    geom_bar(size = 1)
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de cantidad de votos positivos", 
+         x= "Cantidad de votos positivos", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_2 <- list(plot_2a)
+  plot_2b <-  ggplot(combined_df, aes(x = V_pos, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de cantidad de votos positivos", 
+         x= "Cantidad de votos positivos", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  plot_list_2 <- list(plot_2a, plot_2b)
   
   #3 Distribucion de cantidad de votos negativos
   plot_3a <- ggplot(combined_df, aes(x = V_neg)) + 
-    geom_bar(size = 1)
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de cantidad de votos negativos", 
+         x= "Cantidad de votos negativos", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_3 <- list(plot_3a)
+  plot_3b <- ggplot(combined_df, aes(x = V_neg, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de cantidad de votos negativos", 
+         x= "Cantidad de votos negativos", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  plot_list_3 <- list(plot_3a, plot_3b)
   
   #4 Distribucion de cantidad de visualizaciones de ideas que tengan más de k visualizaciones
   
   combined_df_kvis <- combined_df[which(combined_df$visualizaciones >= 6),]
   
   plot_4a <- ggplot(combined_df_kvis, aes(x = visualizaciones)) + 
-    geom_bar(size = 1)
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
+         x= "Cantidad de visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_4<- list(plot_4a)
+  plot_4b <- ggplot(combined_df_kvis, aes(x = visualizaciones, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
+         x= "Cantidad de visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  plot_list_4<- list(plot_4a, plot_4b)
   
   #5 Distribucion de votos positivos de ideas que tengan mas de 0 votos positivos
   
   combined_df_Vposfilt <- combined_df[which(combined_df$V_pos > 0),]
   
   plot_5a <- ggplot(combined_df_Vposfilt, aes(x = V_pos)) + 
-    geom_bar(size = 1)
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
+         x= "Cantidad de votos positivos", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_5<- list(plot_5a)
+  plot_5b <- ggplot(combined_df_Vposfilt, aes(x = V_pos, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
+         x= "Cantidad de votos negativos", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  plot_list_5<- list(plot_5a, plot_5b)
   
   #6 Distribucion de votos negativos de ideas que tengan mas de 0 votos negativos
   
   combined_df_Vnegfilt <- combined_df[which(combined_df$V_neg > 0),]
   
   plot_6a <- ggplot(combined_df_Vnegfilt, aes(x = V_neg)) + 
-    geom_bar(size = 1)
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
+         x= "Cantidad de votos negativos", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_6 <- list(plot_6a)
+  plot_6b <- ggplot(combined_df_Vnegfilt, aes(x = V_neg, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
+         x= "Cantidad de votos negativos", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  plot_list_6 <- list(plot_6a, plot_6b)
   
   #7 Distribucion de rates
   
   plot_7a <- ggplot(combined_df, aes(x = ratio_votos_vis)) + 
-    geom_bar(size = 1)
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de rates", 
+         x= "Ratio votos/visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_7 <- list(plot_7a)
+  plot_7b <- ggplot(combined_df, aes(x = ratio_votos_vis, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de rates", 
+         x= "Ratio votos/visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  
+  plot_list_7 <- list(plot_7a, plot_7b)
   
   #8 Distribucion de rates de ideas que tengan al menos 1 voto
   
@@ -408,18 +487,29 @@ generador_graficos <- function(distlist){
                                               combined_df$V_pos > 0),]
   
   plot_8a <- ggplot(combined_df_Votefilt, aes(x = ratio_votos_vis)) + 
-    geom_bar(size = 1)
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
+         x= "Ratio votos/visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_8<- list(plot_8a)
+  plot_8b <- ggplot(combined_df_Votefilt, aes(x = ratio_votos_vis, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
+         x= "Ratio votos/visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  plot_list_8<- list(plot_8a, plot_8b)
   
   #9 Distribucion de rates x visualizaciones
   
-  plot_9b <- ggplot(combined_df, aes(ratio_votos_vis, visualizaciones)) + 
+  plot_9a <- ggplot(combined_df, aes(ratio_votos_vis, visualizaciones)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
     theme_minimal() 
   
-  plot_list_9 <- list(plot_9b)
+  plot_list_9 <- list(plot_9a)
   #10 Distribucion de rates de ideas x visualizaciones que tengan al menos 1 voto
   
   plot_10b <- ggplot(combined_df_Votefilt, aes(ratio_votos_vis, visualizaciones)) + 
@@ -438,26 +528,70 @@ generador_graficos <- function(distlist){
   #11 Distribucion de rates de las 25 ideas con mejor rate
   
   plot_11a <- ggplot(combined_df_top, aes(x = ratio_votos_vis)) + 
-    geom_bar(size = 1)
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de rates del top 25", 
+         x= "Ratio votos/visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_11 <- list(plot_11a)
+  plot_11b <- ggplot(combined_df_top, aes(x = ratio_votos_vis, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de rates del top 25", 
+         x= "Ratio votos/visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  plot_list_11 <- list(plot_11a, plot_11b)
   
   #12 Distribucion de visualizaciones de las 25 ideas con mejor rate
   
   plot_12a <- ggplot(combined_df_top, aes(x = visualizaciones)) + 
-    geom_bar(size = 1)
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de cantidad de visualizaciones del top 25", 
+         x= "Cantidad de visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_12 <- list(plot_12a)
+  plot_12b <- ggplot(combined_df_top, aes(x = visualizaciones, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de cantidad de visualizaciones del top 25", 
+         x= "Cantidad de visualizaciones", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  plot_list_12 <- list(plot_12a, plot_12b)
   
   #13 Distribucion de votos de las 25 ideas con mejor rate
   
   plot_13a <- ggplot(combined_df_top, aes(x = V_pos)) + 
-    geom_bar(size = 1)
+    geom_bar(size = 1) +
+    labs(title = "Distribucion votos positivos del top 25", 
+         x= "Cantidad de votos positivos", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_13b <- ggplot(combined_df_top, aes(x = V_neg)) + 
-    geom_bar(size = 1)
+  plot_13b <- ggplot(combined_df_top, aes(x = V_pos, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion votos positivos del top 25", 
+         x= "Cantidad de votos positivos", 
+         y = "Frecuencia") +
+    theme_minimal()
   
-  plot_list_13 <- list(plot_13a, plot_13b)
+  plot_13c <- ggplot(combined_df_top, aes(x = V_neg)) + 
+    geom_bar(size = 1) +
+    labs(title = "Distribucion de votos negativos del top 25", 
+         x= "Cantidad de votos negativos", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  plot_13d <- ggplot(combined_df_top, aes(x = V_neg, y = ..count..)) + 
+    geom_density() +
+    labs(title = "Distribucion de votos negativos del top 25", 
+         x= "Cantidad de votos negativos", 
+         y = "Frecuencia") +
+    theme_minimal()
+  
+  plot_list_13 <- list(plot_13a, plot_13b, plot_13c, plot_13d)
   ##################
   
   #devuelve una lista con listas de graficos
