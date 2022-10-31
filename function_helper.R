@@ -83,18 +83,6 @@ Opinion_pool <-function(dist, k, prop, votos_negativos = TRUE,
     #se selecciona solo los valores de la opinion del participante (Dim)
     par_dim_only <- par_n[, which(grepl("Dim", colnames(dist)))]
     
-    #se arma un tibble con las dimensiones de par_n
-    looping_tbl <- tibble(
-      "ID" = sum(nrow(O_pool), 1),
-      par_dim_only,
-      "visualizaciones"=0, 
-      "V_pos"=0,
-      "V_neg" = 0,
-      "ratio_votos_vis"= 0) 
-    
-    #incorpora la fila armada a O_pool
-    O_pool <- bind_rows(O_pool,looping_tbl)
-    
     #Se restan los votos positivos del total de votos para obtener la cantidad de votos negativos
     if(votos_negativos){
       Votos_negativos <- abs(par_n$Votos_positivos - total_votos)
@@ -113,6 +101,18 @@ Opinion_pool <-function(dist, k, prop, votos_negativos = TRUE,
     #se sobrescribe O_pool con los resultados de la votacion
     #se actualizan visualizaciones, votos positivos y negativos y el grado de conseso
     O_pool <- Voting_res
+    
+    #se arma un tibble con las dimensiones de par_n
+    looping_tbl <- tibble(
+      "ID" = sum(nrow(O_pool), 1),
+      par_dim_only,
+      "visualizaciones"=0, 
+      "V_pos"=0,
+      "V_neg" = 0,
+      "ratio_votos_vis"= 0) 
+    
+    #incorpora la fila armada a O_pool
+    O_pool <- bind_rows(O_pool,looping_tbl)
     
     if(nrow(O_pool > k)){
       Voting_participant_choice <- as.vector(Voting_loop[2])
@@ -150,40 +150,31 @@ Opinion_pool <-function(dist, k, prop, votos_negativos = TRUE,
 
 Voting <- function(pool_ideas, par, k, vpos, vneg, prop = 0.5, k_method = "random"){
   
-  #Chequea fila por fila si se encuentra la opinion del participante
-  check <- function(x){
-    x%in%par
-  }
-  
-  #Si se encuentra la idea del participante, se la elimina del pool de seleccion
-  O_pool <- pool_ideas[-which(sapply(pool_ideas, check))[1],] %>%
-    as_tibble
-  
   #Condicional para chequear si el pool de ideas tiene por lo menos k filas
-  if(nrow(O_pool) >= k)
+  if(nrow(pool_ideas) >= k)
   {
     
     #Condicionales para elegir algoritmos de seleccion
     if(k_method == "A"){
       
-      k_opinion <- algoritmo_seleccion_f1x(O_pool, k)
+      k_opinion <- algoritmo_seleccion_f1x(pool_ideas, k)
       
     } else if(k_method == "B"){
       
-      k_opinion <- algoritmo_seleccion_f2x(O_pool, k, prop)
+      k_opinion <- algoritmo_seleccion_f2x(pool_ideas, k, prop)
       
     }
     
     else{
       #Sampleo aleatorio
-      k_opinion <- sample_n(O_pool, k, replace = F)
+      k_opinion <- sample_n(pool_ideas, k, replace = F)
     }
     
-    O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] <- O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)] + 1 #se suma 1 a la dimension "visualizacion" del df a las ideas I presentes 
+    pool_ideas$visualizaciones[which(pool_ideas$ID%in%k_opinion$ID)] <- pool_ideas$visualizaciones[which(pool_ideas$ID%in%k_opinion$ID)] + 1 #se suma 1 a la dimension "visualizacion" del df a las ideas I presentes 
     # en 
     
     #k vectores con las dimensiones de k_opinion
-    k2_noid <- k_opinion[,which(grepl("Dim", colnames(O_pool)))]
+    k2_noid <- k_opinion[,which(grepl("Dim", colnames(pool_ideas)))]
     
     #Matriz de k filas con el resultado de la diferencia
     Dij <- apply(k2_noid,1, function(x) abs(par) - abs(x)) %>%
@@ -201,10 +192,10 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, prop = 0.5, k_method = "rando
     if(vpos > 0){
       
       #se samlea vpos con las probabilidades de cada fila/vector
-      Voted_pos <- sample_n(k_opinion, vpos, prob = c(Poij_pos), replace = T)
+      Voted_pos <- sample_n(k_opinion, vpos, prob = c(Poij_pos), replace = F)
       
       #se suma 1 punto a la idea que se corresponde con el valor minimo
-      O_pool$V_pos[which(O_pool$ID%in%Voted_pos$ID)] <- O_pool$V_pos[which(O_pool$ID%in%Voted_pos$ID)] + 1 
+      pool_ideas$V_pos[which(pool_ideas$ID%in%Voted_pos$ID)] <- pool_ideas$V_pos[which(pool_ideas$ID%in%Voted_pos$ID)] + 1 
       
     }
     
@@ -219,26 +210,26 @@ Voting <- function(pool_ideas, par, k, vpos, vneg, prop = 0.5, k_method = "rando
     if(vneg > 0){
       
       #Se samplea vneg de k_opinion con probabilidades de voto negativo para cada vector
-      Voted_neg <- sample_n(k_opinion,vneg, prob = c(Poij_neg), replace = T)
+      Voted_neg <- sample_n(k_opinion,vneg, prob = c(Poij_neg), replace = F)
       
       #se suma 1 punto a la idea que se corresponde con el valor minimo
-      O_pool$V_neg[which(O_pool$ID%in%Voted_neg$ID)] <- O_pool$V_neg[which(O_pool$ID%in%Voted_neg$ID)] + 1 
+      pool_ideas$V_neg[which(pool_ideas$ID%in%Voted_neg$ID)] <- pool_ideas$V_neg[which(pool_ideas$ID%in%Voted_neg$ID)] + 1 
       
     }
     
     #Ratio Votos/visualizaciones
-    O_pool$ratio_votos_vis[which(O_pool$ID%in%k_opinion$ID)] <- (O_pool$V_pos[which(O_pool$ID%in%k_opinion$ID)]-
-                                                                   O_pool$V_neg[which(O_pool$ID%in%k_opinion$ID)])/O_pool$visualizaciones[which(O_pool$ID%in%k_opinion$ID)]
+    pool_ideas$ratio_votos_vis[which(pool_ideas$ID%in%k_opinion$ID)] <- (pool_ideas$V_pos[which(pool_ideas$ID%in%k_opinion$ID)]-
+                                                                           pool_ideas$V_neg[which(pool_ideas$ID%in%k_opinion$ID)])/pool_ideas$visualizaciones[which(pool_ideas$ID%in%k_opinion$ID)]
     
-    return(list(O_pool, k_opinion$ID))
+    return(list(pool_ideas, k_opinion$ID))
     
   }
   
   else{
     return(list(pool_ideas))
   }
-  
 }
+
 
 
 #####
@@ -278,6 +269,8 @@ algoritmo_seleccion_f2x <- function(O_pool, k, prop){
   #Se subsetean las últimas k/2 filas del dataset ordenado de forma decreciente segun visualizaciones
   k_opinion_low <- O_pool[order(O_pool$visualizaciones, decreasing = T),] %>%
     slice_tail(n = g1_prop)
+  
+  O_pool <- O_pool[-which(O_pool$ID%in%k_opinion_low$ID),]
   
   #Se subsetean las primeras k/2 filas del dataset ordenado de forma decreciente segun ratio votos-visualizaciones
   k_opinion_high <- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
@@ -435,8 +428,8 @@ generador_graficos <- function(distlist){
   
   plot_5b <- ggplot(combined_df_Vposfilt, aes(x = V_pos, y = ..density..)) + 
     geom_density(fill = 'red', colour = 'black', size = 1) +
-    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
-         x= "Cantidad de votos negativos", 
+    labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
+         x= "Cantidad de votos positivos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
