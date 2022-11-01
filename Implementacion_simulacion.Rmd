@@ -164,8 +164,6 @@ test <- pmap(parametros_simulacion_df,
         )
      )
 ```
-
-
 Graficos
 
 ```{r}
@@ -173,10 +171,7 @@ Graficos
 test_only_opinion <- map(test, 1)
 test_covisualizaciones <- map(test, 2)
 
-graficos_opiniones <- map(
-  test_only_opinion,
-  generador_graficos
-)
+graficos_opiniones <- generador_graficos(test_only_opinion, parametros_simulacion_df)
 
 
 ```
