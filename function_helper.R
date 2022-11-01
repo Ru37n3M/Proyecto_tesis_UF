@@ -50,7 +50,7 @@ shuffle_dist <- function(distr){
 
 #####
 
-Opinion_pool <-function(dist, k, prop, votos_negativos = TRUE,
+Opinion_pool <-function(dist, k, prop, votos_negativos = 1,
                         k_method = "random"){
   
   #shuffle_dist: espera los resultados de shuffle_dist
@@ -84,7 +84,7 @@ Opinion_pool <-function(dist, k, prop, votos_negativos = TRUE,
     par_dim_only <- par_n[, which(grepl("Dim", colnames(dist)))]
     
     #Se restan los votos positivos del total de votos para obtener la cantidad de votos negativos
-    if(votos_negativos){
+    if(as.logical(votos_negativos)){
       Votos_negativos <- abs(par_n$Votos_positivos - total_votos)
     }
     else{
@@ -266,24 +266,30 @@ algoritmo_seleccion_f2x <- function(O_pool, k, prop){
   #al subsetear las últimas k filas del dataset
   O_pool <- sample_n(O_pool, nrow(O_pool))
   
-  #Se subsetean las últimas k/2 filas del dataset ordenado de forma decreciente segun visualizaciones
-  k_opinion_low <- O_pool[order(O_pool$visualizaciones, decreasing = T),] %>%
-    slice_tail(n = g1_prop)
-  
-  O_pool <- O_pool[-which(O_pool$ID%in%k_opinion_low$ID),]
-  
-  #Se subsetean las primeras k/2 filas del dataset ordenado de forma decreciente segun ratio votos-visualizaciones
-  k_opinion_high <- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
-    slice_head(n = g2_prop)
-  
   if(g1_prop == 0){
-    k_opinion <- k_opinion_high
+    k_opinion <- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
+      slice_head(n = k)
   } else if(g2_prop == 0){
-    k_opinion <- k_opinion_low
+    k_opinion <- O_pool[order(O_pool$visualizaciones, decreasing = T),] %>%
+      slice_tail(n = k)
   } else{
+    
+    #Se subsetean las últimas k/2 filas del dataset ordenado de forma decreciente segun visualizaciones
+    k_opinion_low <- O_pool[order(O_pool$visualizaciones, decreasing = T),] %>%
+      slice_tail(n = g1_prop)
+    
+    O_pool <- O_pool[-which(O_pool$ID%in%k_opinion_low$ID),]
+    
+    #Se subsetean las primeras k/2 filas del dataset ordenado de forma decreciente segun ratio votos-visualizaciones
+    k_opinion_high <- O_pool[order(O_pool$ratio_votos_vis, decreasing = T),] %>%
+      slice_head(n = g2_prop)
+    
     #Se combinan las filas de ambos subsets para formar k opinones que seran presentadas al participante
     k_opinion <- bind_rows(k_opinion_low, k_opinion_high)
+    
   }
+  
+  
   
   return(k_opinion)
   
@@ -299,7 +305,7 @@ algoritmo_seleccion_f2x <- function(O_pool, k, prop){
 #beta: distribucion beta para probabilidad de distribucion binomial dentro de mixingfun
 #votos_totales: cantidad de votos total para cada participante
 simulacion_plataforma <- function(list, beta, votos_totales, k, prop, 
-                                  votos_negativos = TRUE, k_method = "random"){
+                                  votos_negativos = 1, k_method = "random"){
   parametro_alfa <- as.integer(stringr::str_extract_all(beta, '\\d')[[1]][1])
   parametro_beta <- as.integer(stringr::str_extract_all(beta, '\\d')[[1]][2])
   

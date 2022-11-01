@@ -160,6 +160,7 @@ test <- pmap(parametros_simulacion_df,
       votos_totales = ..3,
       k = ..2,
       prop = ..5,
+      votos_negativos = ..4,
       k_method = 'B'
         )
      )
