@@ -1094,32 +1094,32 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   ggarrange(plot_1b, plot_2b, plot_3b, plot_4b, plot_5b, plot_6b, plot_7b, plot_8b, plot_9b, plot_10b,
             plot_11b, plot_12b, plot_13b, plot_13h, nrow = 7, ncol = 2)
   
-  ggsave("Graficos_conjunto_cantidad_ideas.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_N.png",  height = 50, width = 20, units = 'cm')
   
   ggarrange(plot_1a, plot_2a, plot_3a, plot_4a, plot_5a, plot_6a, plot_7a, plot_8a, plot_9a, plot_10a,
             plot_11a, plot_12a, plot_13a, plot_13g, nrow = 7, ncol = 2)
   
-  ggsave("Graficos_conjunto_N.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_cantidad_votos.png",  height = 50, width = 20, units = 'cm')
   
   ggarrange(plot_1c, plot_2c, plot_3c, plot_4c, plot_5c, plot_6c, plot_7c, plot_8c, plot_9c, plot_10c,
             plot_11c, plot_12c, plot_13c, plot_13i, nrow = 7, ncol = 2)
   
-  ggsave("Graficos_conjunto_cantidad_votos.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_cantidad_ideas.png",  height = 50, width = 20, units = 'cm')
   
   ggarrange(plot_1d, plot_2d, plot_3d, plot_4d, plot_5d, plot_6d, plot_7d, plot_8d, plot_9d, plot_10d,
             plot_11d, plot_12d, plot_13d, plot_13j, nrow = 7, ncol = 2)
   
-  ggsave("Graficos_conjunto_Negativos.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_Negativos.png",  height = 50, width = 20, units = 'cm')
   
   ggarrange(plot_1e, plot_2e, plot_3e, plot_4e, plot_5e, plot_6e, plot_7e, plot_8e, plot_9e, plot_10e,
             plot_11e, plot_12e, plot_13e, plot_13k, nrow = 7, ncol = 2)
   
-  ggsave("Graficos_conjunto_Beta.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_Beta.png",  height = 50, width = 20, units = 'cm')
   
   ggarrange(plot_1f, plot_2f, plot_3f, plot_4f, plot_5f, plot_6f, plot_7f, plot_8f, plot_9f, plot_10f,
             plot_11f, plot_12f, plot_13f, plot_13l, nrow = 7, ncol = 2) 
   
-  ggsave("Graficos_conjunto_Algoritmo.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_Algoritmo.png",  height = 50, width = 20, units = 'cm')
   
   #devuelve una lista con listas de graficos
   return(list(
