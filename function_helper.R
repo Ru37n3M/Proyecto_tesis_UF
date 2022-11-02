@@ -378,7 +378,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   
   Beta_df <- combined_df %>%
-    filter(N == 500  &  Negativos == 1 & Algoritmo == 0.5 & cantidad_votos == 3 & cantidad_ideas == 10)
+    filter(N == 500   & Algoritmo == 0.5 & cantidad_votos == 3 & cantidad_ideas == 10)
   
   
   Algoritmo_df <- combined_df %>%
