@@ -391,8 +391,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_votos)
+    ggthemes::theme_clean() 
   
   plot_1b <- ggplot(N_df, aes(x = visualizaciones, y = ..ncount.. , fill = N)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
@@ -709,8 +708,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_votos)
+    ggthemes::theme_clean()
   
   plot_7b <- ggplot(N_df, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = N)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
@@ -1233,5 +1231,6 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
     "Algoritmo" = plot_list_6
   ))
 }
+
 
 ######
