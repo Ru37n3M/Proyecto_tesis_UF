@@ -344,7 +344,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   library(ggplot2)
   library(ggpubr)
   
-  combined_df<- dislist %>%
+  combined_df <- test_only_opinion %>%
     bind_rows() %>%
     mutate(
       'N' = rep(as.factor(parametros_simulacion_df$N), parametros_simulacion_df$N),
@@ -355,448 +355,496 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
       'Algoritmo' = rep(as.factor(parametros_simulacion_df$Algoritmo), parametros_simulacion_df$N)
     )
   
+  N_df <- combined_df %>% 
+    filter(Beta == "6-2" & Algoritmo == 0.5 & 
+             cantidad_ideas == 10 & Negativos == 1 & cantidad_votos == 3)
+  
+  
+  ideas_df <- combined_df %>%
+    filter(N == 500  & Beta == "6-2" & Algoritmo == 0.5 & Negativos == 1 & cantidad_votos == 3)
+  
+  
+  votos_df <- combined_df %>%
+    filter(N == 500  & Beta == "6-2" & Algoritmo == 0.5 & Negativos == 1 & cantidad_ideas == 10)
+  
+  
+  Negativos_df_part1 <- combined_df %>%
+    filter(N == 500  & Beta == "6-2" & Algoritmo == 0.5 & cantidad_votos == 3 & cantidad_ideas == 10)
+  
+  Negativos_df_part2 <- combined_df %>%
+    filter(N == 500  & Beta == "1-0" & Algoritmo == 0.5 & cantidad_votos == 3 & cantidad_ideas == 10)
+  
+  Negativos_df <- bind_rows(Negativos_df_part1, Negativos_df_part2)
+  
+  
+  Beta_df <- combined_df %>%
+    filter(N == 500  &  Negativos == 1 & Algoritmo == 0.5 & cantidad_votos == 3 & cantidad_ideas == 10)
+  
+  
+  Algoritmo_df <- combined_df %>%
+    filter(N == 500  &  Negativos == 1 & Beta == "6-2" & cantidad_votos == 3 & cantidad_ideas == 10)
+  
+  
   #1 Distribucion de cantidad de visualizaciones
-  plot_1a <- ggplot(combined_df, aes(x = visualizaciones, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  plot_1a <- ggplot(votos_df, aes(x = visualizaciones, y = ..ncount.., fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean() +
     facet_wrap(~cantidad_votos)
   
-  plot_1b <- ggplot(combined_df, aes(x = visualizaciones, fill = N)) + 
-    geom_dotplot() +
+  plot_1b <- ggplot(N_df, aes(x = visualizaciones, y = ..ncount.. , fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~N)
+    ggthemes::theme_clean() 
   
-  plot_1c <- ggplot(combined_df, aes(x = visualizaciones, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_1c <- ggplot(ideas_df, aes(x = visualizaciones, y = ..ncount.. ,fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() + 
-    facet_wrap(~cantidad_ideas)
+    ggthemes::theme_clean() 
   
-  plot_1d <- ggplot(combined_df, aes(x = visualizaciones, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_1d <- ggplot(Negativos_df, aes(x = visualizaciones, y = ..ncount.. , fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() + 
-    facet_wrap(~Negativos)
+    ggthemes::theme_clean() 
   
-  plot_1e <- ggplot(combined_df, aes(x = visualizaciones, fill = Beta)) + 
-    geom_dotplot() +
+  plot_1e <- ggplot(Beta_df, aes(x = visualizaciones, y = ..ncount.. , fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Beta)
+    ggthemes::theme_clean()
   
-  plot_1f <- ggplot(combined_df, aes(x = visualizaciones, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_1f <- ggplot(Algoritmo_df, aes(x = visualizaciones, y = ..ncount.. , fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Algoritmo)
+    ggthemes::theme_clean() 
   
   #2 Distribucion de cantidad de votos positivos
-  plot_2a <- ggplot(combined_df, aes(x = V_pos, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  plot_2a <- ggplot(votos_df, aes(x = V_pos, y = ..ncount.. , fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_votos)
+    ggthemes::theme_clean()
   
-  plot_2b <- ggplot(combined_df, aes(x = V_pos, fill = N)) + 
-    geom_dotplot() +
+  plot_2b <- ggplot(N_df, aes(x = V_pos, y = ..ncount.. , fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~N)
+    ggthemes::theme_clean() 
   
-  plot_2c <- ggplot(combined_df, aes(x = V_pos, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_2c <- ggplot(ideas_df, aes(x = V_pos, y = ..ncount.. , fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_ideas)
+    ggthemes::theme_clean() 
   
-  plot_2d <- ggplot(combined_df, aes(x = V_pos, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_2d <- ggplot(Negativos_df, aes(x = V_pos, y = ..ncount.. , fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Negativos)
+    ggthemes::theme_clean() 
   
-  plot_2e <- ggplot(combined_df, aes(x = V_pos, fill = Beta)) + 
-    geom_dotplot() +
+  plot_2e <- ggplot(Beta_df, aes(x = V_pos, y = ..ncount.. , fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Beta)
+    ggthemes::theme_clean() 
   
-  plot_2f <- ggplot(combined_df, aes(x = V_pos, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_2f <- ggplot(Algoritmo_df, aes(x = V_pos, y = ..ncount.. , fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Algoritmo)
+    ggthemes::theme_clean() 
   
   #3 Distribucion de cantidad de votos negativos
-  plot_3a <- ggplot(combined_df, aes(x = V_neg, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  plot_3a <- ggplot(votos_df, aes(x = V_neg, y = ..ncount.. , fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_votos)
+    ggthemes::theme_clean() 
   
-  plot_3b <- ggplot(combined_df, aes(x = V_neg, fill = N)) + 
-    geom_dotplot() +
+  plot_3b <- ggplot(N_df, aes(x = V_neg, y = ..ncount.. , fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~N)
+    ggthemes::theme_clean() 
   
-  plot_3c <- ggplot(combined_df, aes(x = V_neg, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_3c <- ggplot(ideas_df, aes(x = V_neg, y = ..ncount.. , fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_ideas)
+    ggthemes::theme_clean() 
   
-  plot_3d <- ggplot(combined_df, aes(x = V_neg, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_3d <- ggplot(Negativos_df, aes(x = V_neg, y = ..ncount.. , fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Negativos)
+    ggthemes::theme_clean() 
   
-  plot_3e <- ggplot(combined_df, aes(x = V_neg, fill = Beta)) + 
-    geom_dotplot() +
+  plot_3e <- ggplot(Beta_df, aes(x = V_neg, y = ..ncount.. , fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Beta)
+    ggthemes::theme_clean() 
   
-  plot_3f <- ggplot(combined_df, aes(x = V_neg, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_3f <- ggplot(Algoritmo_df, aes(x = V_neg, y = ..ncount.. , fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Algoritmo)
+    ggthemes::theme_clean()
   
   #4 Distribucion de cantidad de visualizaciones de ideas que tengan más de k visualizaciones
   
-  combined_df_kvis <- combined_df[which(combined_df$visualizaciones >= 6),]
+  #cantidad_votos
+  votos_df_kvis <- votos_df[which(votos_df$visualizaciones >= 6),]
   
-  plot_4a <- ggplot(combined_df_kvis, aes(x = visualizaciones, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  #N
+  N_df_kvis <- N_df[which(N_df$visualizaciones >= 6),]
+  
+  #cantidad_ideas
+  ideas_df_kvis <- ideas_df[which(ideas_df$visualizaciones >= 6),]
+  
+  #Negativos
+  Negativos_df_kvis <- Negativos_df[which(Negativos_df$visualizaciones >= 6),]
+  
+  #Beta
+  Beta_df_kvis <- Beta_df[which(Beta_df$visualizaciones >= 6),]
+  
+  #Algoritmo
+  Algoritmo_df_kvis <- Algoritmo_df[which(Algoritmo_df$visualizaciones >= 6),]
+  
+  plot_4a <- ggplot(votos_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_votos)
+    ggthemes::theme_clean() 
   
-  plot_4b <- ggplot(combined_df_kvis, aes(x = visualizaciones, fill = N)) + 
-    geom_dotplot() +
+  plot_4b <- ggplot(N_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~N)
+    ggthemes::theme_clean() 
   
-  plot_4c <- ggplot(combined_df_kvis, aes(x = visualizaciones, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_4c <- ggplot(ideas_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_ideas)
+    ggthemes::theme_clean() 
   
-  plot_4d <- ggplot(combined_df_kvis, aes(x = visualizaciones, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_4d <- ggplot(Negativos_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Negativos)
+    ggthemes::theme_clean()
   
-  plot_4e <- ggplot(combined_df_kvis, aes(x = visualizaciones, fill = Beta)) + 
-    geom_dotplot() +
+  plot_4e <- ggplot(Beta_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Beta)
+    ggthemes::theme_clean()
   
-  plot_4f <- ggplot(combined_df_kvis, aes(x = visualizaciones, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_4f <- ggplot(Algoritmo_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Algoritmo)
+    ggthemes::theme_clean()
   
   #5 Distribucion de votos positivos de ideas que tengan mas de 0 votos positivos
   
-  combined_df_Vposfilt <- combined_df[which(combined_df$V_pos > 0),]
+  #cantidad_votos
+  votos_df_Vposfilt <- votos_df[which(votos_df$V_pos > 0),]
   
-  plot_5a <- ggplot(combined_df_Vposfilt, aes(x = V_pos, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  #N
+  N_df_Vposfilt <- N_df[which(N_df$V_pos > 0),]
+  
+  #cantidad_ideas
+  ideas_df_Vposfilt <- ideas_df[which(ideas_df$V_pos > 0),]
+  
+  #Negativos
+  Negativos_df_Vposfilt <- Negativos_df[which(Negativos_df$V_pos > 0),]
+  
+  #Beta
+  Beta_df_Vposfilt <- Beta_df[which(Beta_df$V_pos > 0),]
+  
+  #Algoritmo
+  Algoritmo_df_Vposfilt <- Algoritmo_df[which(Algoritmo_df$V_pos > 0),]
+  
+  plot_5a <- ggplot(votos_df_Vposfilt, aes(x = V_pos, y = ..ncount.. , fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_votos)
+    ggthemes::theme_clean()
   
-  plot_5b <- ggplot(combined_df_Vposfilt, aes(x = V_pos, fill = N)) + 
-    geom_dotplot() +
+  plot_5b <- ggplot(N_df_Vposfilt, aes(x = V_pos, y = ..ncount.. , fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~N)
+    ggthemes::theme_clean() 
   
-  plot_5c <- ggplot(combined_df_Vposfilt, aes(x = V_pos, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_5c <- ggplot(ideas_df_Vposfilt, aes(x = V_pos, y = ..ncount.. , fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_ideas)
+    ggthemes::theme_clean() 
   
-  plot_5d <- ggplot(combined_df_Vposfilt, aes(x = V_pos, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_5d <- ggplot(Negativos_df_Vposfilt, aes(x = V_pos, y = ..ncount.. , fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Negativos)
+    ggthemes::theme_clean() 
   
-  plot_5e <- ggplot(combined_df_Vposfilt, aes(x = V_pos, fill = Beta)) + 
-    geom_dotplot() +
+  plot_5e <- ggplot(Beta_df_Vposfilt, aes(x = V_pos, y = ..ncount.. , fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Beta)
+    ggthemes::theme_clean()
   
-  plot_5f <- ggplot(combined_df_Vposfilt, aes(x = V_pos, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_5f <- ggplot(Algoritmo_df_Vposfilt, aes(x = V_pos, y = ..ncount.. , fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Algoritmo)
+    ggthemes::theme_clean()
   
   #6 Distribucion de votos negativos de ideas que tengan mas de 0 votos negativos
   
-  combined_df_Vnegfilt <- combined_df[which(combined_df$V_neg > 0),]
+  #cantidad_votos
+  votos_df_Vnegfilt <- votos_df[which(votos_df$V_neg > 0),]
   
-  plot_6a <- ggplot(combined_df_Vnegfilt, aes(x = V_neg, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  #N
+  N_df_Vnegfilt <- N_df[which(N_df$V_neg > 0),]
+  
+  #cantidad_ideas
+  ideas_df_Vnegfilt <- ideas_df[which(ideas_df$V_neg > 0),]
+  
+  #Negativos
+  Negativos_df_Vnegfilt <- Negativos_df[which(Negativos_df$V_neg > 0),]
+  
+  #Beta
+  Beta_df_Vnegfilt <- Beta_df[which(Beta_df$V_neg > 0),]
+  
+  #Algoritmo
+  Algoritmo_df_Vnegfilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 0),]
+  
+  plot_6a <- ggplot(votos_df_Vnegfilt, aes(x = V_neg, y = ..ncount.. , fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_votos)
+    ggthemes::theme_clean() 
   
-  plot_6b <- ggplot(combined_df_Vnegfilt, aes(x = V_neg, fill = N)) + 
-    geom_dotplot() +
+  plot_6b <- ggplot(N_df_Vnegfilt, aes(x = V_neg, y = ..ncount.. , fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~N)
+    ggthemes::theme_clean()
   
-  plot_6c <- ggplot(combined_df_Vnegfilt, aes(x = V_neg, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_6c <- ggplot(ideas_df_Vnegfilt, aes(x = V_neg, y = ..ncount.. , fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_ideas)
+    ggthemes::theme_clean() 
   
-  plot_6d <- ggplot(combined_df_Vnegfilt, aes(x = V_neg, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_6d <- ggplot(Negativos_df_Vnegfilt, aes(x = V_neg, y = ..ncount.. , fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Negativos)
+    ggthemes::theme_clean()
   
-  plot_6e <- ggplot(combined_df_Vnegfilt, aes(x = V_neg, fill = Beta)) + 
-    geom_dotplot() +
+  plot_6e <- ggplot(Beta_df_Vnegfilt, aes(x = V_neg, y = ..ncount.. , fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Beta)
+    ggthemes::theme_clean() 
   
-  plot_6f <- ggplot(combined_df_Vnegfilt, aes(x = V_neg, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_6f <- ggplot(Algoritmo_df_Vnegfilt, aes(x = V_neg, y = ..ncount.. , fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Algoritmo)
+    ggthemes::theme_clean() 
   
   
   #7 Distribucion de rates
   
-  plot_7a <- ggplot(combined_df, aes(x = ratio_votos_vis, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  plot_7a <- ggplot(votos_df, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean() +
     facet_wrap(~cantidad_votos)
   
-  plot_7b <- ggplot(combined_df, aes(x = ratio_votos_vis, fill = N)) + 
-    geom_dotplot() +
+  plot_7b <- ggplot(N_df, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~N)
+    ggthemes::theme_clean()
   
-  plot_7c <- ggplot(combined_df, aes(x = ratio_votos_vis, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_7c <- ggplot(ideas_df, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_ideas)
+    ggthemes::theme_clean()
   
-  plot_7d <- ggplot(combined_df, aes(x = ratio_votos_vis, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_7d <- ggplot(Negativos_df, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Negativos)
+    ggthemes::theme_clean() 
   
-  plot_7e <- ggplot(combined_df, aes(x = ratio_votos_vis, fill = Beta)) + 
-    geom_dotplot() +
+  plot_7e <- ggplot(Beta_df, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Beta)
+    ggthemes::theme_clean()
   
-  plot_7f <- ggplot(combined_df, aes(x = ratio_votos_vis, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_7f <- ggplot(Algoritmo_df, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Algoritmo)
+    ggthemes::theme_clean()
   
   
   #8 Distribucion de rates de ideas que tengan al menos 1 voto
   
-  combined_df_Votefilt <- combined_df[which(combined_df$V_neg > 0 |
-                                              combined_df$V_pos > 0),]
+  #cantidad_votos
+  votos_df_Votefilt <- votos_df[which(votos_df$V_neg > 0 |
+                                        votos_df$V_pos > 0),]
+  #N
+  N_df_Votefilt <- N_df[which(N_df$V_neg > 0 |
+                                N_df$V_pos > 0),]
+  #cantidad_ideas
+  ideas_df_Votefilt <- ideas_df[which(ideas_df$V_neg > 0 |
+                                        ideas_df$V_pos > 0),]
+  #Negativos
+  Negativos_df_Votefilt <- Negativos_df[which(Negativos_df$V_neg > 0 |
+                                                Negativos_df$V_pos > 0),]
+  #Beta
+  Beta_df_Votefilt <- Beta_df[which(Beta_df$V_neg > 0 |
+                                      Beta_df$V_pos > 0),]
+  #Algoritmo
+  Algoritmo_df_Votefilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 0 |
+                                                Algoritmo_df$V_pos > 0),]
   
-  plot_8a <- ggplot(combined_df_Votefilt, aes(x = ratio_votos_vis, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  plot_8a <- ggplot(votos_df_Votefilt, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_votos)
+    ggthemes::theme_clean()
   
-  plot_8b <- ggplot(combined_df_Votefilt, aes(x = ratio_votos_vis, fill = N)) + 
-    geom_dotplot() +
+  plot_8b <- ggplot(N_df_Votefilt, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~N)
+    ggthemes::theme_clean() 
   
-  plot_8c <- ggplot(combined_df_Votefilt, aes(x = ratio_votos_vis, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_8c <- ggplot(ideas_df_Votefilt, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~cantidad_ideas)
+    ggthemes::theme_clean()
   
-  plot_8d <- ggplot(combined_df_Votefilt, aes(x = ratio_votos_vis, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_8d <- ggplot(Negativos_df_Votefilt, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Negativos)
+    ggthemes::theme_clean() 
   
-  plot_8e <- ggplot(combined_df_Votefilt, aes(x = ratio_votos_vis, fill = Beta)) + 
-    geom_dotplot() +
+  plot_8e <- ggplot(Beta_df_Votefilt, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Beta)
+    ggthemes::theme_clean()
   
-  plot_8f <- ggplot(combined_df_Votefilt, aes(x = ratio_votos_vis, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_8f <- ggplot(Algoritmo_df_Votefilt, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() +
-    facet_wrap(~Algoritmo)
+    ggthemes::theme_clean() 
   
   
   #9 Distribucion de rates x visualizaciones
   
-  plot_9a <- ggplot(combined_df, aes(x =ratio_votos_vis, y = visualizaciones, col = cantidad_votos)) + 
+  plot_9a <- ggplot(votos_df, aes(x =ratio_votos_vis, y = visualizaciones, col = cantidad_votos)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
     ggthemes::theme_clean() +
     facet_wrap(~cantidad_votos)
   
-  plot_9b <- ggplot(combined_df, aes(x =ratio_votos_vis, y = visualizaciones, col = N)) + 
+  plot_9b <- ggplot(N_df, aes(x =ratio_votos_vis, y = visualizaciones, col = N)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
     ggthemes::theme_clean() +
     facet_wrap(~N)
   
-  plot_9c <- ggplot(combined_df, aes(x =ratio_votos_vis, y = visualizaciones, col = cantidad_ideas)) + 
+  plot_9c <- ggplot(ideas_df, aes(x =ratio_votos_vis, y = visualizaciones, col = cantidad_ideas)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
     ggthemes::theme_clean() +
     facet_wrap(~cantidad_ideas)
   
-  plot_9d <- ggplot(combined_df, aes(x =ratio_votos_vis, y = visualizaciones, col = Negativos)) + 
+  plot_9d <- ggplot(Negativos_df, aes(x =ratio_votos_vis, y = visualizaciones, col = Negativos)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
     ggthemes::theme_clean() +
     facet_wrap(~Negativos)
   
-  plot_9e <- ggplot(combined_df, aes(x =ratio_votos_vis, y = visualizaciones, col = Beta)) + 
+  plot_9e <- ggplot(Beta_df, aes(x =ratio_votos_vis, y = visualizaciones, col = Beta)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
     ggthemes::theme_clean() +
     facet_wrap(~Beta)
   
-  plot_9f <- ggplot(combined_df, aes(x =ratio_votos_vis, y = visualizaciones, col = Algoritmo)) + 
+  plot_9f <- ggplot(Algoritmo_df, aes(x =ratio_votos_vis, y = visualizaciones, col = Algoritmo)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
     ggthemes::theme_clean() +
@@ -804,37 +852,37 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #10 Distribucion de rates de ideas x visualizaciones que tengan al menos 1 voto
   
-  plot_10a <- ggplot(combined_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = cantidad_votos)) + 
+  plot_10a <- ggplot(votos_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = cantidad_votos)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
     ggthemes::theme_clean() +
     facet_wrap(~cantidad_votos)
   
-  plot_10b <- ggplot(combined_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = N)) + 
+  plot_10b <- ggplot(N_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = N)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
     ggthemes::theme_clean() +
     facet_wrap(~N)
   
-  plot_10c <- ggplot(combined_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = cantidad_ideas)) + 
+  plot_10c <- ggplot(ideas_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = cantidad_ideas)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
     ggthemes::theme_clean() +
     facet_wrap(~cantidad_ideas)
   
-  plot_10d <- ggplot(combined_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = Negativos)) + 
+  plot_10d <- ggplot(Negativos_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = Negativos)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
     ggthemes::theme_clean() +
     facet_wrap(~Negativos)
   
-  plot_10e <- ggplot(combined_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = Beta)) + 
+  plot_10e <- ggplot(Beta_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = Beta)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
     ggthemes::theme_clean() +
     facet_wrap(~Beta)
   
-  plot_10f <- ggplot(combined_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = Algoritmo)) + 
+  plot_10f <- ggplot(Algoritmo_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = Algoritmo)) + 
     geom_point() + 
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
     ggthemes::theme_clean() +
@@ -955,43 +1003,43 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #11 Distribucion de rates de las 25 ideas con mejor rate
   
-  plot_11a <- ggplot(top25_cantidad_votos, aes(x = ratio_votos_vis, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  plot_11a <- ggplot(top25_cantidad_votos, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_11b <- ggplot(top25_n, aes(x = ratio_votos_vis, fill = N)) + 
-    geom_dotplot() +
+  plot_11b <- ggplot(top25_n, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_11c <- ggplot(top25_cantidad_ideas, aes(x = ratio_votos_vis, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_11c <- ggplot(top25_cantidad_ideas, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_11d <- ggplot(top25_negativos, aes(x = ratio_votos_vis, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_11d <- ggplot(top25_negativos, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_11e <- ggplot(top25_beta, aes(x = ratio_votos_vis, fill = Beta)) + 
-    geom_dotplot() +
+  plot_11e <- ggplot(top25_beta, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_11f <- ggplot(top25_algoritmo, aes(x = ratio_votos_vis, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_11f <- ggplot(top25_algoritmo, aes(x = ratio_votos_vis, y = ..ncount.. ,fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Frecuencia") +
@@ -1000,43 +1048,43 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #12 Distribucion de visualizaciones de las 25 ideas con mejor rate
   
-  plot_12a <- ggplot(top25_cantidad_votos, aes(x = visualizaciones, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  plot_12a <- ggplot(top25_cantidad_votos, aes(x = visualizaciones, y = ..ncount.. , fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones del top 25", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_12b <- ggplot(top25_n, aes(x = visualizaciones, fill = N)) + 
-    geom_dotplot() +
+  plot_12b <- ggplot(top25_n, aes(x = visualizaciones, y = ..ncount.. , fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones del top 25", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_12c <- ggplot(top25_cantidad_ideas, aes(x = visualizaciones, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_12c <- ggplot(top25_cantidad_ideas, aes(x = visualizaciones, y = ..ncount.. , fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones del top 25", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_12d <- ggplot(top25_negativos, aes(x = visualizaciones, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_12d <- ggplot(top25_negativos, aes(x = visualizaciones, y = ..ncount.. , fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones del top 25", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_12e <- ggplot(top25_beta, aes(x = visualizaciones, fill = Beta)) + 
-    geom_dotplot() +
+  plot_12e <- ggplot(top25_beta, aes(x = visualizaciones, y = ..ncount.. , fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones del top 25", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_12f <- ggplot(top25_algoritmo, aes(x = visualizaciones, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_12f <- ggplot(top25_algoritmo, aes(x = visualizaciones, y = ..ncount.. , fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones del top 25", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
@@ -1044,85 +1092,85 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #13 Distribucion de votos de las 25 ideas con mejor rate
   
-  plot_13a <- ggplot(top25_cantidad_votos, aes(x = V_pos, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  plot_13a <- ggplot(top25_cantidad_votos, aes(x = V_pos, y = ..ncount.. , fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13b <- ggplot(top25_n, aes(x = V_pos, fill = N)) + 
-    geom_dotplot() +
+  plot_13b <- ggplot(top25_n, aes(x = V_pos, y = ..ncount.. , fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13c <- ggplot(top25_cantidad_ideas, aes(x = V_pos, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_13c <- ggplot(top25_cantidad_ideas, aes(x = V_pos, y = ..ncount.. , fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13d <- ggplot(top25_negativos, aes(x = V_pos, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_13d <- ggplot(top25_negativos, aes(x = V_pos, y = ..ncount.. , fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13e <- ggplot(top25_beta, aes(x = V_pos, fill = Beta)) + 
-    geom_dotplot() +
+  plot_13e <- ggplot(top25_beta, aes(x = V_pos, y = ..ncount.. , fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13f <- ggplot(top25_algoritmo, aes(x = V_pos, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_13f <- ggplot(top25_algoritmo, aes(x = V_pos, y = ..ncount.. , fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13g <- ggplot(top25_cantidad_votos, aes(x = V_neg, fill = cantidad_votos)) + 
-    geom_dotplot() +
+  plot_13g <- ggplot(top25_cantidad_votos, aes(x = V_neg, y = ..ncount.. , fill = cantidad_votos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13h <- ggplot(top25_n, aes(x = V_neg, fill = N)) + 
-    geom_dotplot() +
+  plot_13h <- ggplot(top25_n, aes(x = V_neg, y = ..ncount.. , fill = N)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13i <- ggplot(top25_cantidad_ideas, aes(x = V_neg, fill = cantidad_ideas)) + 
-    geom_dotplot() +
+  plot_13i <- ggplot(top25_cantidad_ideas, aes(x = V_neg, y = ..ncount.. , fill = cantidad_ideas)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13j <- ggplot(top25_negativos, aes(x = V_neg, fill = Negativos)) + 
-    geom_dotplot() +
+  plot_13j <- ggplot(top25_negativos, aes(x = V_neg, y = ..ncount.. , fill = Negativos)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13k <- ggplot(top25_beta, aes(x = V_neg, fill = Beta)) + 
-    geom_dotplot() +
+  plot_13k <- ggplot(top25_beta, aes(x = V_neg, y = ..ncount.. , fill = Beta)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
     ggthemes::theme_clean()
   
-  plot_13l <- ggplot(top25_algoritmo, aes(x = V_neg, fill = Algoritmo)) + 
-    geom_dotplot() +
+  plot_13l <- ggplot(top25_algoritmo, aes(x = V_neg, y = ..ncount.. , fill = Algoritmo)) + 
+    geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos", 
          y = "Frecuencia") +
