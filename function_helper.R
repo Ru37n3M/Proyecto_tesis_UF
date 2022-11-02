@@ -378,7 +378,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   
   Beta_df <- combined_df %>%
-    filter(N == 500   & Algoritmo == 0.5 & cantidad_votos == 3 & cantidad_ideas == 10)
+    filter(N == 500  &  Algoritmo == 0.5 & cantidad_votos == 3 & cantidad_ideas == 10)
   
   
   Algoritmo_df <- combined_df %>%
@@ -391,42 +391,42 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() 
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100)) 
   
   plot_1b <- ggplot(N_df, aes(x = visualizaciones, y = ..ncount.. , fill = N)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() 
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100)) 
   
   plot_1c <- ggplot(ideas_df, aes(x = visualizaciones, y = ..ncount.. ,fill = cantidad_ideas)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() 
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100)) 
   
   plot_1d <- ggplot(Negativos_df, aes(x = visualizaciones, y = ..ncount.. , fill = Negativos)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() 
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100)) 
   
   plot_1e <- ggplot(Beta_df, aes(x = visualizaciones, y = ..ncount.. , fill = Beta)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100))
   
   plot_1f <- ggplot(Algoritmo_df, aes(x = visualizaciones, y = ..ncount.. , fill = Algoritmo)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() 
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100)) 
   
   #2 Distribucion de cantidad de votos positivos
   plot_2a <- ggplot(votos_df, aes(x = V_pos, y = ..ncount.. , fill = cantidad_votos)) + 
@@ -539,42 +539,42 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() 
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100)) 
   
   plot_4b <- ggplot(N_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = N)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() 
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100)) 
   
   plot_4c <- ggplot(ideas_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = cantidad_ideas)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean() 
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100)) 
   
   plot_4d <- ggplot(Negativos_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = Negativos)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100))
   
   plot_4e <- ggplot(Beta_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = Beta)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100))
   
   plot_4f <- ggplot(Algoritmo_df_kvis, aes(x = visualizaciones, y = ..ncount.. , fill = Algoritmo)) + 
     geom_histogram(position = "identity", alpha = 0.6, bins = 35) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones", 
          y = "Frecuencia") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + coord_cartesian(xlim = c(0,100))
   
   #5 Distribucion de votos positivos de ideas que tengan mas de 0 votos positivos
   
