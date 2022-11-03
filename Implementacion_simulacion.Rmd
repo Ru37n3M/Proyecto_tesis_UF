@@ -165,8 +165,7 @@ test <- pmap(parametros_simulacion_df,
         )
      )
 ```
-Graficos
-
+Finalmente, se separan los datasets de opiniones y de covisualizaciones. Se utiliza la funcion `generador_graficos` para generar los 6 conjuntos de graficos de los datasets de opiniones.
 ```{r}
 
 test_only_opinion <- map(test, 1)
