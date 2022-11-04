@@ -388,129 +388,129 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   
   #1 Distribucion de Cantidad de visualizaciones (log10)
-  plot_1a <- ggplot(votos_df, aes(x = log10(visualizaciones), y = after_stat(density), color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_1a <- ggplot(votos_df, aes(x = log10(visualizaciones), y = after_stat(density), col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de Cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_1b <- ggplot(N_df, aes(x = log10(visualizaciones), y = after_stat(density) , color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_1b <- ggplot(N_df, aes(x = log10(visualizaciones), y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de Cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_1c <- ggplot(ideas_df, aes(x = log10(visualizaciones), y = after_stat(density) ,color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_1c <- ggplot(ideas_df, aes(x = log10(visualizaciones), y = after_stat(density) ,col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de Cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_1d <- ggplot(Negativos_df, aes(x = log10(visualizaciones), y = after_stat(density) , color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_1d <- ggplot(Negativos_df, aes(x = log10(visualizaciones), y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de Cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_1e <- ggplot(Beta_df, aes(x = log10(visualizaciones), y = after_stat(density) , color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_1e <- ggplot(Beta_df, aes(x = log10(visualizaciones), y = after_stat(density) , col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de Cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_1f <- ggplot(Algoritmo_df, aes(x = log10(visualizaciones), y = after_stat(density) , color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_1f <- ggplot(Algoritmo_df, aes(x = log10(visualizaciones), y = after_stat(density) , col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de Cantidad de visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
   #2 Distribucion de cantidad de votos positivos
-  plot_2a <- ggplot(votos_df, aes(x = V_pos, y = after_stat(density) , color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_2a <- ggplot(votos_df, aes(x = V_pos, y = after_stat(density) , col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Votos positivos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_2b <- ggplot(N_df, aes(x = V_pos, y = after_stat(density) , color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_2b <- ggplot(N_df, aes(x = V_pos, y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Votos positivos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_2c <- ggplot(ideas_df, aes(x = V_pos, y = after_stat(density) , color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_2c <- ggplot(ideas_df, aes(x = V_pos, y = after_stat(density) , col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Votos positivos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_2d <- ggplot(Negativos_df, aes(x = V_pos, y = after_stat(density) , color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_2d <- ggplot(Negativos_df, aes(x = V_pos, y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Votos positivos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_2e <- ggplot(Beta_df, aes(x = V_pos, y = after_stat(density) , color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_2e <- ggplot(Beta_df, aes(x = V_pos, y = after_stat(density) , col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Votos positivos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_2f <- ggplot(Algoritmo_df, aes(x = V_pos, y = after_stat(density) , color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_2f <- ggplot(Algoritmo_df, aes(x = V_pos, y = after_stat(density) , col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos positivos", 
          x= "Votos positivos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
   #3 Distribucion de cantidad de votos negativos
-  plot_3a <- ggplot(votos_df, aes(x = V_neg, y = after_stat(density) , color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_3a <- ggplot(votos_df, aes(x = V_neg, y = after_stat(density) , col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Votos negativos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_3b <- ggplot(N_df, aes(x = V_neg, y = after_stat(density) , color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_3b <- ggplot(N_df, aes(x = V_neg, y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Votos negativos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_3c <- ggplot(ideas_df, aes(x = V_neg, y = after_stat(density) , color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_3c <- ggplot(ideas_df, aes(x = V_neg, y = after_stat(density) , col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Votos negativos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_3d <- ggplot(Negativos_df, aes(x = V_neg, y = after_stat(density) , color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_3d <- ggplot(Negativos_df, aes(x = V_neg, y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Votos negativos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_3e <- ggplot(Beta_df, aes(x = V_neg, y = after_stat(density) , color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_3e <- ggplot(Beta_df, aes(x = V_neg, y = after_stat(density) , col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Votos negativos", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_3f <- ggplot(Algoritmo_df, aes(x = V_neg, y = after_stat(density) , color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_3f <- ggplot(Algoritmo_df, aes(x = V_neg, y = after_stat(density) , col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de cantidad de votos negativos", 
          x= "Votos negativos", 
          y = "Densidad") +
@@ -536,43 +536,43 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #Algoritmo
   Algoritmo_df_kvis <- Algoritmo_df[which(Algoritmo_df$visualizaciones >= 7),]
   
-  plot_4a <- ggplot(votos_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_4a <- ggplot(votos_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_4b <- ggplot(N_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_4b <- ggplot(N_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_4c <- ggplot(ideas_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_4c <- ggplot(ideas_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_4d <- ggplot(Negativos_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_4d <- ggplot(Negativos_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_4e <- ggplot(Beta_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_4e <- ggplot(Beta_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_4f <- ggplot(Algoritmo_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_4f <- ggplot(Algoritmo_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
@@ -598,43 +598,43 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #Algoritmo
   Algoritmo_df_Vposfilt <- Algoritmo_df[which(Algoritmo_df$V_pos > 1),]
   
-  plot_5a <- ggplot(votos_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_5a <- ggplot(votos_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_5b <- ggplot(N_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_5b <- ggplot(N_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_5c <- ggplot(ideas_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_5c <- ggplot(ideas_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_5d <- ggplot(Negativos_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_5d <- ggplot(Negativos_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_5e <- ggplot(Beta_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_5e <- ggplot(Beta_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_5f <- ggplot(Algoritmo_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_5f <- ggplot(Algoritmo_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
@@ -660,43 +660,43 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #Algoritmo
   Algoritmo_df_Vnegfilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 1),]
   
-  plot_6a <- ggplot(votos_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_6a <- ggplot(votos_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_6b <- ggplot(N_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_6b <- ggplot(N_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_6c <- ggplot(ideas_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_6c <- ggplot(ideas_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_6d <- ggplot(Negativos_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_6d <- ggplot(Negativos_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_6e <- ggplot(Beta_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_6e <- ggplot(Beta_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_6f <- ggplot(Algoritmo_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_6f <- ggplot(Algoritmo_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
@@ -705,43 +705,43 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #7 Distribucion de rates
   
-  plot_7a <- ggplot(votos_df, aes(x = ratio_votos_vis, y = after_stat(density) ,color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_7a <- ggplot(votos_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_7b <- ggplot(N_df, aes(x = ratio_votos_vis, y = after_stat(density) ,color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_7b <- ggplot(N_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_7c <- ggplot(ideas_df, aes(x = ratio_votos_vis, y = after_stat(density) ,color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_7c <- ggplot(ideas_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_7d <- ggplot(Negativos_df, aes(x = ratio_votos_vis, y = after_stat(density) ,color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_7d <- ggplot(Negativos_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean() 
   
-  plot_7e <- ggplot(Beta_df, aes(x = ratio_votos_vis, y = after_stat(density) ,color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_7e <- ggplot(Beta_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_7f <- ggplot(Algoritmo_df, aes(x = ratio_votos_vis, y = after_stat(density) ,color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_7f <- ggplot(Algoritmo_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
@@ -769,43 +769,43 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   Algoritmo_df_Votefilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 1 |
                                                 Algoritmo_df$V_pos > 1),]
   
-  plot_8a <- ggplot(votos_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_8a <- ggplot(votos_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_8b <- ggplot(N_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_8b <- ggplot(N_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean() 
   
-  plot_8c <- ggplot(ideas_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_8c <- ggplot(ideas_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_8d <- ggplot(Negativos_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_8d <- ggplot(Negativos_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean() 
   
-  plot_8e <- ggplot(Beta_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_8e <- ggplot(Beta_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_8f <- ggplot(Algoritmo_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_8f <- ggplot(Algoritmo_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
@@ -814,77 +814,89 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #9 Distribucion de rates x visualizaciones
   
-  plot_9a <- ggplot(votos_df, aes(x =ratio_votos_vis, y = visualizaciones, col = cantidad_votos)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
+  plot_9a <- ggplot(votos_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~cantidad_votos)
   
-  plot_9b <- ggplot(N_df, aes(x =ratio_votos_vis, y = visualizaciones, col = N)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
+  plot_9b <- ggplot(N_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~N)
   
-  plot_9c <- ggplot(ideas_df, aes(x =ratio_votos_vis, y = visualizaciones, col = cantidad_ideas)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
+  plot_9c <- ggplot(ideas_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~cantidad_ideas)
   
-  plot_9d <- ggplot(Negativos_df, aes(x =ratio_votos_vis, y = visualizaciones, col = Negativos)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
+  plot_9d <- ggplot(Negativos_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~Negativos)
   
-  plot_9e <- ggplot(Beta_df, aes(x =ratio_votos_vis, y = visualizaciones, col = Beta)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
+  plot_9e <- ggplot(Beta_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~Beta)
   
-  plot_9f <- ggplot(Algoritmo_df, aes(x =ratio_votos_vis, y = visualizaciones, col = Algoritmo)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones") + 
+  plot_9f <- ggplot(Algoritmo_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~Algoritmo)
   
   #10 Distribucion de rates de ideas x visualizaciones que tengan al menos 1 voto
   
-  plot_10a <- ggplot(votos_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = cantidad_votos)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
+  plot_10a <- ggplot(votos_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~cantidad_votos)
   
-  plot_10b <- ggplot(N_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = N)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
+  plot_10b <- ggplot(N_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~N)
   
-  plot_10c <- ggplot(ideas_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = cantidad_ideas)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
+  plot_10c <- ggplot(ideas_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~cantidad_ideas)
   
-  plot_10d <- ggplot(Negativos_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = Negativos)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
+  plot_10d <- ggplot(Negativos_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~Negativos)
   
-  plot_10e <- ggplot(Beta_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = Beta)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
+  plot_10e <- ggplot(Beta_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~Beta)
   
-  plot_10f <- ggplot(Algoritmo_df_Votefilt, aes(ratio_votos_vis, visualizaciones, col = Algoritmo)) + 
-    geom_point() + 
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones", title = "Distribución Ratio/Visualizaciones minimo 1 voto") + 
+  plot_10f <- ggplot(Algoritmo_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
+    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
+         col = 'Obs.') + 
     ggthemes::theme_clean() +
     facet_wrap(~Algoritmo)
   
@@ -1003,43 +1015,43 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #11 Distribucion de rates de las 25 ideas con mejor rate
   
-  plot_11a <- ggplot(top25_cantidad_votos, aes(x = ratio_votos_vis, y = after_stat(density) ,color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_11a <- ggplot(top25_cantidad_votos, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_11b <- ggplot(top25_n, aes(x = ratio_votos_vis, y = after_stat(density) ,color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_11b <- ggplot(top25_n, aes(x = ratio_votos_vis, y = after_stat(density) ,col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_11c <- ggplot(top25_cantidad_ideas, aes(x = ratio_votos_vis, y = after_stat(density) ,color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_11c <- ggplot(top25_cantidad_ideas, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_11d <- ggplot(top25_negativos, aes(x = ratio_votos_vis, y = after_stat(density) ,color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_11d <- ggplot(top25_negativos, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_11e <- ggplot(top25_beta, aes(x = ratio_votos_vis, y = after_stat(density) ,color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_11e <- ggplot(top25_beta, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_11f <- ggplot(top25_algoritmo, aes(x = ratio_votos_vis, y = after_stat(density) ,color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_11f <- ggplot(top25_algoritmo, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de rates del top 25", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
@@ -1048,129 +1060,129 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #12 Distribucion de visualizaciones de las 25 ideas con mejor rate
   
-  plot_12a <- ggplot(top25_cantidad_votos, aes(x = visualizaciones, y = after_stat(density) , color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_12a <- ggplot(top25_cantidad_votos, aes(x = log10(visualizaciones), y = after_stat(density) , col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones", 
+         x= "visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_12b <- ggplot(top25_n, aes(x = visualizaciones, y = after_stat(density) , color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_12b <- ggplot(top25_n, aes(x = log10(visualizaciones), y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones", 
+         x= "visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_12c <- ggplot(top25_cantidad_ideas, aes(x = visualizaciones, y = after_stat(density) , color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_12c <- ggplot(top25_cantidad_ideas, aes(x = log10(visualizaciones), y = after_stat(density) , col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones", 
+         x= "visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_12d <- ggplot(top25_negativos, aes(x = visualizaciones, y = after_stat(density) , color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_12d <- ggplot(top25_negativos, aes(x = log10(visualizaciones), y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones", 
+         x= "visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_12e <- ggplot(top25_beta, aes(x = visualizaciones, y = after_stat(density) , color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_12e <- ggplot(top25_beta, aes(x = log10(visualizaciones), y = after_stat(density) , col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones", 
+         x= "visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_12f <- ggplot(top25_algoritmo, aes(x = visualizaciones, y = after_stat(density) , color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_12f <- ggplot(top25_algoritmo, aes(x = log10(visualizaciones), y = after_stat(density) , col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones", 
+         x= "visualizaciones (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
   #13 Distribucion de votos de las 25 ideas con mejor rate
   
-  plot_13a <- ggplot(top25_cantidad_votos, aes(x = V_pos, y = after_stat(density) , color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13a <- ggplot(top25_cantidad_votos, aes(x = log10(V_pos), y = after_stat(density) , col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13b <- ggplot(top25_n, aes(x = V_pos, y = after_stat(density) , color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13b <- ggplot(top25_n, aes(x = log10(V_pos), y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13c <- ggplot(top25_cantidad_ideas, aes(x = V_pos, y = after_stat(density) , color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13c <- ggplot(top25_cantidad_ideas, aes(x = log10(V_pos), y = after_stat(density) , col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13d <- ggplot(top25_negativos, aes(x = V_pos, y = after_stat(density) , color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13d <- ggplot(top25_negativos, aes(x = log10(V_pos), y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13e <- ggplot(top25_beta, aes(x = V_pos, y = after_stat(density) , color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13e <- ggplot(top25_beta, aes(x = log10(V_pos), y = after_stat(density) , col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13f <- ggplot(top25_algoritmo, aes(x = V_pos, y = after_stat(density) , color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13f <- ggplot(top25_algoritmo, aes(x = log10(V_pos), y = after_stat(density) , col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion votos positivos del top 25", 
          x= "Cantidad de votos positivos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13g <- ggplot(top25_cantidad_votos, aes(x = V_neg, y = after_stat(density) , color = cantidad_votos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13g <- ggplot(top25_cantidad_votos, aes(x = log10(V_neg), y = after_stat(density) , col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13h <- ggplot(top25_n, aes(x = V_neg, y = after_stat(density) , color = N)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13h <- ggplot(top25_n, aes(x = log10(V_neg), y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13i <- ggplot(top25_cantidad_ideas, aes(x = V_neg, y = after_stat(density) , color = cantidad_ideas)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13i <- ggplot(top25_cantidad_ideas, aes(x = log10(V_neg), y = after_stat(density) , col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13j <- ggplot(top25_negativos, aes(x = V_neg, y = after_stat(density) , color = Negativos)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13j <- ggplot(top25_negativos, aes(x = log10(V_neg), y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13k <- ggplot(top25_beta, aes(x = V_neg, y = after_stat(density) , color = Beta)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13k <- ggplot(top25_beta, aes(x = log10(V_neg), y = after_stat(density) , col =Beta)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
     ggthemes::theme_clean()
   
-  plot_13l <- ggplot(top25_algoritmo, aes(x = V_neg, y = after_stat(density) , color = Algoritmo)) + 
-    geom_freqpoly(bins = 25, position = 'identity') +
+  plot_13l <- ggplot(top25_algoritmo, aes(x = log10(V_neg), y = after_stat(density) , col =Algoritmo)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
     labs(title = "Distribucion de votos negativos del top 25", 
          x= "Cantidad de votos negativos (log10)", 
          y = "Densidad") +
