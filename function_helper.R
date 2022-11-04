@@ -355,8 +355,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
       'Algoritmo' = rep(as.factor(parametros_simulacion_df$Algoritmo), parametros_simulacion_df$N)
     )
   
-  obs_excluidas<- sum(combined_df$visualizaciones == 0)
-  combined_df<- combined_df[which(combined_df$visualizaciones > 0),]
+  combined_df[,c(5,6,7)] <- combined_df[,c(5,6,7)] + 1
   
   N_df <- combined_df %>% 
     filter(Beta == "6-2" & Algoritmo == 0.5 & 
@@ -520,22 +519,22 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #4 Distribucion de Cantidad de visualizaciones (log10) de ideas que tengan más de k visualizaciones
   
   #cantidad_votos
-  votos_df_kvis <- votos_df[which(votos_df$visualizaciones >= 6),]
+  votos_df_kvis <- votos_df[which(votos_df$visualizaciones >= 7),]
   
   #N
-  N_df_kvis <- N_df[which(N_df$visualizaciones >= 6),]
+  N_df_kvis <- N_df[which(N_df$visualizaciones >= 7),]
   
   #cantidad_ideas
-  ideas_df_kvis <- ideas_df[which(ideas_df$visualizaciones >= 6),]
+  ideas_df_kvis <- ideas_df[which(ideas_df$visualizaciones >= 7),]
   
   #Negativos
-  Negativos_df_kvis <- Negativos_df[which(Negativos_df$visualizaciones >= 6),]
+  Negativos_df_kvis <- Negativos_df[which(Negativos_df$visualizaciones >= 7),]
   
   #Beta
-  Beta_df_kvis <- Beta_df[which(Beta_df$visualizaciones >= 6),]
+  Beta_df_kvis <- Beta_df[which(Beta_df$visualizaciones >= 7),]
   
   #Algoritmo
-  Algoritmo_df_kvis <- Algoritmo_df[which(Algoritmo_df$visualizaciones >= 6),]
+  Algoritmo_df_kvis <- Algoritmo_df[which(Algoritmo_df$visualizaciones >= 7),]
   
   plot_4a <- ggplot(votos_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , color = cantidad_votos)) + 
     geom_freqpoly(bins = 25, position = 'identity') +
@@ -582,22 +581,22 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #5 Distribucion de votos positivos de ideas que tengan mas de 0 votos positivos
   
   #cantidad_votos
-  votos_df_Vposfilt <- votos_df[which(votos_df$V_pos > 0),]
+  votos_df_Vposfilt <- votos_df[which(votos_df$V_pos > 1),]
   
   #N
-  N_df_Vposfilt <- N_df[which(N_df$V_pos > 0),]
+  N_df_Vposfilt <- N_df[which(N_df$V_pos > 1),]
   
   #cantidad_ideas
-  ideas_df_Vposfilt <- ideas_df[which(ideas_df$V_pos > 0),]
+  ideas_df_Vposfilt <- ideas_df[which(ideas_df$V_pos > 1),]
   
   #Negativos
-  Negativos_df_Vposfilt <- Negativos_df[which(Negativos_df$V_pos > 0),]
+  Negativos_df_Vposfilt <- Negativos_df[which(Negativos_df$V_pos > 1),]
   
   #Beta
-  Beta_df_Vposfilt <- Beta_df[which(Beta_df$V_pos > 0),]
+  Beta_df_Vposfilt <- Beta_df[which(Beta_df$V_pos > 1),]
   
   #Algoritmo
-  Algoritmo_df_Vposfilt <- Algoritmo_df[which(Algoritmo_df$V_pos > 0),]
+  Algoritmo_df_Vposfilt <- Algoritmo_df[which(Algoritmo_df$V_pos > 1),]
   
   plot_5a <- ggplot(votos_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , color = cantidad_votos)) + 
     geom_freqpoly(bins = 25, position = 'identity') +
@@ -644,22 +643,22 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #6 Distribucion de votos negativos de ideas que tengan mas de 0 votos negativos
   
   #cantidad_votos
-  votos_df_Vnegfilt <- votos_df[which(votos_df$V_neg > 0),]
+  votos_df_Vnegfilt <- votos_df[which(votos_df$V_neg > 1),]
   
   #N
-  N_df_Vnegfilt <- N_df[which(N_df$V_neg > 0),]
+  N_df_Vnegfilt <- N_df[which(N_df$V_neg > 1),]
   
   #cantidad_ideas
-  ideas_df_Vnegfilt <- ideas_df[which(ideas_df$V_neg > 0),]
+  ideas_df_Vnegfilt <- ideas_df[which(ideas_df$V_neg > 1),]
   
   #Negativos
-  Negativos_df_Vnegfilt <- Negativos_df[which(Negativos_df$V_neg > 0),]
+  Negativos_df_Vnegfilt <- Negativos_df[which(Negativos_df$V_neg > 1),]
   
   #Beta
-  Beta_df_Vnegfilt <- Beta_df[which(Beta_df$V_neg > 0),]
+  Beta_df_Vnegfilt <- Beta_df[which(Beta_df$V_neg > 1),]
   
   #Algoritmo
-  Algoritmo_df_Vnegfilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 0),]
+  Algoritmo_df_Vnegfilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 1),]
   
   plot_6a <- ggplot(votos_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , color = cantidad_votos)) + 
     geom_freqpoly(bins = 25, position = 'identity') +
@@ -752,23 +751,23 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #8 Distribucion de rates de ideas que tengan al menos 1 voto
   
   #cantidad_votos
-  votos_df_Votefilt <- votos_df[which(votos_df$V_neg > 0 |
-                                        votos_df$V_pos > 0),]
+  votos_df_Votefilt <- votos_df[which(votos_df$V_neg > 1 |
+                                        votos_df$V_pos > 1),]
   #N
-  N_df_Votefilt <- N_df[which(N_df$V_neg > 0 |
-                                N_df$V_pos > 0),]
+  N_df_Votefilt <- N_df[which(N_df$V_neg > 1 |
+                                N_df$V_pos > 1),]
   #cantidad_ideas
-  ideas_df_Votefilt <- ideas_df[which(ideas_df$V_neg > 0 |
-                                        ideas_df$V_pos > 0),]
+  ideas_df_Votefilt <- ideas_df[which(ideas_df$V_neg > 1 |
+                                        ideas_df$V_pos > 1),]
   #Negativos
-  Negativos_df_Votefilt <- Negativos_df[which(Negativos_df$V_neg > 0 |
-                                                Negativos_df$V_pos > 0),]
+  Negativos_df_Votefilt <- Negativos_df[which(Negativos_df$V_neg > 1 |
+                                                Negativos_df$V_pos > 1),]
   #Beta
-  Beta_df_Votefilt <- Beta_df[which(Beta_df$V_neg > 0 |
-                                      Beta_df$V_pos > 0),]
+  Beta_df_Votefilt <- Beta_df[which(Beta_df$V_neg > 1 |
+                                      Beta_df$V_pos > 1),]
   #Algoritmo
-  Algoritmo_df_Votefilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 0 |
-                                                Algoritmo_df$V_pos > 0),]
+  Algoritmo_df_Votefilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 1 |
+                                                Algoritmo_df$V_pos > 1),]
   
   plot_8a <- ggplot(votos_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,color = cantidad_votos)) + 
     geom_freqpoly(bins = 25, position = 'identity') +
@@ -1231,8 +1230,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
     "cantidad_ideas" = plot_list_3,
     "Negativos" = plot_list_4,
     "Beta" = plot_list_5, 
-    "Algoritmo" = plot_list_6,
-    "obs_excluidas" = paste('Se excluyeron', obs_excluidas,'filas con 0 visualizaciones')
+    "Algoritmo" = plot_list_6
   ))
 }
 
