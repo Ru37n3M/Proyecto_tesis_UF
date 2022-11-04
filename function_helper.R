@@ -815,89 +815,148 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #9 Distribucion de rates x visualizaciones
   
   plot_9a <- ggplot(votos_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500, 
+                            h = c(ifelse(bandwidth.nrd(votos_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(votos_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(votos_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(votos_df$visualizaciones) ) ) ) ) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~cantidad_votos)
   
   plot_9b <- ggplot(N_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500,      
+                            h = c(ifelse(bandwidth.nrd(N_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(N_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(N_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(N_df$visualizaciones)))))+   coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~N)
   
   plot_9c <- ggplot(ideas_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500,      
+                            h = c(ifelse(bandwidth.nrd(ideas_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(ideas_df$ratio_votos_vis)),          
+                                  ifelse(bandwidth.nrd(log10(ideas_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(ideas_df$visualizaciones))))) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~cantidad_ideas)
   
   plot_9d <- ggplot(Negativos_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500,      
+                            h = c(ifelse(bandwidth.nrd(Negativos_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(Negativos_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(Negativos_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(Negativos_df$visualizaciones))))) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~Negativos)
   
   plot_9e <- ggplot(Beta_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500,      
+                            h = c(ifelse(bandwidth.nrd(Beta_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(Beta_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(Beta_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(Beta_df$visualizaciones))))) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~Beta)
   
   plot_9f <- ggplot(Algoritmo_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500,      
+                            h = c(ifelse(bandwidth.nrd(Algoritmo_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(Algoritmo_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(Algoritmo_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(Algoritmo_df$visualizaciones))))) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~Algoritmo)
   
   #10 Distribucion de rates de ideas x visualizaciones que tengan al menos 1 voto
   
   plot_10a <- ggplot(votos_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500,      
+                            h = c(ifelse(bandwidth.nrd(votos_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(votos_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(votos_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(votos_df$visualizaciones))))) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~cantidad_votos)
   
   plot_10b <- ggplot(N_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500,
+                            h = c(ifelse(bandwidth.nrd(N_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(N_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(N_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(N_df$visualizaciones))))) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~N)
   
   plot_10c <- ggplot(ideas_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500, 
+                            h = c(ifelse(bandwidth.nrd(ideas_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(ideas_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(ideas_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(ideas_df$visualizaciones) ) ) ) ) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~cantidad_ideas)
   
   plot_10d <- ggplot(Negativos_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500, 
+                            h = c(ifelse(bandwidth.nrd(Negativos_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(Negativos_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(Negativos_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(Negativos_df$visualizaciones))))) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~Negativos)
   
   plot_10e <- ggplot(Beta_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500,      
+                            h = c(ifelse(bandwidth.nrd(Beta_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(Beta_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(Beta_df$visualizaciones)) == 0, 0.1, 
+                                         bandwidth.nrd(log10(Beta_df$visualizaciones))))) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~Beta)
   
   plot_10f <- ggplot(Algoritmo_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    geom_hex(bins = 15) +   scale_fill_continuous(type = "viridis") + 
+    stat_density_2d_filled( bins = 500, 
+                            h = c(ifelse(bandwidth.nrd(Algoritmo_df$ratio_votos_vis) == 0, 0.1, 
+                                         bandwidth.nrd(Algoritmo_df$ratio_votos_vis)),           
+                                  ifelse(bandwidth.nrd(log10(Algoritmo_df$visualizaciones) ) == 0, 0.1, 
+                                         bandwidth.nrd(log10(Algoritmo_df$visualizaciones) ) ) ) ) +   
+    coord_cartesian(xlim = c(-0.6, 0.6)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    ggthemes::theme_clean() +
+    theme(legend.position = 'none') +
     facet_wrap(~Algoritmo)
   
   
