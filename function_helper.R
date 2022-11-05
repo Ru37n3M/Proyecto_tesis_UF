@@ -343,6 +343,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   library(tidyverse)
   library(ggplot2)
   library(ggpubr)
+  library(MASS)
   
   combined_df <- test_only_opinion %>%
     bind_rows() %>%
@@ -355,7 +356,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
       'Algoritmo' = rep(as.factor(parametros_simulacion_df$Algoritmo), parametros_simulacion_df$N)
     )
   
-  combined_df[,c(5,6,7)] <- combined_df[,c(5,6,7)] + 1
+  combined_df[,5] <- combined_df[,5] + 1
   
   N_df <- combined_df %>% 
     filter(Beta == "6-2" & Algoritmo == 0.5 & 
@@ -376,6 +377,9 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   Negativos_df_part2 <- combined_df %>%
     filter(N == 500  & Beta == "1-0" & Algoritmo == 0.5 & cantidad_votos == 3 & cantidad_ideas == 10)
   
+  Negativos_df_part1$Negativos <- 'Si'
+  Negativos_df_part2$Negativos <- 'No' 
+  
   Negativos_df <- bind_rows(Negativos_df_part1, Negativos_df_part2)
   
   
@@ -390,131 +394,144 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #1 Distribucion de Cantidad de visualizaciones (log10)
   plot_1a <- ggplot(votos_df, aes(x = log10(visualizaciones), y = after_stat(density), col =cantidad_votos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de Cantidad de visualizaciones", 
-         x= "Cantidad de visualizaciones (log10)", 
+    guides(color=guide_legend(title="Votos disponibles")) +
+    labs(x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_1b <- ggplot(N_df, aes(x = log10(visualizaciones), y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de Cantidad de visualizaciones", 
-         x= "Cantidad de visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="n")) +
+    labs( 
+      x= "Cantidad de visualizaciones (log10)", 
+      y = "Densidad") +
+    
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_1c <- ggplot(ideas_df, aes(x = log10(visualizaciones), y = after_stat(density) ,col =cantidad_ideas)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de Cantidad de visualizaciones", 
-         x= "Cantidad de visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
+    labs( 
+      x= "Cantidad de visualizaciones (log10)", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_1d <- ggplot(Negativos_df, aes(x = log10(visualizaciones), y = after_stat(density) , col =Negativos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de Cantidad de visualizaciones", 
-         x= "Cantidad de visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos negativos")) +
+    labs( 
+      x= "Cantidad de visualizaciones (log10)", 
+      y = "Densidad", fill = 'Votos Negativos') +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_1e <- ggplot(Beta_df, aes(x = log10(visualizaciones), y = after_stat(density) , col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de Cantidad de visualizaciones", 
-         x= "Cantidad de visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Cantidad de visualizaciones (log10)", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_1f <- ggplot(Algoritmo_df, aes(x = log10(visualizaciones), y = after_stat(density) , col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de Cantidad de visualizaciones", 
-         x= "Cantidad de visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Cantidad de visualizaciones (log10)", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   #2 Distribucion de cantidad de votos positivos
   plot_2a <- ggplot(votos_df, aes(x = V_pos, y = after_stat(density) , col =cantidad_votos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos positivos", 
-         x= "Votos positivos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos disponibles")) +
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_2b <- ggplot(N_df, aes(x = V_pos, y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos positivos", 
-         x= "Votos positivos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="n")) +
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_2c <- ggplot(ideas_df, aes(x = V_pos, y = after_stat(density) , col =cantidad_ideas)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos positivos", 
-         x= "Votos positivos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_2d <- ggplot(Negativos_df, aes(x = V_pos, y = after_stat(density) , col =Negativos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos positivos", 
-         x= "Votos positivos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos negativos")) +
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_2e <- ggplot(Beta_df, aes(x = V_pos, y = after_stat(density) , col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos positivos", 
-         x= "Votos positivos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_2f <- ggplot(Algoritmo_df, aes(x = V_pos, y = after_stat(density) , col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos positivos", 
-         x= "Votos positivos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   #3 Distribucion de cantidad de votos negativos
   plot_3a <- ggplot(votos_df, aes(x = V_neg, y = after_stat(density) , col =cantidad_votos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos negativos", 
-         x= "Votos negativos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos disponibles")) +
+    labs( 
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_3b <- ggplot(N_df, aes(x = V_neg, y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos negativos", 
-         x= "Votos negativos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="n")) +
+    labs( 
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_3c <- ggplot(ideas_df, aes(x = V_neg, y = after_stat(density) , col =cantidad_ideas)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos negativos", 
-         x= "Votos negativos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
+    labs( 
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_3d <- ggplot(Negativos_df, aes(x = V_neg, y = after_stat(density) , col =Negativos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos negativos", 
-         x= "Votos negativos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos negativos")) +
+    labs( 
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
+  
   
   plot_3e <- ggplot(Beta_df, aes(x = V_neg, y = after_stat(density) , col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos negativos", 
-         x= "Votos negativos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_3f <- ggplot(Algoritmo_df, aes(x = V_neg, y = after_stat(density) , col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de cantidad de votos negativos", 
-         x= "Votos negativos", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   #4 Distribucion de Cantidad de visualizaciones (log10) de ideas que tengan más de k visualizaciones
   
@@ -538,425 +555,439 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_4a <- ggplot(votos_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =cantidad_votos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Votos disponibles")) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_4b <- ggplot(N_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="n")) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_4c <- ggplot(ideas_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =cantidad_ideas)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_4d <- ggplot(Negativos_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =Negativos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Votos negativos")) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+         y = "Densidad", fill = 'Votos Negativos') +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_4e <- ggplot(Beta_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_4f <- ggplot(Algoritmo_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   #5 Distribucion de votos positivos de ideas que tengan mas de 0 votos positivos
   
   #cantidad_votos
-  votos_df_Vposfilt <- votos_df[which(votos_df$V_pos > 1),]
+  votos_df_Vposfilt <- votos_df[which(votos_df$V_pos > 0),]
   
   #N
-  N_df_Vposfilt <- N_df[which(N_df$V_pos > 1),]
+  N_df_Vposfilt <- N_df[which(N_df$V_pos > 0),]
   
   #cantidad_ideas
-  ideas_df_Vposfilt <- ideas_df[which(ideas_df$V_pos > 1),]
+  ideas_df_Vposfilt <- ideas_df[which(ideas_df$V_pos > 0),]
   
   #Negativos
-  Negativos_df_Vposfilt <- Negativos_df[which(Negativos_df$V_pos > 1),]
+  Negativos_df_Vposfilt <- Negativos_df[which(Negativos_df$V_pos > 0),]
   
   #Beta
-  Beta_df_Vposfilt <- Beta_df[which(Beta_df$V_pos > 1),]
+  Beta_df_Vposfilt <- Beta_df[which(Beta_df$V_pos > 0),]
   
   #Algoritmo
-  Algoritmo_df_Vposfilt <- Algoritmo_df[which(Algoritmo_df$V_pos > 1),]
+  Algoritmo_df_Vposfilt <- Algoritmo_df[which(Algoritmo_df$V_pos > 0),]
   
-  plot_5a <- ggplot(votos_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =cantidad_votos)) + 
+  plot_5a <- ggplot(votos_df_Vposfilt, aes(x = V_pos, y = after_stat(density) , col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Votos disponibles")) +
+    labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
+         x= "Cantidad de votos positivos", 
+         y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
+  
+  plot_5b <- ggplot(N_df_Vposfilt, aes(x = V_pos, y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="n")) +
+    labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
+         x= "Cantidad de votos positivos", 
+         y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
+  
+  plot_5c <- ggplot(ideas_df_Vposfilt, aes(x = V_pos, y = after_stat(density) , col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
+    labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
+         x= "Cantidad de votos positivos", 
+         y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
+  
+  plot_5d <- ggplot(Negativos_df_Vposfilt, aes(x = V_pos, y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Votos negativos")) +
+    labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
+         x= "Cantidad de votos positivos", 
+         y = "Densidad", fill = 'Votos Negativos') +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
+  
+  plot_5e <- ggplot(Beta_df_Vposfilt, aes(x = V_pos, y = after_stat(density) , col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
-         x= "Cantidad de votos positivos (log10)", 
+         x= "Cantidad de votos positivos", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_5b <- ggplot(N_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =N)) + 
+  plot_5f <- ggplot(Algoritmo_df_Vposfilt, aes(x = V_pos, y = after_stat(density) , col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
-         x= "Cantidad de votos positivos (log10)", 
+         x= "Cantidad de votos positivos", 
          y = "Densidad") +
-    ggthemes::theme_clean()
-  
-  plot_5c <- ggplot(ideas_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =cantidad_ideas)) + 
-    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
-         x= "Cantidad de votos positivos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
-  
-  plot_5d <- ggplot(Negativos_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =Negativos)) + 
-    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
-         x= "Cantidad de votos positivos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
-  
-  plot_5e <- ggplot(Beta_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =Beta)) + 
-    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
-         x= "Cantidad de votos positivos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
-  
-  plot_5f <- ggplot(Algoritmo_df_Vposfilt, aes(x = log10(V_pos), y = after_stat(density) , col =Algoritmo)) + 
-    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
-         x= "Cantidad de votos positivos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   #6 Distribucion de votos negativos de ideas que tengan mas de 0 votos negativos
   
   #cantidad_votos
-  votos_df_Vnegfilt <- votos_df[which(votos_df$V_neg > 1),]
+  votos_df_Vnegfilt <- votos_df[which(votos_df$V_neg > 0),]
   
   #N
-  N_df_Vnegfilt <- N_df[which(N_df$V_neg > 1),]
+  N_df_Vnegfilt <- N_df[which(N_df$V_neg > 0),]
   
   #cantidad_ideas
-  ideas_df_Vnegfilt <- ideas_df[which(ideas_df$V_neg > 1),]
+  ideas_df_Vnegfilt <- ideas_df[which(ideas_df$V_neg > 0),]
   
   #Negativos
-  Negativos_df_Vnegfilt <- Negativos_df[which(Negativos_df$V_neg > 1),]
+  Negativos_df_Vnegfilt <- Negativos_df[which(Negativos_df$V_neg > 0),]
   
   #Beta
-  Beta_df_Vnegfilt <- Beta_df[which(Beta_df$V_neg > 1),]
+  Beta_df_Vnegfilt <- Beta_df[which(Beta_df$V_neg > 0),]
   
   #Algoritmo
-  Algoritmo_df_Vnegfilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 1),]
+  Algoritmo_df_Vnegfilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 0),]
   
-  plot_6a <- ggplot(votos_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =cantidad_votos)) + 
+  plot_6a <- ggplot(votos_df_Vnegfilt, aes(x = V_neg, y = after_stat(density) , col =cantidad_votos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Votos disponibles")) +
+    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
+         x= "Cantidad de votos negativos", 
+         y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
+  
+  plot_6b <- ggplot(N_df_Vnegfilt, aes(x = V_neg, y = after_stat(density) , col =N)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="n")) +
+    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
+         x= "Cantidad de votos negativos", 
+         y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
+  
+  plot_6c <- ggplot(ideas_df_Vnegfilt, aes(x = V_neg, y = after_stat(density) , col =cantidad_ideas)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
+    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
+         x= "Cantidad de votos negativos", 
+         y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
+  
+  plot_6d <- ggplot(Negativos_df_Vnegfilt, aes(x = V_neg, y = after_stat(density) , col =Negativos)) + 
+    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Votos negativos")) +
+    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
+         x= "Cantidad de votos negativos", 
+         y = "Densidad", fill = 'Votos Negativos') +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
+  
+  plot_6e <- ggplot(Beta_df_Vnegfilt, aes(x = V_neg, y = after_stat(density) , col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
-         x= "Cantidad de votos negativos (log10)", 
+         x= "Cantidad de votos negativos", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_6b <- ggplot(N_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =N)) + 
+  plot_6f <- ggplot(Algoritmo_df_Vnegfilt, aes(x = V_neg, y = after_stat(density) , col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
-         x= "Cantidad de votos negativos (log10)", 
+         x= "Cantidad de votos negativos", 
          y = "Densidad") +
-    ggthemes::theme_clean()
-  
-  plot_6c <- ggplot(ideas_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =cantidad_ideas)) + 
-    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
-         x= "Cantidad de votos negativos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
-  
-  plot_6d <- ggplot(Negativos_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =Negativos)) + 
-    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
-         x= "Cantidad de votos negativos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
-  
-  plot_6e <- ggplot(Beta_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =Beta)) + 
-    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
-         x= "Cantidad de votos negativos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
-  
-  plot_6f <- ggplot(Algoritmo_df_Vnegfilt, aes(x = log10(V_neg), y = after_stat(density) , col =Algoritmo)) + 
-    geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
-         x= "Cantidad de votos negativos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   
   #7 Distribucion de rates
   
   plot_7a <- ggplot(votos_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_votos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de rates", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos disponibles")) +
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_7b <- ggplot(N_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de rates", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="n")) +
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_7c <- ggplot(ideas_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_ideas)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de rates", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_7d <- ggplot(Negativos_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Negativos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de rates", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean() 
+    guides(color=guide_legend(title="Votos negativos")) +
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad", fill = 'Votos Negativos') +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.2,0.7), legend.title.align = 0.5) 
   
   plot_7e <- ggplot(Beta_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de rates", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.2,0.7), legend.title.align = 0.5)
   
   plot_7f <- ggplot(Algoritmo_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    labs(title = "Distribucion de rates", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   
   #8 Distribucion de rates de ideas que tengan al menos 1 voto
   
   #cantidad_votos
-  votos_df_Votefilt <- votos_df[which(votos_df$V_neg > 1 |
-                                        votos_df$V_pos > 1),]
+  votos_df_Votefilt <- votos_df[which(votos_df$V_neg > 0 |
+                                        votos_df$V_pos > 0),]
   #N
-  N_df_Votefilt <- N_df[which(N_df$V_neg > 1 |
-                                N_df$V_pos > 1),]
+  N_df_Votefilt <- N_df[which(N_df$V_neg > 0 |
+                                N_df$V_pos > 0),]
   #cantidad_ideas
-  ideas_df_Votefilt <- ideas_df[which(ideas_df$V_neg > 1 |
-                                        ideas_df$V_pos > 1),]
+  ideas_df_Votefilt <- ideas_df[which(ideas_df$V_neg > 0 |
+                                        ideas_df$V_pos > 0),]
   #Negativos
-  Negativos_df_Votefilt <- Negativos_df[which(Negativos_df$V_neg > 1 |
-                                                Negativos_df$V_pos > 1),]
+  Negativos_df_Votefilt <- Negativos_df[which(Negativos_df$V_neg > 0 |
+                                                Negativos_df$V_pos > 0),]
   #Beta
-  Beta_df_Votefilt <- Beta_df[which(Beta_df$V_neg > 1 |
-                                      Beta_df$V_pos > 1),]
+  Beta_df_Votefilt <- Beta_df[which(Beta_df$V_neg > 0 |
+                                      Beta_df$V_pos > 0),]
   #Algoritmo
-  Algoritmo_df_Votefilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 1 |
-                                                Algoritmo_df$V_pos > 1),]
+  Algoritmo_df_Votefilt <- Algoritmo_df[which(Algoritmo_df$V_neg > 0 |
+                                                Algoritmo_df$V_pos > 0),]
   
   plot_8a <- ggplot(votos_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_votos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Votos disponibles")) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_8b <- ggplot(N_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="n")) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
-    ggthemes::theme_clean() 
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5) 
   
   plot_8c <- ggplot(ideas_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_ideas)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_8d <- ggplot(Negativos_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Negativos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
+    guides(color=guide_legend(title="Votos negativos")) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean() 
+         y = "Densidad", fill = 'Votos Negativos') +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.2,0.7), legend.title.align = 0.5) 
   
   plot_8e <- ggplot(Beta_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
-    ggthemes::theme_clean()
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.2,0.7), legend.title.align = 0.5)
   
   plot_8f <- ggplot(Algoritmo_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
-    ggthemes::theme_clean() 
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5) 
   
   
   #9 Distribucion de rates x visualizaciones
   
   plot_9a <- ggplot(votos_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500, 
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity', 
                             h = c(ifelse(bandwidth.nrd(votos_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(votos_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(votos_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(votos_df$visualizaciones) ) ) ) ) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
-         col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    coord_cartesian(xlim = c(-1, 1)) +
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'Votos disponibles') + 
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~cantidad_votos)
   
   plot_9b <- ggplot(N_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500,      
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(N_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(N_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(N_df$visualizaciones)) == 0, 0.1, 
-                                         bandwidth.nrd(log10(N_df$visualizaciones)))))+   coord_cartesian(xlim = c(-0.6, 0.6)) +
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
-         col = 'Obs.') + 
-    theme(legend.position = 'none') +
+                                         bandwidth.nrd(log10(N_df$visualizaciones)))))+   coord_cartesian(xlim = c(-1, 1)) +
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'n') + 
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~N)
   
   plot_9c <- ggplot(ideas_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500,      
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(ideas_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(ideas_df$ratio_votos_vis)),          
                                   ifelse(bandwidth.nrd(log10(ideas_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(ideas_df$visualizaciones))))) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
-         col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    coord_cartesian(xlim = c(-1, 1)) +
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'Ideas visualizadas (p/par.)') + 
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~cantidad_ideas)
   
   plot_9d <- ggplot(Negativos_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500,      
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(Negativos_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Negativos_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Negativos_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(Negativos_df$visualizaciones))))) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
-         col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    coord_cartesian(xlim = c(-1, 1)) +
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'Votos negativos disponibles') + 
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Negativos)
   
   plot_9e <- ggplot(Beta_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500,      
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(Beta_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Beta_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Beta_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(Beta_df$visualizaciones))))) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
-         col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    coord_cartesian(xlim = c(-1, 1)) +
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'Beta (prob. de voto positivo)') + 
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Beta)
   
   plot_9f <- ggplot(Algoritmo_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500,      
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(Algoritmo_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Algoritmo_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Algoritmo_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(Algoritmo_df$visualizaciones))))) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones", 
-         col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    coord_cartesian(xlim = c(-1, 1)) +
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'Algoritmos de selección de ideas') + 
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Algoritmo)
   
   #10 Distribucion de rates de ideas x visualizaciones que tengan al menos 1 voto
   
   plot_10a <- ggplot(votos_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500,      
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(votos_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(votos_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(votos_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(votos_df$visualizaciones))))) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
+    coord_cartesian(xlim = c(-1, 1)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~cantidad_votos)
   
   plot_10b <- ggplot(N_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500,
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(N_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(N_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(N_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(N_df$visualizaciones))))) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
+    coord_cartesian(xlim = c(-1, 1)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~N)
   
   plot_10c <- ggplot(ideas_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500, 
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity', 
                             h = c(ifelse(bandwidth.nrd(ideas_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(ideas_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(ideas_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(ideas_df$visualizaciones) ) ) ) ) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
+    coord_cartesian(xlim = c(-1, 1)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~cantidad_ideas)
   
   plot_10d <- ggplot(Negativos_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500, 
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity', 
                             h = c(ifelse(bandwidth.nrd(Negativos_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Negativos_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Negativos_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(Negativos_df$visualizaciones))))) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
+    coord_cartesian(xlim = c(-1, 1)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Negativos)
   
   plot_10e <- ggplot(Beta_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500,      
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(Beta_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Beta_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Beta_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(Beta_df$visualizaciones))))) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
+    coord_cartesian(xlim = c(-1, 1)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Beta)
   
   plot_10f <- ggplot(Algoritmo_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 500, 
+    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity', 
                             h = c(ifelse(bandwidth.nrd(Algoritmo_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Algoritmo_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Algoritmo_df$visualizaciones) ) == 0, 0.1, 
                                          bandwidth.nrd(log10(Algoritmo_df$visualizaciones) ) ) ) ) +   
-    coord_cartesian(xlim = c(-0.6, 0.6)) +
+    coord_cartesian(xlim = c(-1, 1)) +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
-    theme(legend.position = 'none') +
+    theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Algoritmo)
   
   
@@ -964,23 +995,23 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #TOP 25 Parametro N
   
-  n100 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  n100 <- N_df[order(N_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(N == 100) %>%
     slice_head(. , n = 25) 
   
-  n200 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  n200 <- N_df[order(N_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(N == 200) %>%
     slice_head(. , n = 25) 
   
-  n500 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  n500 <- N_df[order(N_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(N == 500) %>%
     slice_head(. , n = 25) 
   
-  n1000 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  n1000 <- N_df[order(N_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(N == 1000) %>%
     slice_head(. , n = 25) 
   
-  n10000 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  n10000 <- N_df[order(N_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(N == 10000) %>%
     slice_head(. , n = 25) 
   
@@ -988,60 +1019,58 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #TOP 25 Parametro Cantidad_Ideas
   
-  I5 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  I5 <- ideas_df[order(ideas_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(cantidad_ideas == 5) %>%
     slice_head(. , n = 25) 
   
-  I10 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  I10 <- ideas_df[order(ideas_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(cantidad_ideas == 10) %>%
     slice_head(. , n = 25) 
   
-  I15 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  I15 <- ideas_df[order(ideas_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(cantidad_ideas == 15) %>%
     slice_head(. , n = 25) 
   
   top25_cantidad_ideas <- bind_rows(I5, I10, I15)
   #TOP 25 Parametro Cantidad_Votos
   
-  V1 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  V1 <- votos_df[order(votos_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(cantidad_votos == 1) %>%
     slice_head(. , n = 25) 
   
-  V3 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  V3 <- votos_df[order(votos_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(cantidad_votos == 3) %>%
     slice_head(. , n = 25) 
   
-  V5 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  V5 <- votos_df[order(votos_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(cantidad_votos == 5) %>%
     slice_head(. , n = 25) 
   
   top25_cantidad_votos <- bind_rows(V1, V3, V5)
   
   #Top 25 Negativos 
-  neg1 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
-    filter(Negativos == 1) %>%
+  neg1 <- Negativos_df_part1[order(Negativos_df_part1$ratio_votos_vis, decreasing = T), ] %>%
     slice_head(. , n = 25) 
   
-  neg0 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
-    filter(Negativos == 0) %>%
+  neg0 <- Negativos_df_part2[order(Negativos_df_part2$ratio_votos_vis, decreasing = T), ] %>%
     slice_head(. , n = 25) 
   
   top25_negativos <- bind_rows(neg1, neg0)
   
   #Top 25 Beta
-  B62 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  B62 <- Beta_df[order(Beta_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(Beta == "6-2") %>%
     slice_head(. , n = 25) 
   
-  B44 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  B44 <- Beta_df[order(Beta_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(Beta == "4-4") %>%
     slice_head(. , n = 25) 
   
-  B26 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  B26 <- Beta_df[order(Beta_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(Beta == "2-6") %>%
     slice_head(. , n = 25) 
   
-  B10 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  B10 <- Beta_df[order(Beta_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(Beta == "1-0") %>%
     slice_head(. , n = 25) 
   
@@ -1049,23 +1078,23 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #Top 25 Algoritmo
   
-  A50 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  A50 <- Algoritmo_df[order(Algoritmo_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(Algoritmo == 0.5) %>%
     slice_head(. , n = 25) 
   
-  A25 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  A25 <- Algoritmo_df[order(Algoritmo_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(Algoritmo == 0.25) %>%
     slice_head(. , n = 25) 
   
-  A75 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  A75 <- Algoritmo_df[order(Algoritmo_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(Algoritmo == 0.75) %>%
     slice_head(. , n = 25) 
   
-  A1 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  A1 <- Algoritmo_df[order(Algoritmo_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(Algoritmo == 1) %>%
     slice_head(. , n = 25) 
   
-  A0 <- combined_df[order(combined_df$ratio_votos_vis, decreasing = T), ] %>%
+  A0 <- Algoritmo_df[order(Algoritmo_df$ratio_votos_vis, decreasing = T), ] %>%
     filter(Algoritmo == 0) %>%
     slice_head(. , n = 25) 
   
@@ -1076,176 +1105,191 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_11a <- ggplot(top25_cantidad_votos, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_votos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de rates del top 25", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos disponibles")) +
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_11b <- ggplot(top25_n, aes(x = ratio_votos_vis, y = after_stat(density) ,col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de rates del top 25", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="n")) +
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_11c <- ggplot(top25_cantidad_ideas, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_ideas)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de rates del top 25", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_11d <- ggplot(top25_negativos, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Negativos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de rates del top 25", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos negativos")) +
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad", fill = 'Votos Negativos') +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_11e <- ggplot(top25_beta, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de rates del top 25", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_11f <- ggplot(top25_algoritmo, aes(x = ratio_votos_vis, y = after_stat(density) ,col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de rates del top 25", 
-         x= "Ratio votos/visualizaciones", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Ratio votos/visualizaciones", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   
   #12 Distribucion de visualizaciones de las 25 ideas con mejor rate
   
   plot_12a <- ggplot(top25_cantidad_votos, aes(x = log10(visualizaciones), y = after_stat(density) , col =cantidad_votos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos disponibles")) +
+    labs( 
+      x= "visualizaciones (log10)", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_12b <- ggplot(top25_n, aes(x = log10(visualizaciones), y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="n")) +
+    labs( 
+      x= "visualizaciones (log10)", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_12c <- ggplot(top25_cantidad_ideas, aes(x = log10(visualizaciones), y = after_stat(density) , col =cantidad_ideas)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
+    labs( 
+      x= "visualizaciones (log10)", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_12d <- ggplot(top25_negativos, aes(x = log10(visualizaciones), y = after_stat(density) , col =Negativos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos negativos")) +
+    labs( 
+      x= "visualizaciones (log10)", 
+      y = "Densidad", fill = 'Votos Negativos') +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_12e <- ggplot(top25_beta, aes(x = log10(visualizaciones), y = after_stat(density) , col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "visualizaciones (log10)", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   plot_12f <- ggplot(top25_algoritmo, aes(x = log10(visualizaciones), y = after_stat(density) , col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de visualizaciones del top 25", 
-         x= "visualizaciones (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "visualizaciones (log10)", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
   #13 Distribucion de votos de las 25 ideas con mejor rate
   
-  plot_13a <- ggplot(top25_cantidad_votos, aes(x = log10(V_pos), y = after_stat(density) , col =cantidad_votos)) + 
+  plot_13a <- ggplot(top25_cantidad_votos, aes(x = V_pos, y = after_stat(density) , col =cantidad_votos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion votos positivos del top 25", 
-         x= "Cantidad de votos positivos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos disponibles")) +
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13b <- ggplot(top25_n, aes(x = log10(V_pos), y = after_stat(density) , col =N)) + 
+  plot_13b <- ggplot(top25_n, aes(x = V_pos, y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion votos positivos del top 25", 
-         x= "Cantidad de votos positivos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="n")) +
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13c <- ggplot(top25_cantidad_ideas, aes(x = log10(V_pos), y = after_stat(density) , col =cantidad_ideas)) + 
+  plot_13c <- ggplot(top25_cantidad_ideas, aes(x = V_pos, y = after_stat(density) , col =cantidad_ideas)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion votos positivos del top 25", 
-         x= "Cantidad de votos positivos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13d <- ggplot(top25_negativos, aes(x = log10(V_pos), y = after_stat(density) , col =Negativos)) + 
+  plot_13d <- ggplot(top25_negativos, aes(x = V_pos, y = after_stat(density) , col =Negativos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion votos positivos del top 25", 
-         x= "Cantidad de votos positivos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos negativos")) +
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad", fill = 'Votos Negativos') +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13e <- ggplot(top25_beta, aes(x = log10(V_pos), y = after_stat(density) , col =Beta)) + 
+  plot_13e <- ggplot(top25_beta, aes(x = V_pos, y = after_stat(density) , col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion votos positivos del top 25", 
-         x= "Cantidad de votos positivos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13f <- ggplot(top25_algoritmo, aes(x = log10(V_pos), y = after_stat(density) , col =Algoritmo)) + 
+  plot_13f <- ggplot(top25_algoritmo, aes(x = V_pos, y = after_stat(density) , col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion votos positivos del top 25", 
-         x= "Cantidad de votos positivos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs( 
+      x= "Cantidad de votos positivos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13g <- ggplot(top25_cantidad_votos, aes(x = log10(V_neg), y = after_stat(density) , col =cantidad_votos)) + 
+  plot_13g <- ggplot(top25_cantidad_votos, aes(x = V_neg, y = after_stat(density) , col =cantidad_votos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de votos negativos del top 25", 
-         x= "Cantidad de votos negativos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs(
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13h <- ggplot(top25_n, aes(x = log10(V_neg), y = after_stat(density) , col =N)) + 
+  plot_13h <- ggplot(top25_n, aes(x = V_neg, y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de votos negativos del top 25", 
-         x= "Cantidad de votos negativos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="n")) +
+    labs( 
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13i <- ggplot(top25_cantidad_ideas, aes(x = log10(V_neg), y = after_stat(density) , col =cantidad_ideas)) + 
+  plot_13i <- ggplot(top25_cantidad_ideas, aes(x = V_neg, y = after_stat(density) , col =cantidad_ideas)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de votos negativos del top 25", 
-         x= "Cantidad de votos negativos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Ideas visualizadas (p/par.)")) +
+    labs(
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13j <- ggplot(top25_negativos, aes(x = log10(V_neg), y = after_stat(density) , col =Negativos)) + 
+  plot_13j <- ggplot(top25_negativos, aes(x = V_neg, y = after_stat(density) , col =Negativos)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de votos negativos del top 25", 
-         x= "Cantidad de votos negativos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    guides(color=guide_legend(title="Votos negativos")) +
+    labs(
+      x= "Cantidad de votos negativos", 
+      y = "Densidad", fill = 'Votos Negativos') +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13k <- ggplot(top25_beta, aes(x = log10(V_neg), y = after_stat(density) , col =Beta)) + 
+  plot_13k <- ggplot(top25_beta, aes(x = V_neg, y = after_stat(density) , col =Beta)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de votos negativos del top 25", 
-         x= "Cantidad de votos negativos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs(
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   
-  plot_13l <- ggplot(top25_algoritmo, aes(x = log10(V_neg), y = after_stat(density) , col =Algoritmo)) + 
+  plot_13l <- ggplot(top25_algoritmo, aes(x = V_neg, y = after_stat(density) , col =Algoritmo)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    labs(title = "Distribucion de votos negativos del top 25", 
-         x= "Cantidad de votos negativos (log10)", 
-         y = "Densidad") +
-    ggthemes::theme_clean()
+    labs(
+      x= "Cantidad de votos negativos", 
+      y = "Densidad") +
+    ggthemes::theme_clean() + theme(legend.title = element_text(size = 10), legend.position = c(0.9,0.7), legend.title.align = 0.5)
   ##################
   
   plot_list_1 <- list(plot_1b, plot_2b, plot_3b, plot_4b, plot_5b, plot_6b, plot_7b, plot_8b, plot_9b, plot_10b,
@@ -1265,34 +1309,155 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #Ordenamiento de los graficos en una pagina con ggpubr 
   
   ggarrange(plot_1b, plot_2b, plot_3b, plot_4b, plot_5b, plot_6b, plot_7b, plot_8b, plot_9b, plot_10b,
-            plot_11b, plot_12b, plot_13b, plot_13h, nrow = 7, ncol = 2)
+            plot_11b, plot_12b, plot_13b, plot_13h, nrow = 7, ncol = 2, labels = 'auto')
   
-  ggsave("Graficos_conjunto_N.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_N.png",  height = 80, width = 30, units = 'cm')
   
   ggarrange(plot_1a, plot_2a, plot_3a, plot_4a, plot_5a, plot_6a, plot_7a, plot_8a, plot_9a, plot_10a,
-            plot_11a, plot_12a, plot_13a, plot_13g, nrow = 7, ncol = 2)
+            plot_11a, plot_12a, plot_13a, plot_13g, nrow = 7, ncol = 2, labels = 'auto')
   
-  ggsave("Graficos_conjunto_cantidad_votos.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_cantidad_votos.png",  height = 80, width = 30, units = 'cm')
   
   ggarrange(plot_1c, plot_2c, plot_3c, plot_4c, plot_5c, plot_6c, plot_7c, plot_8c, plot_9c, plot_10c,
-            plot_11c, plot_12c, plot_13c, plot_13i, nrow = 7, ncol = 2)
+            plot_11c, plot_12c, plot_13c, plot_13i, nrow = 7, ncol = 2, labels = 'auto')
   
-  ggsave("Graficos_conjunto_cantidad_ideas.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_cantidad_ideas.png",  height = 80, width = 30, units = 'cm')
   
   ggarrange(plot_1d, plot_2d, plot_3d, plot_4d, plot_5d, plot_6d, plot_7d, plot_8d, plot_9d, plot_10d,
-            plot_11d, plot_12d, plot_13d, plot_13j, nrow = 7, ncol = 2)
+            plot_11d, plot_12d, plot_13d, plot_13j, nrow = 7, ncol = 2, labels = 'auto')
   
-  ggsave("Graficos_conjunto_Negativos.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_Negativos.png",  height = 80, width = 30, units = 'cm')
   
   ggarrange(plot_1e, plot_2e, plot_3e, plot_4e, plot_5e, plot_6e, plot_7e, plot_8e, plot_9e, plot_10e,
-            plot_11e, plot_12e, plot_13e, plot_13k, nrow = 7, ncol = 2)
+            plot_11e, plot_12e, plot_13e, plot_13k, nrow = 7, ncol = 2, labels = 'auto')
   
-  ggsave("Graficos_conjunto_Beta.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_Beta.png",  height = 80, width = 30, units = 'cm')
   
   ggarrange(plot_1f, plot_2f, plot_3f, plot_4f, plot_5f, plot_6f, plot_7f, plot_8f, plot_9f, plot_10f,
-            plot_11f, plot_12f, plot_13f, plot_13l, nrow = 7, ncol = 2) 
+            plot_11f, plot_12f, plot_13f, plot_13l, nrow = 7, ncol = 2, labels = 'auto') 
   
-  ggsave("Graficos_conjunto_Algoritmo.png",  height = 60, width = 30, units = 'cm')
+  ggsave("Graficos_conjunto_Algoritmo.png",  height = 80, width = 30, units = 'cm')
+  
+  
+  #####Ordenamiento presentacion paper
+  
+  #Figura 1
+  #Figura 1 DIST VIS.
+  
+  caption_1 <- paste('Figura 1. Variaciones en la distribución de la cantidad de visualizaciones en los distintos conjuntos de simulaciones.',
+                     'Los valores del eje x fueron transformados a logaritmo base 10 (log10) para obtener mayor una resolución de la distribución.',
+                     'Dado que en la base de datos original se observaron filas con valor 0 (en visualizaciones y/o votos), se aumento en 1 el valor original de',
+                     'los valores de las filas de visualizaciones, votos positivos y votos negativos, a fin de transformar el eje x a log10.',
+                     'Los diferentes colores se corresponden con los diferentes conjuntos de simulaciones, habiéndose variado diferentes parámetros en cada uno.'
+                     ,sep = '\n')
+  
+  ggarrange(plot_1a, plot_1b, plot_1c, plot_1d, plot_1e, plot_1f, nrow= 3, ncol = 2, labels = 'auto') %>%
+    annotate_figure(fig.lab = "Figura 1", fig.lab.face = "italic", fig.lab.size = 20,
+                    top = text_grob('Distribución de visualizaciones', size = 24, face = 'italic'),
+                    bottom = text_grob(caption_1, just = 'center'))
+  
+  ggsave("Figura1.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  
+  #Figura 2 DIST VPOS
+  
+  caption_2 <- paste('Figura 2. Distribuciones de densidad en la distribución de la cantidad de votos positivos en los distintos conjuntos de simulaciones.',
+                     'A diferencia de la figura 1, se utiliza la densidad sobre la frecuencia de observaciones.',
+                     'A excepción del gráfico f, no se observan variaciones entre los diferentes conjuntos.',
+                     sep = '\n')
+  
+  ggarrange(plot_2a, plot_2b, plot_2c, plot_2d,
+            plot_2e, plot_2f, nrow= 3, ncol = 2, labels = 'auto') %>%
+    annotate_figure(fig.lab = "Figura 2", fig.lab.face = "italic", fig.lab.size = 20,
+                    top = text_grob('Distribución de votos positivos', size = 24, face = 'italic'),
+                    bottom = text_grob(caption_2, just = 'center'))
+  
+  ggsave("Figura2.png", height = 30, width = 30, units = 'cm', bg = 'white')
+  
+  #Figura 3 DIST. VNEG
+  
+  caption_3 <- paste('Figura 3. Distribuciones de densidad utilizada para graficar la distribución de la cantidad de votos negativos en los distintos conjuntos de simulaciones.')
+  
+  ggarrange(plot_3a, plot_3b, plot_3c, plot_3d, plot_3e, plot_3f, nrow= 3, ncol = 2, labels = 'auto') %>%
+    annotate_figure(fig.lab = "Figura 3", fig.lab.face = "italic", fig.lab.size = 20,
+                    top = text_grob('Distribución de votos negativos', size = 24, face = 'italic'),
+                    bottom = text_grob(caption_3, just = 'center'))
+  
+  ggsave("Figura3.png", height = 30, width = 30, units = 'cm', bg = 'white')
+  
+  #Figura 4
+  #Figura 4 DIST. RATES
+  
+  caption_4 <- paste('Figura 4. Distribuciones de densidad donde se observan variaciones en los ratios de los distintos conjuntos de simulaciones.',
+                     'Los valores del eje y fueron transformados a log10 para obtener mayor una resolución de la distribución.', sep = '\n')
+  
+  ggarrange(plot_7a, plot_7b, plot_7c, plot_7d, plot_7e, plot_7f, nrow = 3, ncol = 2, labels = 'auto') %>%
+    annotate_figure(fig.lab = "Figura 4", fig.lab.face = "italic", fig.lab.size = 20,
+                    top = text_grob('Distribución de ratio', size = 24, face = 'italic'),
+                    bottom = text_grob(caption_4, just = 'center'))
+  
+  ggsave("Figura4.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  
+  #Figura 5 RATES X VISUALIZACIONES
+  
+  caption_5 <- paste('Figura 5. Heatmap donde se mide la frecuencia de los valores de las visualizaciones a través de los distintos conjuntos de simulaciones.',
+                     'Los puntos con colores más brillantes indican una mayor concentración de observaciones.',
+                     sep = '\n')
+  
+  ggarrange(plot_9a, plot_9b, plot_9c, plot_9d,
+            plot_9e, plot_9f, nrow = 3, ncol = 2, labels = 'auto') %>%
+    annotate_figure(fig.lab = "Figura 5", fig.lab.face = "italic", fig.lab.size = 20,
+                    top = text_grob('Densidad de visualizaciones por ratio', size = 24, face = 'italic'),
+                    bottom = text_grob(caption_5, just = 'center'))
+  
+  ggsave("Figura5.png", height = 30, width = 30, units = 'cm', bg = 'white')
+  
+  
+  
+  #Figura 6 TOP VIS
+  
+  caption_6 <- paste('Figura 6. Distribuciones de densidad de las visualizaciones de las mejores 25 ideas de cada conjunto de simulaciones.')
+  
+  ggarrange(plot_12a, plot_12b, plot_12c, plot_12d,
+            plot_12e, plot_12f, nrow = 3, ncol = 2, labels = 'auto')%>%
+    annotate_figure(fig.lab ="Figura 6", fig.lab.face = "italic", fig.lab.size = 20,
+                    top = text_grob('Distribución de visualizaciones de las mejores 25 ideas', size = 24, face = 'italic'),
+                    bottom = text_grob(caption_6, just = 'center'))
+  
+  ggsave("Figura6.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  
+  
+  #Figura 7 TOP VPOS
+  
+  caption_7 <- paste('Figura 7. Distribuciones de densidad de los votos positivos de las mejores 25 ideas de cada conjunto de simulaciones.')
+  
+  ggarrange(plot_13a, plot_13b, plot_13c, plot_13d, plot_13e, plot_13f, nrow = 3, ncol = 2, labels = 'auto')%>%
+    annotate_figure(fig.lab = "Figura 7", fig.lab.face = "italic", fig.lab.size = 20,
+                    top = text_grob('Distribución de votos positivos de las mejores 25 opiniones', size = 24),
+                    bottom = text_grob(caption_7, just = 'center'))
+  
+  ggsave("Figura7.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  
+  #Figura 8 TOP VNEG
+  
+  caption_8 <- paste('Figura 8. Distribuciones de densidad los votos negativos de las mejores 25 ideas de cada conjunto de simulaciones.')
+  
+  ggarrange(plot_13g, plot_13h, plot_13i, plot_13j, plot_13k, plot_13l, nrow = 3, ncol = 2, labels = 'auto')%>%
+    annotate_figure(fig.lab = "Figura 8", fig.lab.face = "italic", fig.lab.size = 20,
+                    top = text_grob('Distribución de votos negativos de las mejores 25 opiniones', size = 24),
+                    bottom = text_grob(caption_8, just = 'center'))
+  
+  ggsave("Figura8.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  
+  #Figura 9 TOP RATES
+  
+  caption_9 <- paste('Figura 9. Distribuciones de densidad de las variaciones de ratio contra visualizaciones de las mejores 25 ideas de los distintos parámetros',sep = '\n')
+  
+  ggarrange(plot_11a, plot_11b, plot_11c, plot_11d, plot_11e, plot_11f, nrow = 3, ncol = 2, labels = 'auto')%>%
+    annotate_figure(fig.lab = "Figura 9", fig.lab.face = "italic", fig.lab.size = 20,
+                    top = text_grob('Distribución de ratio de las mejores 25 ideas', size = 24, face = 'italic'),
+                    bottom = text_grob(caption_9, just = 'center'))
+  
+  ggsave("Figura9.png",  height = 30, width = 30, units = 'cm', bg = 'white')
   
   #devuelve una lista con listas de graficos
   return(list(
