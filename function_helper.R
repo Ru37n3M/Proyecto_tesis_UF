@@ -401,7 +401,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_1b <- ggplot(N_df, aes(x = log10(visualizaciones), y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs( 
       x= "Cantidad de visualizaciones (log10)", 
       y = "Densidad") +
@@ -449,7 +449,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_2b <- ggplot(N_df, aes(x = V_pos, y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs( 
       x= "Cantidad de votos positivos", 
       y = "Densidad") +
@@ -496,7 +496,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_3b <- ggplot(N_df, aes(x = V_neg, y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs( 
       x= "Cantidad de votos negativos", 
       y = "Densidad") +
@@ -563,7 +563,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_4b <- ggplot(N_df_kvis, aes(x = log10(visualizaciones), y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs(title = "Distribucion de ideas con más de 6 visualizaciones", 
          x= "Cantidad de visualizaciones (log10)", 
          y = "Densidad") +
@@ -629,7 +629,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_5b <- ggplot(N_df_Vposfilt, aes(x = V_pos, y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs(title = "Distribucion de ideas con al menos 1 voto positivo", 
          x= "Cantidad de votos positivos", 
          y = "Densidad") +
@@ -695,7 +695,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_6b <- ggplot(N_df_Vnegfilt, aes(x = V_neg, y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs(title = "Distribucion de ideas con al menos 1 voto negativo", 
          x= "Cantidad de votos negativos", 
          y = "Densidad") +
@@ -744,7 +744,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_7b <- ggplot(N_df, aes(x = ratio_votos_vis, y = after_stat(density) ,col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs( 
       x= "Ratio votos/visualizaciones", 
       y = "Densidad") +
@@ -812,7 +812,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_8b <- ggplot(N_df_Votefilt, aes(x = ratio_votos_vis, y = after_stat(density) ,col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70, adjust = 3.75) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs(title = "Distribucion de rates de ideas con al menos 1 voto", 
          x= "Ratio votos/visualizaciones", 
          y = "Densidad") +
@@ -852,66 +852,73 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #9 Distribucion de rates x visualizaciones
   
   plot_9a <- ggplot(votos_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity', 
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity', 
                             h = c(ifelse(bandwidth.nrd(votos_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(votos_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(votos_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(votos_df$visualizaciones) ) ) ) ) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'Votos disponibles') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~cantidad_votos)
   
   plot_9b <- ggplot(N_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(N_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(N_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(N_df$visualizaciones)) == 0, 0.1, 
-                                         bandwidth.nrd(log10(N_df$visualizaciones)))))+   coord_cartesian(xlim = c(-1, 1)) +
-    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'n') + 
+                                         bandwidth.nrd(log10(N_df$visualizaciones)))))+   
+    coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
+    labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'N') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~N)
   
   plot_9c <- ggplot(ideas_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(ideas_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(ideas_df$ratio_votos_vis)),          
                                   ifelse(bandwidth.nrd(log10(ideas_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(ideas_df$visualizaciones))))) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'Ideas visualizadas (p/par.)') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~cantidad_ideas)
   
   plot_9d <- ggplot(Negativos_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(Negativos_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Negativos_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Negativos_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(Negativos_df$visualizaciones))))) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'Votos negativos disponibles') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Negativos)
   
   plot_9e <- ggplot(Beta_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(Beta_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Beta_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Beta_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(Beta_df$visualizaciones))))) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'Beta (prob. de voto positivo)') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Beta)
   
   plot_9f <- ggplot(Algoritmo_df, aes(x =ratio_votos_vis, y = log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(Algoritmo_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Algoritmo_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Algoritmo_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(Algoritmo_df$visualizaciones))))) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", subtitle = 'Algoritmos de selección de ideas') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Algoritmo)
@@ -919,72 +926,78 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   #10 Distribucion de rates de ideas x visualizaciones que tengan al menos 1 voto
   
   plot_10a <- ggplot(votos_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(votos_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(votos_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(votos_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(votos_df$visualizaciones))))) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~cantidad_votos)
   
   plot_10b <- ggplot(N_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(N_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(N_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(N_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(N_df$visualizaciones))))) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~N)
   
   plot_10c <- ggplot(ideas_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity', 
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity', 
                             h = c(ifelse(bandwidth.nrd(ideas_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(ideas_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(ideas_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(ideas_df$visualizaciones) ) ) ) ) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~cantidad_ideas)
   
   plot_10d <- ggplot(Negativos_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity', 
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity', 
                             h = c(ifelse(bandwidth.nrd(Negativos_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Negativos_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Negativos_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(Negativos_df$visualizaciones))))) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Negativos)
   
   plot_10e <- ggplot(Beta_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity',
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity',
                             h = c(ifelse(bandwidth.nrd(Beta_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Beta_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Beta_df$visualizaciones)) == 0, 0.1, 
                                          bandwidth.nrd(log10(Beta_df$visualizaciones))))) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
     facet_wrap(~Beta)
   
   plot_10f <- ggplot(Algoritmo_df_Votefilt, aes(ratio_votos_vis, log10(visualizaciones))) + 
-    stat_density_2d_filled( bins = 250,   n = 120, contour_var = 'ndensity', 
+    stat_density_2d_filled( bins = 70,   n = 400, contour_var = 'ndensity', 
                             h = c(ifelse(bandwidth.nrd(Algoritmo_df$ratio_votos_vis) == 0, 0.1, 
                                          bandwidth.nrd(Algoritmo_df$ratio_votos_vis)),           
                                   ifelse(bandwidth.nrd(log10(Algoritmo_df$visualizaciones) ) == 0, 0.1, 
                                          bandwidth.nrd(log10(Algoritmo_df$visualizaciones) ) ) ) ) +   
     coord_cartesian(xlim = c(-1, 1)) +
+    scale_fill_viridis_d(option = 'A') +
     labs(x = "Ratio votos/visualizaciones", y = "Visualizaciones (log10)", title = "Distribución Ratio/Visualizaciones minimo 1 voto", 
          col = 'Obs.') + 
     theme(legend.position = 'none', panel.background = element_rect(fill = 'transparent', color = NA)) +
@@ -1101,6 +1114,38 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   top25_algoritmo <- bind_rows(A50, A25, A75, A1, A0)
   
+  
+  #######
+  
+  summarise_list_top25 <- list(
+    list(
+      top25_n,
+      top25_cantidad_ideas,
+      top25_cantidad_votos,
+      top25_beta,
+      top25_algoritmo
+    ),
+    list(
+      'N',
+      'cantidad_ideas',
+      'cantidad_votos',
+      'Beta',
+      'Algoritmo'
+    )
+  ) %>% pmap(
+    ~ summarise(.x %>% group_by(..2),
+                media = mean(ratio_votos_vis),
+                mediana = median(ratio_votos_vis),
+                iqr = IQR(ratio_votos_vis),
+                min = min(ratio_votos_vis),
+                max = max(ratio_votos_vis),
+                q1 = quantile(ratio_votos_vis, 0.25),
+                q3 = quantile(ratio_votos_vis, 0.75)
+    )
+  )
+  
+  save(summarise_list_top25, file = 'top25.rda')
+  
   #11 Distribucion de rates de las 25 ideas con mejor rate
   
   plot_11a <- ggplot(top25_cantidad_votos, aes(x = ratio_votos_vis, y = after_stat(density) ,col =cantidad_votos)) + 
@@ -1113,7 +1158,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_11b <- ggplot(top25_n, aes(x = ratio_votos_vis, y = after_stat(density) ,col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs( 
       x= "Ratio votos/visualizaciones", 
       y = "Densidad") +
@@ -1162,7 +1207,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_12b <- ggplot(top25_n, aes(x = log10(visualizaciones), y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs( 
       x= "visualizaciones (log10)", 
       y = "Densidad") +
@@ -1210,7 +1255,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_13b <- ggplot(top25_n, aes(x = V_pos, y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs( 
       x= "Cantidad de votos positivos", 
       y = "Densidad") +
@@ -1255,7 +1300,7 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   plot_13h <- ggplot(top25_n, aes(x = V_neg, y = after_stat(density) , col =N)) + 
     geom_density(position = 'identity', linetype = 1, lwd = 0.70) +
-    guides(color=guide_legend(title="n")) +
+    guides(color=guide_legend(title="N")) +
     labs( 
       x= "Cantidad de votos negativos", 
       y = "Densidad") +
@@ -1341,123 +1386,146 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
   
   #####Ordenamiento presentacion paper
   
-  #Figura 1
-  #Figura 1 DIST VIS.
+  #Fig. 1
+  #Fig. 1 DIST VIS.
   
-  caption_1 <- paste('Figura 1. Variaciones en la distribución de la cantidad de visualizaciones en los distintos conjuntos de simulaciones.',
+  caption_1 <- paste('Fig. 1. Variaciones en la distribución de la cantidad de visualizaciones en los distintos conjuntos de simulaciones.',
                      'Los valores del eje x fueron transformados a logaritmo base 10 (log10) para obtener mayor una resolución de la distribución.',
-                     'Dado que en la base de datos original se observaron filas con valor 0 (en visualizaciones y/o votos), se aumento en 1 el valor original de',
-                     'los valores de las filas de visualizaciones, votos positivos y votos negativos, a fin de transformar el eje x a log10.',
+                     'Dado que en la base de datos original se observaron filas con valor 0 en visualizaciones, se aumento en 1 el valor original de',
+                     'los valores de las filas de visualizaciones a fin de transformar el eje x a log10.',
                      'Los diferentes colores se corresponden con los diferentes conjuntos de simulaciones, habiéndose variado diferentes parámetros en cada uno.'
                      ,sep = '\n')
   
-  ggarrange(plot_1a, plot_1b, plot_1c, plot_1d, plot_1e, plot_1f, nrow= 3, ncol = 2, labels = 'auto') %>%
-    annotate_figure(fig.lab = "Figura 1", fig.lab.face = "italic", fig.lab.size = 20,
+  ggarrange(ggarrange(plot_1a, plot_1b, ncol = 2, labels = c('a', 'b')), 
+            ggarrange(plot_1c, plot_1e, ncol = 2, labels = c('c', 'd')), 
+            ggarrange(plot_1f, labels = 'e'), 
+            nrow= 3,labels = 'auto') %>%
+    annotate_figure(fig.lab = "Fig. 1", fig.lab.face = "italic", fig.lab.size = 20,
                     top = text_grob('Distribución de visualizaciones', size = 24, face = 'italic'),
                     bottom = text_grob(caption_1, just = 'center'))
   
-  ggsave("Figura1.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  ggsave("Fig.1.png",  height = 30, width = 30, units = 'cm', bg = 'white')
   
-  #Figura 2 DIST VPOS
+  #Fig. 2 DIST VPOS
   
-  caption_2 <- paste('Figura 2. Distribuciones de densidad en la distribución de la cantidad de votos positivos en los distintos conjuntos de simulaciones.',
-                     'A diferencia de la figura 1, se utiliza la densidad sobre la frecuencia de observaciones.',
-                     'A excepción del gráfico f, no se observan variaciones entre los diferentes conjuntos.',
+  caption_2 <- paste('Fig. 2. Distribuciones de densidad en la distribución de la cantidad de votos positivos en los distintos conjuntos de simulaciones.',
+                     'A diferencia de la Fig. 1, se utiliza la densidad sobre la frecuencia de observaciones.',
                      sep = '\n')
   
-  ggarrange(plot_2a, plot_2b, plot_2c, plot_2d,
-            plot_2e, plot_2f, nrow= 3, ncol = 2, labels = 'auto') %>%
-    annotate_figure(fig.lab = "Figura 2", fig.lab.face = "italic", fig.lab.size = 20,
+  ggarrange(ggarrange(plot_2a, plot_2b, ncol = 2, labels = c('a', 'b')), 
+            ggarrange(plot_2c, plot_2e, ncol = 2, labels = c( 'c', 'd')), 
+            ggarrange(plot_2f, labels = 'e'), 
+            nrow= 3, labels = 'auto') %>%
+    annotate_figure(fig.lab = "Fig. 2", fig.lab.face = "italic", fig.lab.size = 20,
                     top = text_grob('Distribución de votos positivos', size = 24, face = 'italic'),
                     bottom = text_grob(caption_2, just = 'center'))
   
-  ggsave("Figura2.png", height = 30, width = 30, units = 'cm', bg = 'white')
+  ggsave("Fig.2.png", height = 30, width = 30, units = 'cm', bg = 'white')
   
-  #Figura 3 DIST. VNEG
+  #Fig. 3 DIST. VNEG
   
-  caption_3 <- paste('Figura 3. Distribuciones de densidad utilizada para graficar la distribución de la cantidad de votos negativos en los distintos conjuntos de simulaciones.')
+  caption_3 <- paste('Fig. 3. Distribuciones de densidad utilizada para graficar la distribución de la cantidad de votos negativos en los distintos conjuntos de simulaciones.')
   
-  ggarrange(plot_3a, plot_3b, plot_3c, plot_3d, plot_3e, plot_3f, nrow= 3, ncol = 2, labels = 'auto') %>%
-    annotate_figure(fig.lab = "Figura 3", fig.lab.face = "italic", fig.lab.size = 20,
+  ggarrange(ggarrange(plot_3a, plot_3b, ncol = 2, labels = c('a', 'b')), 
+            ggarrange(plot_3c, plot_3e, ncol = 2, labels = c('c', 'd')), 
+            ggarrange(plot_3f, labels = 'e'), 
+            nrow= 3, labels = 'auto') %>%
+    annotate_figure(fig.lab = "Fig. 3", fig.lab.face = "italic", fig.lab.size = 20,
                     top = text_grob('Distribución de votos negativos', size = 24, face = 'italic'),
                     bottom = text_grob(caption_3, just = 'center'))
   
-  ggsave("Figura3.png", height = 30, width = 30, units = 'cm', bg = 'white')
+  ggsave("Fig.3.png", height = 30, width = 30, units = 'cm', bg = 'white')
   
-  #Figura 4
-  #Figura 4 DIST. RATES
+  #Fig. 4
+  #Fig. 4 DIST. RATES
   
-  caption_4 <- paste('Figura 4. Distribuciones de densidad donde se observan variaciones en los ratios de los distintos conjuntos de simulaciones.',
+  caption_4 <- paste('Fig. 4. Distribuciones de densidad donde se observan variaciones en los ratios de los distintos conjuntos de simulaciones.',
                      'Los valores del eje y fueron transformados a log10 para obtener mayor una resolución de la distribución.', sep = '\n')
   
-  ggarrange(plot_7a, plot_7b, plot_7c, plot_7d, plot_7e, plot_7f, nrow = 3, ncol = 2, labels = 'auto') %>%
-    annotate_figure(fig.lab = "Figura 4", fig.lab.face = "italic", fig.lab.size = 20,
+  ggarrange(ggarrange(plot_7a, plot_7b, ncol = 2, labels = c('a', 'b')), 
+            ggarrange(plot_7c, plot_7e, ncol = 2, labels = c('c', 'd')), 
+            ggarrange(plot_7f, labels = 'e'), 
+            nrow = 3, labels = 'auto') %>%
+    annotate_figure(fig.lab = "Fig. 4", fig.lab.face = "italic", fig.lab.size = 20,
                     top = text_grob('Distribución de ratio', size = 24, face = 'italic'),
                     bottom = text_grob(caption_4, just = 'center'))
   
-  ggsave("Figura4.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  ggsave("Fig.4.png",  height = 30, width = 30, units = 'cm', bg = 'white')
   
-  #Figura 5 RATES X VISUALIZACIONES
+  #Fig. 5 RATES X VISUALIZACIONES
   
-  caption_5 <- paste('Figura 5. Heatmap donde se mide la frecuencia de los valores de las visualizaciones a través de los distintos conjuntos de simulaciones.',
+  caption_5 <- paste('Fig. 5. Heatmap donde se mide la frecuencia de los valores de las visualizaciones a través de los distintos conjuntos de simulaciones.',
                      'Los puntos con colores más brillantes indican una mayor concentración de observaciones.',
                      sep = '\n')
   
-  ggarrange(plot_9a, plot_9b, plot_9c, plot_9d,
-            plot_9e, plot_9f, nrow = 3, ncol = 2, labels = 'auto') %>%
-    annotate_figure(fig.lab = "Figura 5", fig.lab.face = "italic", fig.lab.size = 20,
+  ggarrange(ggarrange(plot_9a, plot_9b, ncol = 2, labels = c('a', 'b')), 
+            ggarrange(plot_9c,plot_9e, ncol = 2, labels = c('c', 'd')), 
+            ggarrange(plot_9f, labels = 'e'), 
+            nrow = 3, labels = 'auto') %>%
+    annotate_figure(fig.lab = "Fig. 5", fig.lab.face = "italic", fig.lab.size = 20,
                     top = text_grob('Densidad de visualizaciones por ratio', size = 24, face = 'italic'),
                     bottom = text_grob(caption_5, just = 'center'))
   
-  ggsave("Figura5.png", height = 30, width = 30, units = 'cm', bg = 'white')
+  ggsave("Fig.5.png", height = 30, width = 30, units = 'cm', bg = 'white')
   
   
   
-  #Figura 6 TOP VIS
+  #Fig. 6 TOP VIS
   
-  caption_6 <- paste('Figura 6. Distribuciones de densidad de las visualizaciones de las mejores 25 ideas de cada conjunto de simulaciones.')
+  caption_6 <- paste('Fig. 6. Distribuciones de densidad de las visualizaciones de las mejores 25 ideas de cada conjunto de simulaciones.')
   
-  ggarrange(plot_12a, plot_12b, plot_12c, plot_12d,
-            plot_12e, plot_12f, nrow = 3, ncol = 2, labels = 'auto')%>%
-    annotate_figure(fig.lab ="Figura 6", fig.lab.face = "italic", fig.lab.size = 20,
+  ggarrange(ggarrange(plot_12a, plot_12b, ncol = 2, labels = c('a', 'b')), 
+            ggarrange(plot_12c, plot_12e, ncol = 2, labels = c('c', 'd')), 
+            ggarrange(plot_12f, labels = 'e'), 
+            nrow = 3, labels = 'auto')%>%
+    annotate_figure(fig.lab ="Fig. 6", fig.lab.face = "italic", fig.lab.size = 20,
                     top = text_grob('Distribución de visualizaciones de las mejores 25 ideas', size = 24, face = 'italic'),
                     bottom = text_grob(caption_6, just = 'center'))
   
-  ggsave("Figura6.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  ggsave("Fig.6.png",  height = 30, width = 30, units = 'cm', bg = 'white')
   
   
-  #Figura 7 TOP VPOS
+  #Fig. 7 TOP VPOS
   
-  caption_7 <- paste('Figura 7. Distribuciones de densidad de los votos positivos de las mejores 25 ideas de cada conjunto de simulaciones.')
+  caption_7 <- paste('Fig. 7. Distribuciones de densidad de los votos positivos de las mejores 25 ideas de cada conjunto de simulaciones.')
   
-  ggarrange(plot_13a, plot_13b, plot_13c, plot_13d, plot_13e, plot_13f, nrow = 3, ncol = 2, labels = 'auto')%>%
-    annotate_figure(fig.lab = "Figura 7", fig.lab.face = "italic", fig.lab.size = 20,
+  ggarrange(ggarrange(plot_13a, plot_13b, ncol = 2, labels = c('a','b')), 
+            ggarrange(plot_13c, plot_13e, ncol = 2, labels = c('c', 'd')), 
+            ggarrange(plot_13f, labels = 'e'), 
+            nrow = 3,labels = 'auto')%>%
+    annotate_figure(fig.lab = "Fig. 7", fig.lab.face = "italic", fig.lab.size = 20,
                     top = text_grob('Distribución de votos positivos de las mejores 25 opiniones', size = 24),
                     bottom = text_grob(caption_7, just = 'center'))
   
-  ggsave("Figura7.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  ggsave("Fig.7.png",  height = 30, width = 30, units = 'cm', bg = 'white')
   
-  #Figura 8 TOP VNEG
+  #Fig. 8 TOP VNEG
   
-  caption_8 <- paste('Figura 8. Distribuciones de densidad los votos negativos de las mejores 25 ideas de cada conjunto de simulaciones.')
+  caption_8 <- paste('Fig. 8. Distribuciones de densidad los votos negativos de las mejores 25 ideas de cada conjunto de simulaciones.')
   
-  ggarrange(plot_13g, plot_13h, plot_13i, plot_13j, plot_13k, plot_13l, nrow = 3, ncol = 2, labels = 'auto')%>%
-    annotate_figure(fig.lab = "Figura 8", fig.lab.face = "italic", fig.lab.size = 20,
+  ggarrange(ggarrange(plot_13g, plot_13h, ncol = 2, labels = c('a', 'b')), 
+            ggarrange(plot_13i, plot_13k, ncol = 2, labels = c('c', 'd')), 
+            ggarrange(plot_13l, labels = 'e'), 
+            nrow = 3)%>%
+    annotate_figure(fig.lab = "Fig. 8", fig.lab.face = "italic", fig.lab.size = 20,
                     top = text_grob('Distribución de votos negativos de las mejores 25 opiniones', size = 24),
                     bottom = text_grob(caption_8, just = 'center'))
   
-  ggsave("Figura8.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  ggsave("Fig.8.png",  height = 30, width = 30, units = 'cm', bg = 'white')
   
-  #Figura 9 TOP RATES
+  #Fig. 9 TOP RATES
   
-  caption_9 <- paste('Figura 9. Distribuciones de densidad de las variaciones de ratio contra visualizaciones de las mejores 25 ideas de los distintos parámetros',sep = '\n')
+  caption_9 <- paste('Fig. 9. Distribuciones de densidad de las variaciones de ratio contra visualizaciones de las mejores 25 ideas de los distintos parámetros',sep = '\n')
   
-  ggarrange(plot_11a, plot_11b, plot_11c, plot_11d, plot_11e, plot_11f, nrow = 3, ncol = 2, labels = 'auto')%>%
-    annotate_figure(fig.lab = "Figura 9", fig.lab.face = "italic", fig.lab.size = 20,
+  ggarrange(ggarrange(plot_11a, plot_11b, ncol = 2, labels = c('a', 'b')), 
+            ggarrange(plot_11c, plot_11e, ncol = 2, labels = c('c', 'd')), 
+            ggarrange(plot_11f,  labels = 'e'), 
+            nrow = 3)%>%
+    annotate_figure(fig.lab = "Fig. 9", fig.lab.face = "italic", fig.lab.size = 20,
                     top = text_grob('Distribución de ratio de las mejores 25 ideas', size = 24, face = 'italic'),
                     bottom = text_grob(caption_9, just = 'center'))
   
-  ggsave("Figura9.png",  height = 30, width = 30, units = 'cm', bg = 'white')
+  ggsave("Fig.9.png",  height = 30, width = 30, units = 'cm', bg = 'white')
   
   #devuelve una lista con listas de graficos
   return(list(
@@ -1466,9 +1534,11 @@ generador_graficos <- function(dislist, parametros_simulacion_df){
     "cantidad_ideas" = plot_list_3,
     "Negativos" = plot_list_4,
     "Beta" = plot_list_5, 
-    "Algoritmo" = plot_list_6
+    "Algoritmo" = plot_list_6,
+    'top25summary' = summarise_list_top25
   ))
 }
+
 
 
 ######
